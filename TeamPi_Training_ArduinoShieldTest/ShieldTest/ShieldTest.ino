@@ -78,8 +78,8 @@ void setup() {
 	pinMode(pot, INPUT);
 
 	//setup buttons:
-	pinMode(2, INPUT);
-	pinMode(3, INPUT);
+	pinMode(2, INPUT_PULLUP);
+	pinMode(3, INPUT_PULLUP);
 
 	//TODO: more elegant solution for this in the buttons class.
 
@@ -110,7 +110,7 @@ void loop() {
 		if (millis() - lastBlinkTime > delayTime) {
 			//increment the current led that is to be lit up
 			currentLed = (currentLed + 1) % nOfLeds;
-			for (int i = 0; i <= nOfLeds; i++) {
+			for (int i = 0; i < nOfLeds; i++) {
 				//make all leds except for the "current one" LOW
 				if (i == currentLed) {
 					digitalWrite(led[i], HIGH);
