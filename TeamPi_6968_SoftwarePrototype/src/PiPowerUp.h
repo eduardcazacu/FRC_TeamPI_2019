@@ -23,11 +23,11 @@ using namespace frc;
 
 class PiPowerUp{
 private:
-	Spark intake1{0};
-	Spark intake2{1};
+	Spark intakeR{0};
+	Spark intakeL{1};
 
-	Spark boxPush1{2};
-	Spark boxPush2{3};
+	Spark boxPushR{2};
+	Spark boxPushL{3};
 
 	DoubleSolenoid pistons{0,1};
 

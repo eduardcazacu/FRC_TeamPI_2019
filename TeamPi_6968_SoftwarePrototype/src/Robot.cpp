@@ -24,6 +24,10 @@ class Robot: public frc::IterativeRobot {
 	//tele op:
 	frc::Joystick m_stick { 0 };
 	frc::Joystick boxStick { 1 };	//second controller for box pickup
+	//speed reduction:
+	double speedReductionFactor = 0.7;
+
+
 
 	//box pickup:
 	bool armState = false, lastButtonValue = false;
@@ -33,7 +37,7 @@ class Robot: public frc::IterativeRobot {
 public:
 	void TeleopPeriodic() {
 		// drive with arcade style
-		piMovement->move(m_stick.GetY(), m_stick.GetX());
+		piMovement->move(m_stick.GetY()*speedReductionFactor, m_stick.GetZ()*0.7);
 
 		//handle the intake system for the box
 		power->moveBox(boxStick.GetY());

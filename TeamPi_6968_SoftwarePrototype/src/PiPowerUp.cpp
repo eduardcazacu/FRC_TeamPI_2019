@@ -15,13 +15,13 @@ PiPowerUp::PiPowerUp(){
 }
 
 void PiPowerUp::moveBox(double speed){
-	boxPush1.Set(-speed);
-	boxPush2.Set(speed);
+	boxPushR.Set(speed);
+	boxPushL.Set(speed);
 }
 
 void PiPowerUp::intakeBox(double speed){
-	intake1.Set(-speed);
-	intake2.Set(speed);
+	intakeR.Set(-speed);
+	intakeL.Set(speed);
 }
 
 void PiPowerUp::openPistons(){
