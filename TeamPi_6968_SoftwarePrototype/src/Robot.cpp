@@ -7,11 +7,18 @@
 
 #include <IterativeRobot.h>
 #include <Joystick.h>
+#include <WPILib.h>
+#include <CameraServer.h>
+
+#include <DigitalInput.h>
+#include <DigitalOutput.h>
+
 
 //Our own libraries
 #include <iostream>
 #include "PiMovement.h"
 #include "PiPowerUp.h"
+#include "PiUltrasoon.h"
 
 class Robot: public frc::IterativeRobot {
 
@@ -20,6 +27,7 @@ class Robot: public frc::IterativeRobot {
 
 	//functions:
 	PiPowerUp *power = new PiPowerUp();
+	PiUltrasoon *Ultra1= new PiUltrasoon(6,7);
 
 	//tele op:
 	frc::Joystick m_stick { 0 };
@@ -42,6 +50,10 @@ public:
 		//handle the intake system for the box
 		power->moveBox(boxStick.GetY());
 		power->intakeBox(boxStick.GetY());
+
+		// utlrasonic sesnor stuf
+		double c = Ultra1->UltrasoonValue(1, 1);
+		std::cout<< "This is the distance in front of ultra1: " << c<< std::endl;
 
 		//open close arms:
 		bool buttonValue = boxStick.GetRawButton(1);
@@ -71,6 +83,7 @@ public:
 	void RobotInit()
 	{
 	piMovement->init();
+	CameraServer::GetInstance()->StartAutomaticCapture();
 	}
 };
 
