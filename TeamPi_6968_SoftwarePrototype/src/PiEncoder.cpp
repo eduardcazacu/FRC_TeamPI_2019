@@ -24,8 +24,8 @@ PiEncoder::PiEncoder(WPI_TalonSRX* lEnc, WPI_TalonSRX* rEnc,
 
 	this->wheelRadius = new double(wheelRadius);
 
-	//defaults:
-	this->lastReading = 0;
+	tmrL->Start();
+	tmrR->Start();
 }
 
 double PiEncoder::RPMLeft() {
@@ -55,17 +55,40 @@ double PiEncoder::RPMRight() {
 }
 
 double PiEncoder::distanceLeft() {
+	//if tmr is off start it (first reading will not be valid)
+
+	//get raw reading:
+	double magVel_UnitsPer100ms = this->lEnc->GetSelectedSensorVelocity(0);
+	//find out how much of a rotation happens in 1ms:
+	double encVel = magVel_UnitsPer100ms / 4096 / 100;
+
+	//find the distance travelled since the last reading in mm:
+	double wheelVel = *wheelRadius * 2.0 * M_PI * encVel*tmrL->Get()*1000; //speed in mm/ms
+	double dist = wheelVel;
+
+	//reset tmr:
+	tmrL->Reset();
+
+	return dist;
+
+}
+
+double PiEncoder::distanceRight() {
+	//if tmr is off start it (first reading will not be valid)
+
 	//get raw reading:
 	double magVel_UnitsPer100ms = this->rEnc->GetSelectedSensorVelocity(0);
 	//find out how much of a rotation happens in 1ms:
 	double encVel = magVel_UnitsPer100ms / 4096 / 100;
 
 	//find the distance travelled since the last reading in mm:
-	double wheelVel = *wheelRadius * 2.0 * M_PI * encVel; //speed in mm/ms
-	double dist = wheelVel * tmr->Get() * 1000;
+	double wheelVel = *wheelRadius * 2.0 * M_PI * encVel*tmrR->Get()*1000; //speed in mm/ms
+	double dist = wheelVel;
+
+	//reset tmr:
+	tmrR->Reset();
 
 	return dist;
-	//reset timer:
-	//
 
 }
+

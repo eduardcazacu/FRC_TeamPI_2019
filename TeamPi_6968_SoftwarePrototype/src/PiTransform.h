@@ -15,7 +15,7 @@ private:
 
 public:
 PiVector3 *position =  new PiVector3(0,0,0);
-PiVector3 *rotation = new PiVector3();
+PiVector3 *rotation = new PiVector3(0,0,0);
 PiVector3 *velocity = new PiVector3();
 PiVector3 *acceleration = new PiVector3();
 };

@@ -12,16 +12,14 @@
 #include "ctre/Phoenix.h"
 #include <WPILib.h>
 #include <cmath>
+#include <iostream>
 
 class PiEncoder{
 private:
 	WPI_TalonSRX *lEnc, *rEnc;
-
-	unsigned long lastReading;
-
 	double *wheelRadius;
-
-	Timer *tmr = new Timer();
+	Timer *tmrR = new Timer();
+	Timer *tmrL = new Timer();
 
 public:
 	//constructor

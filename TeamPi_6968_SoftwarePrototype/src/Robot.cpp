@@ -17,7 +17,7 @@
 #include <iostream>
 #include "PiMovement.h"
 #include "PiPowerUp.h"
-
+#include "PiPosition.h"
 #include "PiEncoder.h"
 #include "PiUltrasoon.h"
 
@@ -32,6 +32,7 @@ public:
 	//positioning:
 	const double wheelRadius = 76.2f;			//random value for now
 	PiEncoder *piEncoder = new PiEncoder(_lEncoder, _rEncoder, wheelRadius);
+	PiPosition *position = new PiPosition(piEncoder);
 
 	//functions:
 	PiPowerUp *power = new PiPowerUp();
@@ -45,21 +46,46 @@ public:
 
 	//box pickup:
 	bool armState = false, lastButtonValue = false;
-	//auto:
+
+
 
 	void TeleopPeriodic() {
 		// drive with arcade style
 		piMovement->move(m_stick.GetY() * speedReductionFactor,
-				m_stick.GetX() * 0.7);
+				m_stick.GetZ() * 0.7);
+
+		//box intake:
+		intakeSystem();
+
+		// utlrasonic sesnor stuf
+		/*double c = Ultra1->UltrasoonValue(1, 20);
+		 std::cout << "This is the distance in front of ultra1: " << c
+		 << std::endl;
+		 */
+
+		double leftRPM = piEncoder->RPMLeft();
+		double rightRPM = -piEncoder->RPMRight();
+		/*if (leftRPM || rightRPM)
+			std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
+					<< "\n";
+		*/
+		position->updatePosition();
+		std::cout << "Distance travelled: " << position->getDistance()<<"\n";
+		std::cout<< "angle: "<<position->Get()->rotation->z<<'\n';
+
+	}
+
+	void RobotInit() {
+		piMovement->init();
+		CameraServer::GetInstance()->StartAutomaticCapture();
+	}
+
+	void intakeSystem() {
+		//all the box itake stuff and pneumatics here:
 
 		//handle the intake system for the box
 		power->moveBox(boxStick.GetY());
 		power->intakeBox(boxStick.GetY());
-
-		// utlrasonic sesnor stuf
-		double c = Ultra1->UltrasoonValue(1, 20);
-		std::cout << "This is the distance in front of ultra1: " << c
-				<< std::endl;
 
 		//open close arms:
 		bool buttonValue = boxStick.GetRawButton(1);
@@ -83,18 +109,6 @@ public:
 		} else {
 			lastButtonValue = false;
 		}
-
-		double leftRPM = piEncoder->RPMLeft();
-		double rightRPM = -piEncoder->RPMRight();
-		if (leftRPM || rightRPM)
-			std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
-					<< "\n";
-
-	}
-
-	void RobotInit() {
-		piMovement->init();
-		CameraServer::GetInstance()->StartAutomaticCapture();
 	}
 };
 
