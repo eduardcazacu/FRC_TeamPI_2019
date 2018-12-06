@@ -13,16 +13,13 @@
 #include <DigitalInput.h>
 #include <DigitalOutput.h>
 
-
 //Our own libraries
 #include <iostream>
 #include "PiMovement.h"
 #include "PiPowerUp.h"
-<<<<<<< HEAD
+
 #include "PiEncoder.h"
-=======
 #include "PiUltrasoon.h"
->>>>>>> 61195c3981a347c7a201227dff5c02dd607b0201
 
 class Robot: public frc::IterativeRobot {
 public:
@@ -38,7 +35,7 @@ public:
 
 	//functions:
 	PiPowerUp *power = new PiPowerUp();
-	PiUltrasoon *Ultra1= new PiUltrasoon(6,7);
+	PiUltrasoon *Ultra1 = new PiUltrasoon(6, 7);
 
 	//tele op:
 	frc::Joystick m_stick { 0 };
@@ -61,7 +58,8 @@ public:
 
 		// utlrasonic sesnor stuf
 		double c = Ultra1->UltrasoonValue(1, 20);
-		std::cout<< "This is the distance in front of ultra1: " << c<< std::endl;
+		std::cout << "This is the distance in front of ultra1: " << c
+				<< std::endl;
 
 		//open close arms:
 		bool buttonValue = boxStick.GetRawButton(1);
@@ -94,17 +92,10 @@ public:
 
 	}
 
-<<<<<<< HEAD
 	void RobotInit() {
 		piMovement->init();
-=======
-	void RobotInit()
-	{
-	piMovement->init();
-	CameraServer::GetInstance()->StartAutomaticCapture();
->>>>>>> 61195c3981a347c7a201227dff5c02dd607b0201
+		CameraServer::GetInstance()->StartAutomaticCapture();
 	}
-
 };
 
 START_ROBOT_CLASS(Robot)
