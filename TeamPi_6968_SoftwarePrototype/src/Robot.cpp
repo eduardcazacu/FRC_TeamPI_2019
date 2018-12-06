@@ -52,7 +52,7 @@ public:
 		power->intakeBox(boxStick.GetY());
 
 		// utlrasonic sesnor stuf
-		double c = Ultra1->UltrasoonValue(1, 1);
+		double c = Ultra1->UltrasoonValue(1, 20);
 		std::cout<< "This is the distance in front of ultra1: " << c<< std::endl;
 
 		//open close arms:

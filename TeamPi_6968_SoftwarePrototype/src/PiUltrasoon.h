@@ -24,8 +24,8 @@ class PiUltrasoon{
 	//declare all the variables and functions which don't need to be exposed to the main program
 	private:
 		//object destinction
-		//int T = 6;
-		//int E = 7;
+		int T;
+		int E;
 
 		// Variables:
 		double LastsampleUltra, LastAverageUltra, LastTimeUltra;
@@ -33,10 +33,6 @@ class PiUltrasoon{
 		// digital input, output pointer definition.
 		frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(6);
 		frc::DigitalInput* EchoPin = new frc::DigitalInput(7);
-
-		//declare pins as new objects. T = trigger pin from User decleration E is echopin from user decleration
-		//TriggerPin = new frc::DigitalOutput::DigitalOutput(T);
-		//EchoPin = new frc::DigitalInput(E);
 
 
 	public:
@@ -55,7 +51,7 @@ class PiUltrasoon{
 		double GetLastSampleUltra();
 		double GetLastTimeUltra();
 
-		//Set funcitons
+		//Set functions
 		void SetLastAverageUltra(double SetAvg);
 		void SetLastSampleUltra(double SetSample);
 		void SetLastTimeUltra(double SetTime);
