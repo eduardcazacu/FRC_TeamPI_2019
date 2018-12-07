@@ -9,7 +9,7 @@
 #ifndef PIMICRODELAY_H_
 #define PIMICRODELAY_H_
 
-#include "WPILib.h"  // i do not jet know if this library is neccisarey but for safety i include it
+#include "WPILib.h"  // i do not jet know if this library is necessary but for safety i include it
 #include <Timer.h>
 
 class PiMicroDelay{
