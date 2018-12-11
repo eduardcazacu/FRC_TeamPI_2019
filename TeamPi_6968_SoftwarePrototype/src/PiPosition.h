@@ -23,6 +23,10 @@ private:
 
 	//sensors:
 	PiEncoder *encoders;
+	/*
+	 * Description: Update the robot's position and orientation using encoders
+	 */
+	void updateEncoderPosition(PiVector3 *angle, PiVector3 *position);
 
 	//properties:
 	PiRobot properties;

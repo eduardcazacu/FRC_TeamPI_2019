@@ -6,6 +6,7 @@
  */
 
 #include "PiPosition.h"
+#include <math.h>
 
 PiPosition::PiPosition(PiEncoder *encoders) {
 	this->encoders = encoders;
@@ -14,30 +15,43 @@ PiPosition::PiPosition(PiEncoder *encoders) {
 	dist = 0;
 }
 
+PiTransform *PiPosition::Get() {
+	return this->robot;
+}
 
-PiTransform *PiPosition::Get(){
-return this->robot;
+void PiPosition::updateEncoderPosition(PiVector3 *angle, PiVector3 *position) {
+	double rDist = -encoders->distanceRight();	//on blinky this one is reversed
+	double lDist = encoders->distanceLeft();
+
+	//find the distance
+	double distance = (lDist - rDist) / 2 + rDist;
+	double tempAngle = atan((lDist - rDist) / properties.wheelBase);
+	tempAngle = tempAngle * (180.0 / M_PI);
+
+	//reset angles
+	if (angle->z >= 360)
+		angle->z -= 360;
+	else if (angle->z <= -360)
+		angle->z += 360;
+
+<<<<<<< HEAD
+	//find the distance traveled
+	double distance = 2*M_PI*radius*angl/360;
+=======
+	//add the angle
+	angle->z += tempAngle;
+>>>>>>> 603684ad73d7d40b9b100100a4682409db0d607e
+
+	//x-y position:
+	position->y += sin(tempAngle)*distance;
+	position->x += cos(tempAngle)*distance;
+
+	//add to distance:
+	this->dist += abs(distance);
 }
 
 void PiPosition::updatePosition() {
-	double rDist = encoders->distanceRight();
-	double lDist = encoders->distanceLeft();
-
-	//find the radius
-	double rLeft = ((properties.wheelBase * lDist / rDist)
-			/ (1 - (lDist / rDist)));
-	double radius = rLeft+properties.wheelBase/2;			//radius of the robot turn
-
-	//find the angle:
-	double angl = lDist*360/2*M_PI*rLeft;
-
-	//find the distance traveled
-	double distance = 2*M_PI*radius*angl/360;
-
-
-	//update the variables:
-	this->robot->rotation = new PiVector3(robot->rotation->x,robot->rotation->y, robot->rotation->z+angl);
-	this->dist+=abs(distance);
+	updateEncoderPosition(robot->rotation, robot->position);
 }
 
 double PiPosition::getDistance() {
