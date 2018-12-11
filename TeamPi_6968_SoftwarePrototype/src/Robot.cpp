@@ -39,7 +39,7 @@ public:
 	PiUltrasoon *Ultra1 = new PiUltrasoon(6, 7);
 
 	//tele op:
-	frc::Joystick m_stick { 0 };
+	frc::Joystick m_stick { 0 };	//first controller for driving
 	frc::Joystick boxStick { 1 };	//second controller for box pickup
 	//speed reduction:
 	double speedReductionFactor = 0.7;
@@ -79,7 +79,7 @@ public:
 	}
 
 	void intakeSystem() {
-		//all the box itake stuff and pneumatics here:
+		//all the box intake stuff and pneumatics here:
 
 		//handle the intake system for the box
 		power->moveBox(boxStick.GetY());

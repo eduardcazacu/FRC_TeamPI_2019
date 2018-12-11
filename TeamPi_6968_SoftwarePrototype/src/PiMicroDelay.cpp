@@ -18,7 +18,7 @@
 #include "PiMicroDelay.h"
 #include "WPILib.h"
 
-//decleration of object with pin Deffinition Trigger and Echo
+//declaration of object with pin Definition Trigger and Echo
 PiMicroDelay::PiMicroDelay(){
 
 }
