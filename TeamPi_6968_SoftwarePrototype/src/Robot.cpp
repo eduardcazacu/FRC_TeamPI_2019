@@ -53,16 +53,14 @@ public:
 	//box pickup:
 	bool armState = false, lastButtonValue = false;
 
-<<<<<<< HEAD
+
 	//for the dashboard
 	PiDashboard *dashboard = new PiDashboard();
 	//NetworkTable table;
 	//SendableChooser<Command> chooser = new SendableChooser();
-	double x = 0;
 
 
-=======
->>>>>>> 603684ad73d7d40b9b100100a4682409db0d607e
+
 	void TeleopPeriodic() {
 
 		// drive with arcade style
@@ -88,7 +86,6 @@ public:
 		std::cout<< "angle: "<<position->Get()->rotation->z<<'\n';
 		std::cout<<"coordinates: "<<position->Get()->position->x<<" , "<<position->Get()->position->y<<"\n";
 
-		x += 1.0;
 		//refreshed the dashboard values
 		dashboard->Refresh();
 	}

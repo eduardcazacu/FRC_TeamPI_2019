@@ -19,9 +19,12 @@ PiTransform *PiPosition::Get() {
 	return this->robot;
 }
 
+
+
 void PiPosition::updateEncoderPosition(PiVector3 *angle, PiVector3 *position) {
 	double rDist = -encoders->distanceRight();	//on blinky this one is reversed
 	double lDist = encoders->distanceLeft();
+
 
 	//find the distance
 	double distance = (lDist - rDist) / 2 + rDist;
@@ -34,13 +37,9 @@ void PiPosition::updateEncoderPosition(PiVector3 *angle, PiVector3 *position) {
 	else if (angle->z <= -360)
 		angle->z += 360;
 
-<<<<<<< HEAD
-	//find the distance traveled
-	double distance = 2*M_PI*radius*angl/360;
-=======
+
 	//add the angle
 	angle->z += tempAngle;
->>>>>>> 603684ad73d7d40b9b100100a4682409db0d607e
 
 	//x-y position:
 	position->y += sin(tempAngle)*distance;
