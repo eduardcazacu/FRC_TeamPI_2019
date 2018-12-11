@@ -47,8 +47,6 @@ public:
 	//box pickup:
 	bool armState = false, lastButtonValue = false;
 
-
-
 	void TeleopPeriodic() {
 		// drive with arcade style
 		piMovement->move(m_stick.GetY() * speedReductionFactor,
@@ -63,15 +61,15 @@ public:
 		 << std::endl;
 		 */
 
-		double leftRPM = piEncoder->RPMLeft();
-		double rightRPM = -piEncoder->RPMRight();
 		/*if (leftRPM || rightRPM)
 			std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
 					<< "\n";
 		*/
 		position->updatePosition();
+
 		std::cout << "Distance travelled: " << position->getDistance()<<"\n";
 		std::cout<< "angle: "<<position->Get()->rotation->z<<'\n';
+		std::cout<<"coordinates: "<<position->Get()->position->x<<" , "<<position->Get()->position->y<<"\n";
 
 	}
 
