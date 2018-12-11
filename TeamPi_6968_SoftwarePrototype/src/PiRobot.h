@@ -9,18 +9,19 @@
 #define SRC_PIROBOT_H_
 
 
-#include "PiVector3.h";
+#include "PiTransform.h"
 
 //Store all the robot properties here:
 class PiRobot{
 private:
-
+PiTransform  transform;
 public:
 	PiRobot();
 
 	const PiVector3 size{600, 870, 0};
 	const double wheelBase = 570;
 
+	//PiTransform transform;	//the location/rotation/velocity/acceleration of the robot
 
 };
 

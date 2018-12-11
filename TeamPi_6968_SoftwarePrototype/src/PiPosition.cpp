@@ -31,7 +31,7 @@ void PiPosition::updatePosition() {
 	//find the angle:
 	double angl = lDist*360/2*M_PI*rLeft;
 
-	//find the distance travelled
+	//find the distance traveled
 	double distance = 2*M_PI*radius*angl/360;
 
 

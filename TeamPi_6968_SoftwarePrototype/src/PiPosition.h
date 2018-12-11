@@ -28,6 +28,7 @@ private:
 	PiRobot properties;
 
 public:
+
 	PiPosition(PiEncoder *encoders);
 	/*
 	 * DESCRIPTION:		Get the distance travelled by the robot.

@@ -20,10 +20,16 @@
 #include "PiPosition.h"
 #include "PiEncoder.h"
 #include "PiUltrasoon.h"
+#include "PiMap.h"
+#include "PiDashboard.h"
+#include "TimedRobot.h"
+#include "networktables/NetworkTable.h"
+#include "networktables/NetworkTableEntry.h"
+#include "networktables/NetworkTableInstance.h"
 
 class Robot: public frc::IterativeRobot {
 public:
-	//driving:
+	///driving:
 	PiMovement *piMovement = new PiMovement();
 
 	WPI_TalonSRX * _rEncoder = new WPI_TalonSRX(4);
@@ -47,9 +53,15 @@ public:
 	//box pickup:
 	bool armState = false, lastButtonValue = false;
 
+	//for the dashboard
+	PiDashboard *dashboard = new PiDashboard();
+	//NetworkTable table;
+	//SendableChooser<Command> chooser = new SendableChooser();
+	double x = 0;
 
 
 	void TeleopPeriodic() {
+
 		// drive with arcade style
 		piMovement->move(m_stick.GetY() * speedReductionFactor,
 				m_stick.GetZ() * 0.7);
@@ -57,7 +69,7 @@ public:
 		//box intake:
 		intakeSystem();
 
-		// utlrasonic sesnor stuf
+		// utlrasonic sensor stuf
 		/*double c = Ultra1->UltrasoonValue(1, 20);
 		 std::cout << "This is the distance in front of ultra1: " << c
 		 << std::endl;
@@ -73,11 +85,24 @@ public:
 		std::cout << "Distance travelled: " << position->getDistance()<<"\n";
 		std::cout<< "angle: "<<position->Get()->rotation->z<<'\n';
 
+		x += 1.0;
+		//refreshed the dashboard values
+		dashboard->Refresh();
 	}
 
 	void RobotInit() {
-		piMovement->init();
+
+
+		//Dashboard
+		//chooser.addDefault("Open Piston", new changeButtonValue(true));
+		//chooser.addDefault("Close Piston", new changeButtonValue(false));
 		CameraServer::GetInstance()->StartAutomaticCapture();
+
+		//SmartDashboard.putData("Auto mode", chooser);
+
+		//robot
+		piMovement->init();
+		dashboard->Refresh();
 	}
 
 	void intakeSystem() {
@@ -109,6 +134,10 @@ public:
 		} else {
 			lastButtonValue = false;
 		}
+	}
+
+	void changeButtonValue(bool value){
+		lastButtonValue = value;
 	}
 };
 
