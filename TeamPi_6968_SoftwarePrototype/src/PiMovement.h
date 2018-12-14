@@ -20,6 +20,7 @@
 #include <Drive/DifferentialDrive.h>
 #include "ctre/Phoenix.h"
 #include <Spark.h>
+#include "PiPosition.h"
 
 using namespace frc;
 
@@ -40,8 +41,10 @@ private:
 	Spark *leftPWM = new Spark(5); //both motors are controlled from the same PWM pin
 
 	frc::DifferentialDrive m_robotDrive{*leftPWM, *_rightFront};
-	//new line of code
-	//s
+	double speed = 0.1;
+	double oldDistance;
+	int index = 0;
+
 public:
 	//define all the methods which are needed inside other classes and in the main file.
 	//NO VARIABLES SHOULD BE PLACED HERE. Variables should be kept private.
@@ -67,6 +70,10 @@ public:
 	 * OUTPUT:
 	 */
 	void move(double speed, double zRotation);
+
+	//use this function before you start the moveDistance
+	void moveDistance(PiPosition position, double distance);
+
 
 };
 

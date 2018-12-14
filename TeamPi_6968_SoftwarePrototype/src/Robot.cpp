@@ -59,7 +59,7 @@ public:
 	//NetworkTable table;
 	//SendableChooser<Command> chooser = new SendableChooser();
 
-
+	double testX = 0;
 
 	void TeleopPeriodic() {
 
@@ -85,6 +85,11 @@ public:
 		std::cout << "Distance travelled: " << position->getDistance()<<"\n";
 		std::cout<< "angle: "<<position->Get()->rotation->z<<'\n';
 		std::cout<<"coordinates: "<<position->Get()->position->x<<" , "<<position->Get()->position->y<<"\n";
+
+		dashboard->xEntry.SetDouble(testX++);
+		//dashboard->xEntry.SetDouble(position->Get()->position->x);
+		dashboard->yEntry.SetDouble(position->Get()->position->y);
+		dashboard->angleEntry.SetDouble(position->Get()->rotation->z);
 
 		//refreshed the dashboard values
 		dashboard->Refresh();
@@ -133,6 +138,19 @@ public:
 
 		} else {
 			lastButtonValue = false;
+		}
+		std::cout << "OpenPiston: " << dashboard->OpenPiston.GetValue()<< std::endl;
+		if(dashboard->OpenPiston.GetValue()){
+			armState = !armState;
+			if (armState) {
+				//if 1, then open:
+				power->openPistons();
+			} else {
+				//close:
+				power->closePistons();
+			}
+
+			dashboard->OpenPiston.SetBoolean(false);
 		}
 	}
 

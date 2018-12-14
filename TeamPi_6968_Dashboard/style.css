@@ -1,0 +1,29 @@
+/* There wil normally be a lot here, but to keep this example simple we left out any unnecessary CSS. */
+
+
+body {
+  background-color: #DDDDDF; /*Gray*/
+}
+
+button {
+  background-color: #FF3333; /* Red */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}

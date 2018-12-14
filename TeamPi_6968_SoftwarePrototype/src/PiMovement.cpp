@@ -9,6 +9,7 @@
  */
 
 #include "PiMovement.h"
+#include "PiPosition.h"
 
 PiMovement::PiMovement(){
 //constructor
@@ -34,3 +35,24 @@ void PiMovement::move(double speed, double zRotation){
 
 	m_robotDrive.ArcadeDrive(speed, zRotation);
 }
+
+
+void PiMovement::moveDistance(PiPosition position, double distance){
+	switch(this->index){
+	case 0:
+		this->oldDistance = position.getDistance();
+		index++;
+		break;
+	case 1:
+		if(position.getDistance() >= oldDistance){
+			index++;
+			break;
+		}
+		this->move(this->speed, 0);
+		break;
+	case 2:
+		this->move(0,0);
+		break;
+	}
+}
+
