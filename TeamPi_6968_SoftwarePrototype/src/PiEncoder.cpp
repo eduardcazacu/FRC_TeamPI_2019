@@ -24,6 +24,10 @@ PiEncoder::PiEncoder(WPI_TalonSRX* lEnc, WPI_TalonSRX* rEnc,
 
 	this->wheelRadius = new double(wheelRadius);
 
+	//calibration
+	this->calMulR = this->calMulL=1;
+	this->calReadingsMade= 0;
+
 	tmrL->Start();
 	tmrR->Start();
 }
@@ -38,6 +42,8 @@ double PiEncoder::RPMLeft() {
 	//MagRPM = magVel [units/kT] * 600 [kTs/minute] / 4096(units/rev), where kT = 100ms
 	double magRPM = magVel_UnitsPer100ms * 600 / 4096;
 
+	//add calibration
+	magRPM = magRPM*calMulL;
 	return magRPM;
 }
 
@@ -51,6 +57,8 @@ double PiEncoder::RPMRight() {
 	//MagRPM = magVel [units/kT] * 600 [kTs/minute] / 4096(units/rev), where kT = 100ms
 	double magRPM = magVel_UnitsPer100ms * 600 / 4096;
 
+	//add calibration
+	magRPM = magRPM*calMulR;
 	return magRPM;
 }
 
@@ -63,7 +71,7 @@ double PiEncoder::distanceLeft() {
 	double encVel = magVel_UnitsPer100ms / 4096 / 100;
 
 	//find the distance travelled since the last reading in mm:
-	double wheelVel = *wheelRadius * 2.0 * M_PI * encVel*tmrL->Get()*1000; //speed in mm/ms
+	double wheelVel = *wheelRadius * 2.0 * M_PI * encVel * tmrL->Get() * 1000; //speed in mm/ms
 	double dist = wheelVel;
 
 	//reset tmr:
@@ -82,7 +90,7 @@ double PiEncoder::distanceRight() {
 	double encVel = magVel_UnitsPer100ms / 4096 / 100;
 
 	//find the distance travelled since the last reading in mm:
-	double wheelVel = *wheelRadius * 2.0 * M_PI * encVel*tmrR->Get()*1000; //speed in mm/ms
+	double wheelVel = *wheelRadius * 2.0 * M_PI * encVel * tmrR->Get() * 1000; //speed in mm/ms
 	double dist = wheelVel;
 
 	//reset tmr:
@@ -92,3 +100,45 @@ double PiEncoder::distanceRight() {
 
 }
 
+bool PiEncoder::calibrate() {
+	double rpmL, rpmR, avgRPM;
+	if (!calibrated) {
+		rpmL = RPMLeft();
+		rpmR = RPMRight();
+
+		avgRPM = (abs(rpmL) + abs(rpmR)) / 2;
+
+		if (avgRPM) {
+			//adjust to the average:
+
+			double tempCalMulL = avgRPM / rpmL;
+			double tempCalMulR = avgRPM / rpmR;
+
+			//average
+			calMulL = (calMulL + tempCalMulL) / 2;
+			calMulR = (calMulR + tempCalMulL) / 2;
+
+			this->calReadingsMade++;
+
+			std::cout << "Calibrating encoders... \ n";
+
+			if (calReadingsMade >= CAL_READINGS) {
+				calReadingsMade = 0;
+				calibrated = true;
+				//display values for reference
+				std::cout << "multiplier left: " << calMulL << " right: "
+						<< calMulR << "\n";
+				return true;
+			}
+		}
+		else{
+			std::cout<<"Move straight at a constant speed";
+		}
+		return false;
+	}
+	return true;
+}
+void PiEncoder::setCalibration(double calL, double calR) {
+	this->calMulL = calL;
+	this->calMulR = calR;
+}
