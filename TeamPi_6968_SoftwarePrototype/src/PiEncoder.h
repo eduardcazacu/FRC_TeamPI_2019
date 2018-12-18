@@ -12,17 +12,22 @@
 #include "ctre/Phoenix.h"
 #include <WPILib.h>
 #include <cmath>
+#include <iostream>
+
+
+#define CAL_READINGS 100
 
 class PiEncoder{
 private:
 	WPI_TalonSRX *lEnc, *rEnc;
-
-	unsigned long lastReading;
-
 	double *wheelRadius;
+	Timer *tmrR = new Timer();
+	Timer *tmrL = new Timer();
 
-	Timer *tmr = new Timer();
-
+	double calMulL, calMulR; //calibration
+	bool calibrated=true; //don't go into calibration
+	const int calReadings = 100; //how many readings before calibration
+	int calReadingsMade;
 public:
 	//constructor
 	PiEncoder(WPI_TalonSRX* lEnc, WPI_TalonSRX* rEnc, double wheelRadius);
@@ -48,6 +53,17 @@ public:
 
 	double distanceRight();
 
+	//adjust the calibration values for the two encoders.
+	/*
+	 * For this to work the robot must be driven in a straight line
+	 * it return true when the robot has been calibrated.
+	 */
+	bool calibrate();
+
+	/*
+	 *write calibration multiplier values for the encoders
+	 */
+	void setCalibration(double calL, double calR);
 };
 
 

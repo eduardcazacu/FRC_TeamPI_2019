@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta charset="utf-8">
+    <title>Blinky Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+    <script language="javascript" type="text/javascript" src="PlayingField.js"></script>
+</head>
+
+<body>
+
+  <H1>The ultimate Pi Dashboard</H1>
+
+  <div class="column">
+    <div id='PlayingField'></div>
+
+    <div id="connection">Not Yet started to connect</div>
+    <div id='X'>No X Position Yet</div>
+    <div id='Y'>No Y Position Yet</div>
+    <div id='Angle'>No Angle Yet</div>
+    <br>
+    <div id='calibration'> no Calibration value yet</div>
+    <button id = "calibrateButton" type="button">Calibrate</button>
+    <button id = "pistonButton" type="button">Open Piston</button>
+  </div>
+
+  <div class="column">
+    <H3>Designated cordinate</H3>
+    <form>
+      X-cordinate:<br>
+      <input type="text"
+        name="x-cordinate"
+        id = "x-input"><br>
+      Y-cordinate:<br>
+      <input type="text"
+        name="y-cordinate"
+        id = "y-input"><br>
+      Angle:<br>
+      <input type="text"
+        name="angle-cordinate"
+        id = "angle-input"><br>
+      <button id = "SendCordinate"
+        type="button">Execute</button>
+    </form>
+  </div>
+
+  <script src="/networktables/networktables.js"></script>
+  <script src="ui.js"></script>
+
+</body>
+
+</html>

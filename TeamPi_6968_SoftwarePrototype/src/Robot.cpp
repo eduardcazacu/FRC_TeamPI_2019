@@ -19,6 +19,7 @@
 #include "PiMovement.h"
 #include "PiPowerUp.h"
 
+#include "PiPosition.h"
 #include "PiEncoder.h"
 #include "PiUltrasoon.h"
 #include "MPU9250.h"
@@ -32,6 +33,16 @@ public:
 
 	//driving:
 	PiMovement *piMovement = new PiMovement();
+#include "PiMap.h"
+#include "PiDashboard.h"
+#include "TimedRobot.h"
+#include "networktables/NetworkTable.h"
+#include "networktables/NetworkTableEntry.h"
+#include "networktables/NetworkTableInstance.h"
+#include "PiPathfinding.h"
+
+class Robot: public frc::IterativeRobot {
+public:
 
 	WPI_TalonSRX * _rEncoder = new WPI_TalonSRX(4);
 	WPI_TalonSRX * _lEncoder = new WPI_TalonSRX(2);
@@ -39,6 +50,7 @@ public:
 	//positioning:
 	const double wheelRadius = 76.2f;			//random value for now
 	PiEncoder *piEncoder = new PiEncoder(_lEncoder, _rEncoder, wheelRadius);
+	PiPosition *position = new PiPosition(piEncoder);
 
 	//functions:
 	PiPowerUp *power = new PiPowerUp();
@@ -46,28 +58,107 @@ public:
 	//MPU9250 *accel = new MPU9250(0x68);
 	//PiBuiltInAccelerometer *accelIntern = new PiBuiltInAccelerometer();
 
+<<<<<<< HEAD
 	//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(6);  // chack if this works !
 	//frc::DigitalInput* EchoPin = new frc::DigitalInput(7);
 	//Ultrasonic *Ultra2 = new Ultrasonic(TriggerPin,EchoPin,Ultrasonic::kMilliMeters);
+=======
+	///driving:
+	PiMovement *piMovement = new PiMovement(position);
+
+>>>>>>> 8e1f8ea4a8559b0abddee0edba30261da45e2ed9
 	//tele op:
-	frc::Joystick m_stick { 0 };
+	frc::Joystick m_stick { 0 };	//first controller for driving
 	frc::Joystick boxStick { 1 };	//second controller for box pickup
+
+
+	//auto stuff:
+	PiPathfinding *pathfinding = new PiPathfinding(position);
+	PiTransform *autoTargets[] = {new PiTransform(new PiVector3(0,2000,0),new PiVector3(0,0,359)),new PiTransform(new PiVector3(0,0,0),new PiVector3(0,0,0))}
+	int nOfTargets = 2;
+	int currentTarget = 0;
+
 	//speed reduction:
 	double speedReductionFactor = 0.7;
 
 	//box pickup:
 	bool armState = false, lastButtonValue = false;
-	//auto:
+
+	//for the dashboard
+	PiDashboard *dashboard = new PiDashboard();
+	//NetworkTable table;
+	//SendableChooser<Command> chooser = new SendableChooser();
+
+	double testX = 0;
 
 	void TeleopPeriodic() {
+
 		// drive with arcade style
 		piMovement->move(m_stick.GetY() * speedReductionFactor,
-				m_stick.GetX() * 0.7);
+				m_stick.GetZ() * 0.7);
+		//box intake:
+		intakeSystem();
+
+		// utlrasonic sensor stuf
+		/*double c = Ultra1->UltrasoonValue(1, 20);
+		 std::cout << "This is the distance in front of ultra1: " << c
+		 << std::endl;
+		 */
+
+		/*if (leftRPM || rightRPM)
+		 std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
+		 << "\n";
+		 */
+		if (!piEncoder->calibrate()) {
+			//calibrate encoders
+		} else {
+			position->updatePosition();
+
+			std::cout << "Distance travelled: " << position->getDistance()
+					<< "\n";
+			std::cout << "angle: " << position->Get()->rotation->z << '\n';
+			std::cout << "coordinates: " << position->Get()->position->x
+					<< " , " << position->Get()->position->y << "\n";
+
+		}
+		//dashboard->xEntry.SetDouble(testX++);
+		dashboard->xEntry.SetDouble(position->Get()->position->x);
+		dashboard->yEntry.SetDouble(position->Get()->position->y);
+		dashboard->angleEntry.SetDouble(position->Get()->rotation->z);
+
+		//refreshed the dashboard values
+		dashboard->Refresh();
+	}
+
+	void AutoPeriodic() {
+		//do auto stuff
+		if(pathfinding->GoTO(position,autoTargets[currentTarget])){
+			currentTarget=(currentTarget+1)%nOfTargets;
+		}
+
+	}
+	void RobotInit() {
+
+		//Dashboard
+		//chooser.addDefault("Open Piston", new changeButtonValue(true));
+		//chooser.addDefault("Close Piston", new changeButtonValue(false));
+		CameraServer::GetInstance()->StartAutomaticCapture();
+
+		//SmartDashboard.putData("Auto mode", chooser);
+
+		//robot
+		piMovement->init();
+		dashboard->Refresh();
+	}
+
+	void intakeSystem() {
+		//all the box intake stuff and pneumatics here:
 
 		//handle the intake system for the box
 		power->moveBox(boxStick.GetY());
 		power->intakeBox(boxStick.GetY());
 
+<<<<<<< HEAD
 		// utlrasonic sesnor stuf
 		double c = Ultra1->UltrasoonMasurment(1,20);
 		std::cout << "This is the distance in front of ultra2: " << c << std::endl;
@@ -79,6 +170,8 @@ public:
 
 		//accelIntern->AdvancedCalculation();
 
+=======
+>>>>>>> 8e1f8ea4a8559b0abddee0edba30261da45e2ed9
 		//open close arms:
 		bool buttonValue = boxStick.GetRawButton(1);
 
@@ -101,19 +194,26 @@ public:
 		} else {
 			lastButtonValue = false;
 		}
+		std::cout << "OpenPiston: " << dashboard->OpenPiston.GetValue()
+				<< std::endl;
+		if (dashboard->OpenPiston.GetValue()) {
+			armState = !armState;
+			if (armState) {
+				//if 1, then open:
+				power->openPistons();
+			} else {
+				//close:
+				power->closePistons();
+			}
 
-		double leftRPM = piEncoder->RPMLeft();
-		double rightRPM = -piEncoder->RPMRight();
-		if (leftRPM || rightRPM)
-			std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
-					<< "\n";
-
+			dashboard->OpenPiston.SetBoolean(false);
+		}
 	}
 
-	void RobotInit() {
-		piMovement->init();
-		CameraServer::GetInstance()->StartAutomaticCapture();
+	void changeButtonValue(bool value) {
+		lastButtonValue = value;
 	}
-};
+}
+;
 
 START_ROBOT_CLASS(Robot)

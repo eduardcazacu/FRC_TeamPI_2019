@@ -20,8 +20,13 @@
 #include <Drive/DifferentialDrive.h>
 #include "ctre/Phoenix.h"
 #include <Spark.h>
+#include "PiPosition.h"
 
 using namespace frc;
+
+#define DIST_TOLERANCE  5	//tolerance in mm
+#define ANGL_TOLERANCE  5 //tolerance in degrees
+
 
 class PiMovement{
 private:
@@ -40,8 +45,17 @@ private:
 	Spark *leftPWM = new Spark(5); //both motors are controlled from the same PWM pin
 
 	frc::DifferentialDrive m_robotDrive{*leftPWM, *_rightFront};
-	//new line of code
-	//s
+
+	//positioning:
+	PiPosition *position;
+	double startDistance ;
+	double startAngle ;
+
+	bool autoDriving,autoRotating;
+	bool goodToGo;
+
+
+
 public:
 	//define all the methods which are needed inside other classes and in the main file.
 	//NO VARIABLES SHOULD BE PLACED HERE. Variables should be kept private.
@@ -52,7 +66,7 @@ public:
 	 * INPUT:			No parameters at the moment
 	 * OUTPUT:			Void
 	 */
-	PiMovement();
+	PiMovement(PiPosition *positioningObj);
 
 	/*
 	 * DECRIPTION:		initialise everything that is needed
@@ -67,6 +81,22 @@ public:
 	 * OUTPUT:
 	 */
 	void move(double speed, double zRotation);
+
+	/*
+	 * DESCRIPTION: go forward a given distance
+	 * PARAMETERS: 	distance to drive
+	 * RETURN:		point reached or not.
+	 */
+	bool driveFor(double dist, double speed);
+	/*
+	 * DESCRIPTION:	rotate a certain number of degrees
+	 * PARAMETERS:	degrees to rotate
+	 * RETURN:		orientation reached or not
+	 */
+	bool rotate(double angle, double speed);
+
+	void pause();
+	void resume();
 
 };
 
