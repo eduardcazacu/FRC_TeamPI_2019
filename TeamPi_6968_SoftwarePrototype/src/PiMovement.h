@@ -53,6 +53,9 @@ private:
 
 	bool autoDriving,autoRotating;
 	bool goodToGo;
+
+
+
 public:
 	//define all the methods which are needed inside other classes and in the main file.
 	//NO VARIABLES SHOULD BE PLACED HERE. Variables should be kept private.

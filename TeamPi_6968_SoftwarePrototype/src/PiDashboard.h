@@ -19,8 +19,15 @@ class PiDashboard{
 private:
 	static NetworkTable dashboardTable;
 
+
 public:
 	nt::NetworkTableEntry xEntry;
+	nt::NetworkTableEntry yEntry;
+	nt::NetworkTableEntry angleEntry;
+	nt::NetworkTableEntry OpenPiston;
+	nt::NetworkTableEntry Calibration;
+	nt::NetworkTableEntry Calibrating;
+
 
 	/*
 	* DESCRIPTION:		Constructor. Creates the object and initializes variables.

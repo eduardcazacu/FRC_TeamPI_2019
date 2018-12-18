@@ -9,6 +9,7 @@
  */
 
 #include "PiMovement.h"
+#include "PiPosition.h"
 
 PiMovement::PiMovement(PiPosition *positioningObj)
 {
