@@ -29,8 +29,6 @@
 
 class Robot: public frc::IterativeRobot {
 public:
-	///driving:
-	PiMovement *piMovement = new PiMovement();
 
 	WPI_TalonSRX * _rEncoder = new WPI_TalonSRX(4);
 	WPI_TalonSRX * _lEncoder = new WPI_TalonSRX(2);
@@ -44,6 +42,9 @@ public:
 	PiPowerUp *power = new PiPowerUp();
 	PiUltrasoon *Ultra1 = new PiUltrasoon(6, 7);
 
+	///driving:
+	PiMovement *piMovement = new PiMovement(position);
+
 	//tele op:
 	frc::Joystick m_stick { 0 };	//first controller for driving
 	frc::Joystick boxStick { 1 };	//second controller for box pickup
@@ -53,13 +54,10 @@ public:
 	//box pickup:
 	bool armState = false, lastButtonValue = false;
 
-
 	//for the dashboard
 	PiDashboard *dashboard = new PiDashboard();
 	//NetworkTable table;
 	//SendableChooser<Command> chooser = new SendableChooser();
-
-
 
 	void TeleopPeriodic() {
 
@@ -77,21 +75,28 @@ public:
 		 */
 
 		/*if (leftRPM || rightRPM)
-			std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
+		 std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
+		 << "\n";
+		 */
+		if (!piEncoder->calibrate()) {
+			//calibrate encoders
+		} else {
+			position->updatePosition();
+
+			std::cout << "Distance travelled: " << position->getDistance()
 					<< "\n";
-		*/
-		position->updatePosition();
+			std::cout << "angle: " << position->Get()->rotation->z << '\n';
+			std::cout << "coordinates: " << position->Get()->position->x
+					<< " , " << position->Get()->position->y << "\n";
 
-		std::cout << "Distance travelled: " << position->getDistance()<<"\n";
-		std::cout<< "angle: "<<position->Get()->rotation->z<<'\n';
-		std::cout<<"coordinates: "<<position->Get()->position->x<<" , "<<position->Get()->position->y<<"\n";
-
+		}
 		//refreshed the dashboard values
 		dashboard->Refresh();
 	}
-
+	void AutoPeriodic(){
+		//do auto stuff
+	}
 	void RobotInit() {
-
 
 		//Dashboard
 		//chooser.addDefault("Open Piston", new changeButtonValue(true));
@@ -136,7 +141,7 @@ public:
 		}
 	}
 
-	void changeButtonValue(bool value){
+	void changeButtonValue(bool value) {
 		lastButtonValue = value;
 	}
 };
