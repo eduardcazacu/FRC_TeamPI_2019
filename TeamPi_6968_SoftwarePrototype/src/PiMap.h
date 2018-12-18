@@ -17,7 +17,7 @@ private:
 
 public:
 	PiMap();
-	//PiRobot robot = new PiRobot();
+	PiRobot robot;
 	//GameObject[] gameObjects;
 	//PiProperties properties = new PiProperties();
 };

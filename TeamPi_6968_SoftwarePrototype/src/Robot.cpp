@@ -66,7 +66,6 @@ public:
 		// drive with arcade style
 		piMovement->move(m_stick.GetY() * speedReductionFactor,
 				m_stick.GetZ() * 0.7);
-
 		//box intake:
 		intakeSystem();
 

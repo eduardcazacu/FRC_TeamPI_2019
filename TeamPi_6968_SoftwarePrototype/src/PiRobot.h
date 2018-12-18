@@ -14,7 +14,7 @@
 //Store all the robot properties here:
 class PiRobot{
 private:
-PiTransform  transform;
+PiTransform *  transform;
 public:
 	PiRobot();
 

@@ -6,7 +6,13 @@ var ui = {
 	Anglevalue: document.getElementById('Angle'),
 	pistonButton: document.getElementById('pistonButton'),
 	calibration: document.getElementById('calibration'),
-	calibrateButton: document.getElementById('calibrateButton')
+	calibrateButton: document.getElementById('calibrateButton'),
+
+	inputX:					document.getElementById('x-input'),
+	inputY: 				document.getElementById('y-input'),
+	inputAngle: 		document.getElementById('angle-input'),
+	SendCordinate:	document.getElementById('SendCordinate')
+
 };
 
 
@@ -94,6 +100,15 @@ ui.pistonButton.onclick = function() {
 ui.calibrateButton.onclick = function() {
 	console.log("calibarting")
 	NetworkTables.setValue('/data/calibrating', true);
+}
+
+ui.SendCordinate.onclick = function(){
+	NetworkTables.setValue('/data/Destination/X', ui.inputX.innerHTML);
+	NetworkTables.setValue('/data/Destination/Y',ui.inputY.innerHTML);
+	NetworkTables.setValue('/data/Destination/Angle',ui.inputAngle.innerHTML);
+	//mapClass.destination.x = NetworkTables.setValue('/data/Position/X', ui.inputX.innerHTML);
+	//mapClass.destination.y = NetworkTables.setValue('/data/Position/Y',ui.inputY.innerHTML);
+	//mapClass.destination.dir = NetworkTables.setValue('/data/Position/Angle',ui.inputAngle.innerHTML);
 }
 
 // The folllowing functions are called when the user interacts with control elements.

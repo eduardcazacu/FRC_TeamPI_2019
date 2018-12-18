@@ -8,10 +8,12 @@
 
 
 #include "PiMap.h"
+#include "PiRobot.h"
 
 
 PiMap::PiMap(){
 
-	//PiTransform startLocation = new PiVector3() //!!!!!!!!!!!!!!!No way to create new piVector3
+	PiTransform *startLocation = new PiTransform(); //!!!!!!!!!!!!!!!No way to create new piVector3
 	//this->robot = new PiRobot(startLocation);
+	//this->robot * = new PiRobot();
 }
