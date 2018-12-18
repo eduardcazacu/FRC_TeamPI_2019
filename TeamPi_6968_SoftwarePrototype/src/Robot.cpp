@@ -26,6 +26,7 @@
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
+#include "PiPathfinding.h"
 
 class Robot: public frc::IterativeRobot {
 public:
@@ -48,6 +49,14 @@ public:
 	//tele op:
 	frc::Joystick m_stick { 0 };	//first controller for driving
 	frc::Joystick boxStick { 1 };	//second controller for box pickup
+
+
+	//auto stuff:
+	PiPathfinding *pathfinding = new PiPathfinding(position);
+	PiTransform *autoTargets[] = {new PiTransform(new PiVector3(0,2000,0),new PiVector3(0,0,359)),new PiTransform(new PiVector3(0,0,0),new PiVector3(0,0,0))}
+	int nOfTargets = 2;
+	int currentTarget = 0;
+
 	//speed reduction:
 	double speedReductionFactor = 0.7;
 
@@ -91,8 +100,8 @@ public:
 					<< " , " << position->Get()->position->y << "\n";
 
 		}
-		dashboard->xEntry.SetDouble(testX++);
-		//dashboard->xEntry.SetDouble(position->Get()->position->x);
+		//dashboard->xEntry.SetDouble(testX++);
+		dashboard->xEntry.SetDouble(position->Get()->position->x);
 		dashboard->yEntry.SetDouble(position->Get()->position->y);
 		dashboard->angleEntry.SetDouble(position->Get()->rotation->z);
 
@@ -102,6 +111,10 @@ public:
 
 	void AutoPeriodic() {
 		//do auto stuff
+		if(pathfinding->GoTO(position,autoTargets[currentTarget])){
+			currentTarget=(currentTarget+1)%nOfTargets;
+		}
+
 	}
 	void RobotInit() {
 

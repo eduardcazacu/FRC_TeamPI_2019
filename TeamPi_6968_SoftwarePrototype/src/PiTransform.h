@@ -14,11 +14,17 @@ class PiTransform{
 private:
 
 public:
-PiVector3 *position =  new PiVector3(0,0,0);
-PiVector3 *rotation = new PiVector3(0,0,0);
-PiVector3 *velocity = new PiVector3();
-PiVector3 *acceleration = new PiVector3();
+PiVector3 *position;
+PiVector3 *rotation;
+PiVector3 *velocity;
+PiVector3 *acceleration;
+
+PiTransform();
+PiTransform(PiVector3 posiion);
+PiTransform(PiVector3 position, PiVector3 rotation);
 };
+
+
 
 
 #endif /* SRC_PITRANSFORM_H_ */

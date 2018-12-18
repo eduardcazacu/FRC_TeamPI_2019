@@ -2,16 +2,20 @@
  * PiPathfinding.h
  *
  *  Created on: 18 Dec 2018
- *      Author: NickD
+ *      Author: eddyc
  */
 
 #ifndef SRC_PIPATHFINDING_H_
 #define SRC_PIPATHFINDING_H_
 
-#include "PiRobot.h"
 #include "TimedRobot.h"
+#include "PiRobot.h"
+#include "PiPosition.h"
+#include "PiTransform.h"
+#include "PiMovement.h"
+#include <math.h>
 
-class PiPathfinding{
+class PiPathfinding {
 private:
 
 	int index = 0;
@@ -20,19 +24,20 @@ private:
 	float oldX = 0;
 	float oldY = 0;
 	float oldDir = 0;
+	double dx, dy;
 
-	void calcAngleToGo(float dx,float dy);
+	double calcAngleToGo(double dx, double dy);
+
+	PiMovement *move;
+
+	double speed = 0.2;
 
 public:
 
+	PiPathfinding(PiMovement *move);
 
-	PiPathfinding();
-
-
-	void GoTo(PiRobot * robot, PiPosition * destination);
+	bool GoTO(PiPosition * robotPos, PiTransform * destination);
 
 };
 
-
 #endif /* SRC_PIPATHFINDING_H_ */
-
