@@ -26,6 +26,11 @@ PiDashboard::PiDashboard()
 	yEntry = table->GetEntry("Position/Y");
 	angleEntry = table->GetEntry("Position/Angle");
 	OpenPiston = table->GetEntry("pistons");
+	OpenPiston.SetBoolean(true);
+
+	XDestination = table->GetEntry("Destination/X");
+	YDestination = table->GetEntry("Destination/Y");
+	DirDestination = table->GetEntry("Destination/Dir");
 
 	/*table.AddEntryListener("pistons", (table,key, entry, value, flags) -> {
 		Syst
