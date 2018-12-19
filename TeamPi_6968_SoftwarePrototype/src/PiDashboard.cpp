@@ -4,8 +4,7 @@
  *  Created on: 11 Dec 2018
  *      Author: NickD
  */
-#ifndef SRC_PIPOSITION_H_
-#define SRC_PIPOSITION_H_
+
 
 #include "PiRobot.h"
 #include "PiDashboard.h"
@@ -45,4 +44,4 @@ void PiDashboard::Refresh(){
 	//SmartDashboard.putData("Turn on field oriented drive", new DrivetrainGyroOn());
 }
 
-#endif
+

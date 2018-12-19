@@ -16,7 +16,7 @@ PiTransform::PiTransform(){
 	this->acceleration = new PiVector3();
 }
 PiTransform::PiTransform(PiVector3 posiion){
-	this->position =  new PiVector3(position.x,position->y,position.z);
+	this->position =  new PiVector3(position->x,position->y,position->z);
 	this->rotation = new PiVector3();
 	this->velocity = new PiVector3();
 	this->acceleration = new PiVector3();

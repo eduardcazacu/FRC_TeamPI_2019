@@ -27,8 +27,8 @@ void PiPosition::updateEncoderPosition(PiVector3 *angle, PiVector3 *position) {
 
 
 	//find the distance
-	double distance = (lDist - rDist) / 2 + rDist;
-	double tempAngle = atan((lDist - rDist) / properties.wheelBase);
+	double distance = (rDist - lDist) / 2 + lDist;
+	double tempAngle = atan((rDist - lDist) / properties.wheelBase);
 	tempAngle = tempAngle * (180.0 / M_PI);
 
 	//reset angles
@@ -42,11 +42,11 @@ void PiPosition::updateEncoderPosition(PiVector3 *angle, PiVector3 *position) {
 	angle->z += tempAngle;
 
 	//x-y position:
-	position->y += sin(tempAngle)*distance;
-	position->x += cos(tempAngle)*distance;
+	position->y += sin(tempAngle/M_PI*180)*distance;
+	position->x += cos(tempAngle/M_PI*180)*distance;
 
 	//add to distance:
-	this->dist += abs(distance);
+	this->dist += abs(distance);	//should this be absolute?? What if you drive backwards?
 }
 
 void PiPosition::updatePosition() {
