@@ -25,8 +25,13 @@ public:
 	nt::NetworkTableEntry yEntry;
 	nt::NetworkTableEntry angleEntry;
 	nt::NetworkTableEntry OpenPiston;
-	nt::NetworkTableEntry Calibration;
-	nt::NetworkTableEntry Calibrating;
+
+	nt::NetworkTableEntry XDestination;
+	nt::NetworkTableEntry YDestination;
+	nt::NetworkTableEntry DirDestination;
+
+
+
 
 
 	/*
