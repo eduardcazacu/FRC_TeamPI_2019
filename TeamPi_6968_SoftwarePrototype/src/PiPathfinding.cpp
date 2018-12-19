@@ -53,9 +53,9 @@ bool PiPathfinding::GoTO(PiPosition * robotPos, PiTransform * destination) {
 		}
 		break;
 	}
-	case 4:
-	gotThere = true;
-	break;
+	//case 4:
+	//gotThere = true;
+	//break;
 
 	return gotThere;
 }

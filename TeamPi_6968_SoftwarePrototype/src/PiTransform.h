@@ -20,7 +20,7 @@ PiVector3 *velocity;
 PiVector3 *acceleration;
 
 PiTransform();
-PiTransform(PiVector3 posiion);
+PiTransform(PiVector3 position);
 PiTransform(PiVector3 position, PiVector3 rotation);
 };
 
