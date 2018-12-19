@@ -35,6 +35,9 @@ class PiUltrasoon{
 		// Variables:
 		double LastsampleUltra, LastAverageUltra, LastTimeUltra;
 
+		//correction values
+		double previousValues[25]={};
+		int arrSize = 25;
 		// digital input, output pointer definition.
 		//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(this->T);  // chack if this works !
 		//frc::DigitalInput* EchoPin = new frc::DigitalInput(this->E);
@@ -69,5 +72,6 @@ class PiUltrasoon{
 		 */
 		double UltrasoonValue(int What, int samples);
 		double UltrasoonMasurment(int what, int Samples);
+		bool UltrasoonObject(double Distance);
 };
 #endif

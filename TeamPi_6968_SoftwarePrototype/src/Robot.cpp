@@ -47,21 +47,13 @@ public:
 	//PiBuiltInAccelerometer *A = new PiBuiltInAccelerometer();
 	PiMicroDelay *Delay = new PiMicroDelay();
 
-	//driving:
-	PiMovement *piMovement = new PiMovement();
-
-
 	//functions:
 	PiPowerUp *power = new PiPowerUp();
 	PiUltrasoon *Ultra1 = new PiUltrasoon(6, 7);
 	//MPU9250 *accel = new MPU9250(0x68);
 	//PiBuiltInAccelerometer *accelIntern = new PiBuiltInAccelerometer();
 
-	//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(6);  // chack if this works !
-	//frc::DigitalInput* EchoPin = new frc::DigitalInput(7);
-	//Ultrasonic *Ultra2 = new Ultrasonic(TriggerPin,EchoPin,Ultrasonic::kMilliMeters);
-
-	//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(6);  // chack if this works !
+	//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(6);
 	//frc::DigitalInput* EchoPin = new frc::DigitalInput(7);
 	//Ultrasonic *Ultra2 = new Ultrasonic(TriggerPin,EchoPin,Ultrasonic::kMilliMeters);
 
@@ -75,13 +67,13 @@ public:
 
 /*
 	//auto stuff:
-<<<<<<< HEAD
+
 	/*PiPathfinding *pathfinding = new PiPathfinding(position);
 	PiTransform *autoTargets[] = {(new PiTransform(new PiVector3(0,2000,0)),new PiVector3(0,0,359)),new PiTransform(new PiVector3(0,0,0),new PiVector3(0,0,0))};
-=======
+
 	PiPathfinding *pathfinding = new PiPathfinding(position);
 	PiTransform *autoTargets[] = new PiTransform(new PiVector3(0,2000,0),new PiVector3(0,0,359)),new PiTransform(new PiVector3(0,0,0),new PiVector3(0,0,0));
->>>>>>> 60ae410ce2b65b1ffa24e6c88a41b2cb2bd9dc53
+
 	int nOfTargets = 2;
 	int currentTarget = 0;*/
 
@@ -106,10 +98,10 @@ public:
 		intakeSystem();
 
 		// utlrasonic sensor stuf
-		/*double c = Ultra1->UltrasoonValue(1, 20);
-		 std::cout << "This is the distance in front of ultra1: " << c
-		 << std::endl;
-		 */
+			//double c = Ultra1->UltrasoonMasurment(1, 1);
+			//std::cout << "This is the distance in front of ultra1: " << c << std::endl;
+		std::cout<<"Object: "<<Ultra1->UltrasoonObject(10)<<std::endl;
+
 
 		/*if (leftRPM || rightRPM)
 		 std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
@@ -119,13 +111,13 @@ public:
 			//calibrate encoders
 		} else {
 			position->updatePosition();
-
+/*
 			std::cout << "Distance travelled: " << position->getDistance()
 					<< "\n";
 			std::cout << "angle: " << position->Get()->rotation->z << '\n';
 			std::cout << "coordinates: " << position->Get()->position->x
 					<< " , " << position->Get()->position->y << "\n";
-
+*/
 		}
 		//dashboard->xEntry.SetDouble(testX++);
 		dashboard->xEntry.SetDouble(position->Get()->position->x);
@@ -165,10 +157,6 @@ public:
 		power->moveBox(boxStick.GetY());
 		power->intakeBox(boxStick.GetY());
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 60ae410ce2b65b1ffa24e6c88a41b2cb2bd9dc53
 		// utlrasonic sesnor stuf
 		//double c = Ultra1->UltrasoonMasurment(1,20);
 		//std::cout << "This is the distance in front of ultra2: " << c << std::endl;
