@@ -1,7 +1,8 @@
 var map = function(p){
 
-  width = 500;
-  height = 500;
+  width = 750;
+  height = 750;
+
 
   var blinky;
   var destination;
@@ -20,7 +21,7 @@ var map = function(p){
     p.line()
 
 
-    blinky.draw(Xvalue, Yvalue, Anglevalue);
+    blinky.draw(Xvalue/2 + width/2, Yvalue/2 + height/2, Anglevalue);
     if(destination != null){
       destination.draw();
       //MoveBlinky();
@@ -125,13 +126,14 @@ var map = function(p){
       this.dir = _dir;
       p.fill(255,0,0);
       p.stroke(0);
+      var rotation = this.dir/180*p.PI;
       p.translate(this.x, height - this.y );
-      p.rotate(this.dir/180*p.PI);
+      p.rotate(rotation);
       p.rect(0- this.width/2,0- this.height/2, this.width, this.height);
       p.fill(255);
       p.pop();
 
-      this.arrow.update(this.x, height - this.y, this.dir, this.width/12);
+      this.arrow.update(this.x, height - this.y, rotation, this.width/12);
     }
 
     var driveIndex = 0;
@@ -210,7 +212,7 @@ var map = function(p){
       this.angle = dir;
     p.push();
     p.translate(this.x,this.y);
-    p.rotate(this.angle/180*p.PI-p.PI/2);
+    p.rotate(this.angle-p.PI/2);
     p.fill(255);
     p.beginShape()
     p.noStroke();
