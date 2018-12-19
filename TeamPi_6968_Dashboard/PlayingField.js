@@ -23,7 +23,7 @@ var map = function(p){
     blinky.draw(Xvalue, Yvalue, Anglevalue);
     if(destination != null){
       destination.draw();
-      MoveBlinky();
+      //MoveBlinky();
     }
     /*
     xCross = Veriables.Xvalue + width/2;
@@ -120,9 +120,9 @@ var map = function(p){
 
     this.draw = function(_x,_y,_dir){
       p.push();
-      //this.x = _x;
-      //this.y = _y;
-      //this.dir = _dir;
+      this.x = _x;
+      this.y = _y;
+      this.dir = _dir;
       p.fill(255,0,0);
       p.stroke(0);
       p.translate(this.x, height - this.y );
