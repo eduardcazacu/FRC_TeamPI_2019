@@ -19,17 +19,13 @@ PiTransform *PiPosition::Get() {
 	return this->robot;
 }
 
-
-
 void PiPosition::updateEncoderPosition(PiVector3 *angle, PiVector3 *position) {
 	double rDist = -encoders->distanceRight();	//on blinky this one is reversed
 	double lDist = encoders->distanceLeft();
 
-
 	//find the distance
 	double distance = (rDist - lDist) / 2 + lDist;
 	double tempAngle = atan((rDist - lDist) / properties.wheelBase);
-	tempAngle = tempAngle * (180.0 / M_PI);
 
 	//reset angles
 	if (angle->z >= 360)
@@ -37,16 +33,17 @@ void PiPosition::updateEncoderPosition(PiVector3 *angle, PiVector3 *position) {
 	else if (angle->z <= -360)
 		angle->z += 360;
 
-
+	tempAngle = tempAngle * (180.0 / M_PI);
 	//add the angle
 	angle->z += tempAngle;
 
+
 	//x-y position:
-	position->y += sin(tempAngle/M_PI*180)*distance;
-	position->x += cos(tempAngle/M_PI*180)*distance;
+	position->y += cos((angle->z * M_PI / 180)) * distance;
+	position->x += sin((angle->z * M_PI / 180)) * distance;
 
 	//add to distance:
-	this->dist += abs(distance);	//should this be absolute?? What if you drive backwards?
+	this->dist += abs(distance);
 }
 
 void PiPosition::updatePosition() {

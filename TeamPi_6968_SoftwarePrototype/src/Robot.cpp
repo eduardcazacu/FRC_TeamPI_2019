@@ -26,11 +26,12 @@
 #include "PiBuiltInAccelerometer.h"
 #include "PiMicroDelay.h"
 
-
 #include "PiMap.h"
 #include "PiDashboard.h"
 #include "TimedRobot.h"
 #include "PiPathfinding.h"
+
+#include <vector>
 
 class Robot: public frc::IterativeRobot {
 public:
@@ -52,7 +53,6 @@ public:
 	//MPU9250 *accel = new MPU9250(0x68);
 	//PiBuiltInAccelerometer *accelIntern = new PiBuiltInAccelerometer();
 
-
 	//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(6);  // chack if this works !
 	//frc::DigitalInput* EchoPin = new frc::DigitalInput(7);
 	//Ultrasonic *Ultra2 = new Ultrasonic(TriggerPin,EchoPin,Ultrasonic::kMilliMeters);
@@ -64,12 +64,17 @@ public:
 	frc::Joystick m_stick { 0 };	//first controller for driving
 	frc::Joystick boxStick { 1 };	//second controller for box pickup
 
-/*
 	//auto stuff:
-	PiPathfinding *pathfinding = new PiPathfinding(position);
-	PiTransform *autoTargets[] = new PiTransform(new PiVector3(0,2000,0),new PiVector3(0,0,359)),new PiTransform(new PiVector3(0,0,0),new PiVector3(0,0,0));
+	PiPathfinding *pathfinding = new PiPathfinding(piMovement);
+	PiTransform *autoTarget;
+
+	PiTransform *autoTarget0 = new PiTransform(PiVector3(1000, 1000, 0),
+			PiVector3(0, 0, 0));
+	PiTransform *autoTarget1 = new PiTransform(PiVector3(0, 0, 0),
+			PiVector3(0, 0, 0));
+
 	int nOfTargets = 2;
-	int currentTarget = 0;*/
+	int currentTarget = 0;
 
 	//speed reduction;
 	double speedReductionFactor = 0.7;
@@ -90,28 +95,37 @@ public:
 		piMovement->move(m_stick.GetY() * speedReductionFactor,
 				m_stick.GetZ() * 0.7);
 		//box intake:
-		intakeSystem();
+		//intakeSystem();
 
 		// utlrasonic sensor stuf
 		/*double c = Ultra1->UltrasoonValue(1, 20);
 		 std::cout << "This is the distance in front of ultra1: " << c
 		 << std::endl;
 		 */
+		positioningStuff();
 
-		/*if (leftRPM || rightRPM)
-		 std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
-		 << "\n";
-		 */
+	}
+
+	void positioningStuff() {
 		if (!piEncoder->calibrate()) {
 			//calibrate encoders
 		} else {
-			position->updatePosition();
+			/*double leftRPM = piEncoder->RPMLeft();
+			 double rightRPM = piEncoder->RPMRight();
 
-			std::cout << "Distance travelled: " << position->getDistance()
-					<< "\n";
-			std::cout << "angle: " << position->Get()->rotation->z << '\n';
-			std::cout << "coordinates: " << position->Get()->position->x
-					<< " , " << position->Get()->position->y << "\n";
+			 if (leftRPM || rightRPM)
+			 std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
+			 << "\n";
+
+			 */
+			position->updatePosition();
+			/*
+			 std::cout << "Distance travelled: " << position->getDistance()
+			 << "\n";
+			 std::cout << "angle: " << position->Get()->rotation->z << '\n';
+			 std::cout << "coordinates: " << position->Get()->position->x
+			 << " , " << position->Get()->position->y << "\n";
+			 */
 
 		}
 		//dashboard->xEntry.SetDouble(testX++);
@@ -123,12 +137,32 @@ public:
 		dashboard->Refresh();
 	}
 
-	void AutoPeriodic() {
+	void AutonomousInit() {
+		autoTarget = autoTarget1;
+	}
+
+	void AutonomousPeriodic() {
+		positioningStuff();
 		//do auto stuff
-		/*
-		if(pathfinding->GoTO(position,autoTargets[currentTarget])){
-			currentTarget=(currentTarget+1)%nOfTargets;
-		}*/
+		//piMovement->autoMove(0, 0.2);
+
+		switch (currentTarget) {
+		case 0:
+			autoTarget = autoTarget0;
+			break;
+		case 1:
+			autoTarget = autoTarget1;
+			break;
+		default:
+			break;
+
+		}
+
+		if (pathfinding->GoTO(position, autoTarget)) {
+			std::cout << "Going new places \n";
+			//go to next target:
+			currentTarget++;
+		}
 
 	}
 	void RobotInit() {
@@ -152,7 +186,6 @@ public:
 		power->moveBox(boxStick.GetY());
 		power->intakeBox(boxStick.GetY());
 
-
 		// utlrasonic sesnor stuf
 		//double c = Ultra1->UltrasoonMasurment(1,20);
 		//std::cout << "This is the distance in front of ultra2: " << c << std::endl;
@@ -163,7 +196,6 @@ public:
 		//std::cout<<"this is acceleration in X: "<< accel2->GetX()<<'\n' <<"this is accelerometer Y: "<<accel2->GetY()<<'\n'<<"this is accelerometer Z: "<<accel2->GetZ()<< std::endl;
 
 		//accelIntern->AdvancedCalculation();
-
 
 		//open close arms:
 		bool buttonValue = boxStick.GetRawButton(1);
@@ -187,8 +219,8 @@ public:
 		} else {
 			lastButtonValue = false;
 		}
-		std::cout << "OpenPiston: " << dashboard->OpenPiston.GetValue()
-				<< std::endl;
+		/*std::cout << "OpenPiston: " << dashboard->OpenPiston.GetValue()
+		 << std::endl;*/
 		if (dashboard->OpenPiston.GetValue()) {
 			armState = !armState;
 			if (armState) {

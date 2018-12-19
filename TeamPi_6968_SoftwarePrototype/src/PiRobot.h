@@ -19,7 +19,7 @@ public:
 	PiRobot();
 
 	const PiVector3 size{600, 870, 0};
-	const double wheelBase = 570;
+	const double wheelBase = 580;
 
 	//PiTransform transform;	//the location/rotation/velocity/acceleration of the robot
 

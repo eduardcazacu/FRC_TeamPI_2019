@@ -49,7 +49,7 @@ private:
 	//positioning:
 	PiPosition *position;
 	double startDistance ;
-	double startAngle ;
+	double startAngle,destinationAngle ;
 
 	bool autoDriving,autoRotating;
 	bool goodToGo;
@@ -87,6 +87,8 @@ public:
 	 * PARAMETERS: 	distance to drive
 	 * RETURN:		point reached or not.
 	 */
+
+	void autoMove(double speed, double zRotation);
 	bool driveFor(double dist, double speed);
 	/*
 	 * DESCRIPTION:	rotate a certain number of degrees
