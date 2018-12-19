@@ -25,7 +25,8 @@ PiEncoder::PiEncoder(WPI_TalonSRX* lEnc, WPI_TalonSRX* rEnc,
 	this->wheelRadius = new double(wheelRadius);
 
 	//calibration
-	this->calMulR = this->calMulL=1;
+	this->calMulR = 1;
+	this->calMulL=1;
 	this->calReadingsMade= 0;
 
 	tmrL->Start();
@@ -116,11 +117,11 @@ bool PiEncoder::calibrate() {
 
 			//average
 			calMulL = (calMulL + tempCalMulL) / 2;
-			calMulR = (calMulR + tempCalMulL) / 2;
+			calMulR = (calMulR + tempCalMulR) / 2;
 
 			this->calReadingsMade++;
 
-			std::cout << "Calibrating encoders... \ n";
+			std::cout << "Calibrating encoders... \n";
 
 			if (calReadingsMade >= CAL_READINGS) {
 				calReadingsMade = 0;
@@ -132,7 +133,7 @@ bool PiEncoder::calibrate() {
 			}
 		}
 		else{
-			std::cout<<"Move straight at a constant speed";
+			std::cout<<"Move straight at a constant speed \n";
 		}
 		return false;
 	}

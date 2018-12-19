@@ -28,8 +28,7 @@ bool PiPathfinding::GoTO(PiPosition * robotPos, PiTransform * destination) {
 		oldDir = (int) (robotPos->Get()->rotation->z + 360) % 360;
 		dx = oldX - robotPos->Get()->position->x;
 		dy = oldY - robotPos->Get()->position->y;
-		angleToGo = calcAngleToGo(destination->position->x,
-				destination->position->y);
+		angleToGo = calcAngleToGo(dx,dy);
 		distance = sqrt(pow(dx, 2) + pow(dy, 2));
 
 		index++;
@@ -46,9 +45,9 @@ bool PiPathfinding::GoTO(PiPosition * robotPos, PiTransform * destination) {
 		}
 		break;
 	case 3: //turn to designated angle
-		if (move->rotate(
+		if (true /*move->rotate(
 				(int) (destination->rotation->z - oldDir + 5 * 360) % 360,
-				speed)) {
+				speed)*/) {
 			index++;
 		}
 		break;
@@ -61,11 +60,14 @@ bool PiPathfinding::GoTO(PiPosition * robotPos, PiTransform * destination) {
 }
 
 double PiPathfinding::calcAngleToGo(double dx, double dy) {
-	double angle = atan2(dy, dx) / M_PI * 180 * -1 + 90; //to degrees
+	std::cout<<"dx"<<(dx)<<"\n";
+	std::cout<<"dy"<<(dy)<<"\n";
+	double angle = atan2(dy, dx) / M_PI * 180; //to degrees
 	while (angle < 0) {
 		angle += 360;
 	}
-	angle = (int) angle % 360;
-	return (angle - oldDir);
+	double anglediff = ((int)(angle - oldDir + 360.0 )% 360);
+	std::cout<<(anglediff)<<"\n";
+	return anglediff;
 }
 
