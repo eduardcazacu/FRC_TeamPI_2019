@@ -25,6 +25,7 @@ PiMicroDelay::PiMicroDelay(){
 
 void PiMicroDelay::DelayTime(int Time){
 	uint64_t startTimeUsec = nt::Now();
+	timeMax = 10000;
 
 	while((nt::Now()<= startTimeUsec + Time)||(nt::Now()<= startTimeUsec +timeMax));
 }

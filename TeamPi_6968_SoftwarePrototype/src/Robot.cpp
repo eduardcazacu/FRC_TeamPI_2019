@@ -12,20 +12,34 @@
 
 #include <DigitalInput.h>
 #include <DigitalOutput.h>
+#include <I2C.h>
 
 //Our own libraries
 #include <iostream>
 #include "PiMovement.h"
 #include "PiPowerUp.h"
+
 #include "PiPosition.h"
 #include "PiEncoder.h"
 #include "PiUltrasoon.h"
+#include "MPU9250.h"
+#include "PiBuiltInAccelerometer.h"
+#include "PiMicroDelay.h"
+
+class Robot: public frc::IterativeRobot {
+public:
+	//PiBuiltInAccelerometer *A = new PiBuiltInAccelerometer();
+	PiMicroDelay *Delay = new PiMicroDelay();
+
+	//driving:
+	PiMovement *piMovement = new PiMovement();
 #include "PiMap.h"
 #include "PiDashboard.h"
 #include "TimedRobot.h"
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
+#include "PiPathfinding.h"
 
 class Robot: public frc::IterativeRobot {
 public:
@@ -41,13 +55,29 @@ public:
 	//functions:
 	PiPowerUp *power = new PiPowerUp();
 	PiUltrasoon *Ultra1 = new PiUltrasoon(6, 7);
+	//MPU9250 *accel = new MPU9250(0x68);
+	//PiBuiltInAccelerometer *accelIntern = new PiBuiltInAccelerometer();
 
+<<<<<<< HEAD
+	//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(6);  // chack if this works !
+	//frc::DigitalInput* EchoPin = new frc::DigitalInput(7);
+	//Ultrasonic *Ultra2 = new Ultrasonic(TriggerPin,EchoPin,Ultrasonic::kMilliMeters);
+=======
 	///driving:
 	PiMovement *piMovement = new PiMovement(position);
 
+>>>>>>> 8e1f8ea4a8559b0abddee0edba30261da45e2ed9
 	//tele op:
 	frc::Joystick m_stick { 0 };	//first controller for driving
 	frc::Joystick boxStick { 1 };	//second controller for box pickup
+
+
+	//auto stuff:
+	PiPathfinding *pathfinding = new PiPathfinding(position);
+	PiTransform *autoTargets[] = {new PiTransform(new PiVector3(0,2000,0),new PiVector3(0,0,359)),new PiTransform(new PiVector3(0,0,0),new PiVector3(0,0,0))}
+	int nOfTargets = 2;
+	int currentTarget = 0;
+
 	//speed reduction:
 	double speedReductionFactor = 0.7;
 
@@ -91,8 +121,8 @@ public:
 					<< " , " << position->Get()->position->y << "\n";
 
 		}
-		dashboard->xEntry.SetDouble(testX++);
-		//dashboard->xEntry.SetDouble(position->Get()->position->x);
+		//dashboard->xEntry.SetDouble(testX++);
+		dashboard->xEntry.SetDouble(position->Get()->position->x);
 		dashboard->yEntry.SetDouble(position->Get()->position->y);
 		dashboard->angleEntry.SetDouble(position->Get()->rotation->z);
 
@@ -102,6 +132,10 @@ public:
 
 	void AutoPeriodic() {
 		//do auto stuff
+		if(pathfinding->GoTO(position,autoTargets[currentTarget])){
+			currentTarget=(currentTarget+1)%nOfTargets;
+		}
+
 	}
 	void RobotInit() {
 
@@ -124,6 +158,20 @@ public:
 		power->moveBox(boxStick.GetY());
 		power->intakeBox(boxStick.GetY());
 
+<<<<<<< HEAD
+		// utlrasonic sesnor stuf
+		double c = Ultra1->UltrasoonMasurment(1,20);
+		std::cout << "This is the distance in front of ultra2: " << c << std::endl;
+		//accel->readSensor();
+		//double W = accel->getAccelX_mss();
+		//std::cout << "This is the x of the accelerometer: "<< W << std::endl;
+
+		//std::cout<<"this is acceleration in X: "<< accel2->GetX()<<'\n' <<"this is accelerometer Y: "<<accel2->GetY()<<'\n'<<"this is accelerometer Z: "<<accel2->GetZ()<< std::endl;
+
+		//accelIntern->AdvancedCalculation();
+
+=======
+>>>>>>> 8e1f8ea4a8559b0abddee0edba30261da45e2ed9
 		//open close arms:
 		bool buttonValue = boxStick.GetRawButton(1);
 

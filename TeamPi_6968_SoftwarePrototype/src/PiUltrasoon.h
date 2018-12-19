@@ -19,6 +19,8 @@
 #include <DigitalInput.h>
 #include <DigitalOutput.h>
 #include <Timer.h>
+#include <Ultrasonic.h>
+#include <PiMicroDelay.h>
 
 class PiUltrasoon{
 	//declare all the variables and functions which don't need to be exposed to the main program
@@ -26,15 +28,18 @@ class PiUltrasoon{
 		//object destinction
 		int T;
 		int E;
+		//pins
+		frc::DigitalOutput* TriggerPin;
+		frc::DigitalInput* EchoPin;
 
 		// Variables:
 		double LastsampleUltra, LastAverageUltra, LastTimeUltra;
 
 		// digital input, output pointer definition.
-		frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(6);
-		frc::DigitalInput* EchoPin = new frc::DigitalInput(7);
+		//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(this->T);  // chack if this works !
+		//frc::DigitalInput* EchoPin = new frc::DigitalInput(this->E);
 
-
+		PiMicroDelay* Delay = new PiMicroDelay();
 	public:
 		//define all the methods which are needed inside other classes and in the main file.
 		//NO VARIABLES SHOULD BE PLACED HERE. Variables should be kept private.
@@ -44,7 +49,7 @@ class PiUltrasoon{
 		 * INPUT:			Trigger pin and echo pin example: PiUltrasoon(1,2); 1 = trigger pin 2 = echo pin
 		 * OUTPUT:			Void
 		 */
-		PiUltrasoon(int _T, int _E);
+		PiUltrasoon(int, int);
 
 		// get functions
 		double GetLastAverageUltra();
@@ -63,5 +68,6 @@ class PiUltrasoon{
 		 * OUTPUT:			What value? (double)
 		 */
 		double UltrasoonValue(int What, int samples);
+		double UltrasoonMasurment(int what, int Samples);
 };
 #endif
