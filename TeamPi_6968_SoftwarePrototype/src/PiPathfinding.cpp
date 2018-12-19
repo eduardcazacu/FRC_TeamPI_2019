@@ -51,18 +51,18 @@ bool PiPathfinding::GoTO(PiPosition * robotPos, PiTransform * destination) {
 			index++;
 		}
 		break;
-	}
-	//case 4:
-	//gotThere = true;
-	//break;
 
+	case 4:
+		gotThere = true;
+		break;
+	}
 	return gotThere;
 }
 
 double PiPathfinding::calcAngleToGo(double dx, double dy) {
 	std::cout<<"dx"<<(dx)<<"\n";
 	std::cout<<"dy"<<(dy)<<"\n";
-	double angle = atan2(dy, dx) / M_PI * 180; //to degrees
+	double angle = atan2(dx, dy) / M_PI * 180; //to degrees
 	while (angle < 0) {
 		angle += 360;
 	}

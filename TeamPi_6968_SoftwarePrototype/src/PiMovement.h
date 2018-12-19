@@ -24,8 +24,8 @@
 
 using namespace frc;
 
-#define DIST_TOLERANCE  5	//tolerance in mm
-#define ANGL_TOLERANCE  5 //tolerance in degrees
+#define DIST_TOLERANCE  2	//tolerance in mm
+#define ANGL_TOLERANCE  1 //tolerance in degrees
 
 
 class PiMovement{

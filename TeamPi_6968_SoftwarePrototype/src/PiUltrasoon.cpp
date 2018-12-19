@@ -78,7 +78,7 @@ double PiUltrasoon::UltrasoonMasurment(int what, int Samples){
 	double PrevAvg;
 	for(int z = 0; z< this->arrSize; z++){
 		if(this->previousValues[z] == 0){
-			previousValues[z] = 10;
+			previousValues[z] = 50;
 		}
 		PrevAvg += this->previousValues[z];
 	}
@@ -104,6 +104,7 @@ double PiUltrasoon::UltrasoonMasurment(int what, int Samples){
 }
 
 bool PiUltrasoon::UltrasoonObject(double Distance){
+	std::cout << UltrasoonMasurment(1,1) << '\n';
 	if(UltrasoonMasurment(1,1) < Distance){
 		return true;
 	}

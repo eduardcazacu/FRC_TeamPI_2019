@@ -49,7 +49,7 @@ public:
 
 	//functions:
 	PiPowerUp *power = new PiPowerUp();
-	PiUltrasoon *Ultra1 = new PiUltrasoon(6, 7);
+	PiUltrasoon *Ultra1 = new PiUltrasoon(0, 1);
 	//MPU9250 *accel = new MPU9250(0x68);
 	//PiBuiltInAccelerometer *accelIntern = new PiBuiltInAccelerometer();
 
@@ -65,17 +65,18 @@ public:
 	frc::Joystick boxStick { 1 };	//second controller for box pickup
 
 
-/*
+
 	//auto stuff:
+    PiPathfinding *pathfinding = new PiPathfinding(piMovement);
+    PiTransform *autoTarget;
 
-	/*PiPathfinding *pathfinding = new PiPathfinding(position);
-	PiTransform *autoTargets[] = {(new PiTransform(new PiVector3(0,2000,0)),new PiVector3(0,0,359)),new PiTransform(new PiVector3(0,0,0),new PiVector3(0,0,0))};
-
-	PiPathfinding *pathfinding = new PiPathfinding(position);
-	PiTransform *autoTargets[] = new PiTransform(new PiVector3(0,2000,0),new PiVector3(0,0,359)),new PiTransform(new PiVector3(0,0,0),new PiVector3(0,0,0));
+    PiTransform *autoTarget0 = new PiTransform(PiVector3(0, 2000, 0),
+            PiVector3(0, 0, 0));
+    PiTransform *autoTarget1 = new PiTransform(PiVector3(0, 0, 0),
+            PiVector3(0, 0, 0));
 
 	int nOfTargets = 2;
-	int currentTarget = 0;*/
+	int currentTarget = 0;
 
 	double speedReductionFactor = 0.7;
 
@@ -102,40 +103,93 @@ public:
 			//std::cout << "This is the distance in front of ultra1: " << c << std::endl;
 		std::cout<<"Object: "<<Ultra1->UltrasoonObject(10)<<std::endl;
 
+	}
 
-		/*if (leftRPM || rightRPM)
-		 std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
-		 << "\n";
-		 */
-		if (!piEncoder->calibrate()) {
-			//calibrate encoders
-		} else {
-			position->updatePosition();
-/*
-			std::cout << "Distance travelled: " << position->getDistance()
-					<< "\n";
-			std::cout << "angle: " << position->Get()->rotation->z << '\n';
-			std::cout << "coordinates: " << position->Get()->position->x
-					<< " , " << position->Get()->position->y << "\n";
-*/
+	void positioningStuff() {
+			if (!piEncoder->calibrate()) {
+				//calibrate encoders
+			} else {
+				/*double leftRPM = piEncoder->RPMLeft();
+				 double rightRPM = piEncoder->RPMRight();
+
+				 if (leftRPM || rightRPM)
+				 std::cout << "Left RPM: " << leftRPM << " Right RPM: " << rightRPM
+				 << "\n";
+
+				 */
+				position->updatePosition();
+				/*
+				 std::cout << "Distance travelled: " << position->getDistance()
+				 << "\n";
+				 std::cout << "angle: " << position->Get()->rotation->z << '\n';
+				 std::cout << "coordinates: " << position->Get()->position->x
+				 << " , " << position->Get()->position->y << "\n";
+				 */
+
+			}
+			//dashboard->xEntry.SetDouble(testX++);
+			dashboard->xEntry.SetDouble(position->Get()->position->x);
+			dashboard->yEntry.SetDouble(position->Get()->position->y);
+			dashboard->angleEntry.SetDouble(position->Get()->rotation->z);
+
+			//refreshed the dashboard values
+			dashboard->Refresh();
 		}
-		//dashboard->xEntry.SetDouble(testX++);
-		dashboard->xEntry.SetDouble(position->Get()->position->x);
-		dashboard->yEntry.SetDouble(position->Get()->position->y);
-		dashboard->angleEntry.SetDouble(position->Get()->rotation->z);
 
-		//refreshed the dashboard values
-		dashboard->Refresh();
-	}
+	void AutonomousInit() {
+			autoTarget = autoTarget1;
+		}
 
-	void AutoPeriodic() {
-		//do auto stuff
-		/*
-		if(pathfinding->GoTO(position,autoTargets[currentTarget])){
-			currentTarget=(currentTarget+1)%nOfTargets;
-		}*/
+	void AutonomousPeriodic() {
+			positioningStuff();
+			//do auto stuff
+			//piMovement->autoMove(0, 0.2);
+			//std::cout << Ultra1->UltrasoonObject(30) << '\n';
+			if(Ultra1->UltrasoonObject(30)){	//in centimeters
+				piMovement->pause();
+			}
+			else{
+				piMovement->resume();
+				switch (currentTarget) {
+				case 0:
+					autoTarget = autoTarget0;
+					break;
+				case 1:
+					autoTarget = autoTarget1;
+					break;
+				default:
+					break;
 
-	}
+				}
+
+				/*if (pathfinding->GoTO(position, autoTarget)) {
+					std::cout << "Going new places \n";
+					//go to next target:
+					currentTarget++;
+				}*/
+			}
+
+			switch (currentTarget) {
+			case 0:
+				autoTarget = autoTarget0;
+				break;
+			case 1:
+				autoTarget = autoTarget1;
+				break;
+			default:
+				break;
+
+			}
+
+			if (pathfinding->GoTO(position, autoTarget)) {
+				std::cout << "Going new places \n";
+				//go to next target:
+				currentTarget++;
+			}
+			/*pathfinding->GoTO(position, new PiTransform(PiVector3(dashboard->XDestination, dashboard->YDestination, 0),
+		            PiVector3(0, 0, 0))))*/
+
+		}
 	void RobotInit() {
 
 		//Dashboard
@@ -192,6 +246,7 @@ public:
 		}
 		std::cout << "OpenPiston: " << dashboard->OpenPiston.GetValue()
 				<< std::endl;
+		/*
 		if (dashboard->OpenPiston.GetValue()) {
 			armState = !armState;
 			if (armState) {
@@ -203,7 +258,7 @@ public:
 			}
 
 			dashboard->OpenPiston.SetBoolean(false);
-		}
+		}*/
 	}
 
 	void changeButtonValue(bool value) {

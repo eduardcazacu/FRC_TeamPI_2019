@@ -36,8 +36,8 @@ class PiUltrasoon{
 		double LastsampleUltra, LastAverageUltra, LastTimeUltra;
 
 		//correction values
-		double previousValues[25]={};
-		int arrSize = 25;
+		double previousValues[15]={};
+		int arrSize = 15;
 		// digital input, output pointer definition.
 		//frc::DigitalOutput* TriggerPin = new frc::DigitalOutput(this->T);  // chack if this works !
 		//frc::DigitalInput* EchoPin = new frc::DigitalInput(this->E);
