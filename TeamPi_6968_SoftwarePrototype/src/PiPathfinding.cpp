@@ -54,6 +54,7 @@ bool PiPathfinding::GoTO(PiPosition * robotPos, PiTransform * destination) {
 
 	case 4:
 		gotThere = true;
+		std::cout << "gotThere? " << gotThere <<"\n";
 		break;
 	}
 	return gotThere;

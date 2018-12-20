@@ -21,7 +21,7 @@ var map = function(p){
     p.line()
 
 
-    blinky.draw(Xvalue/zoom + width/2, Yvalue/zoom + height/2, Anglevalue);
+    blinky.draw(Xvalue/zoom + width/2, Yvalue/zoom + height/4, Anglevalue);
     if(destination != null){
       destination.draw();
       //MoveBlinky();
@@ -232,10 +232,15 @@ var map = function(p){
     this.x = _x;
     this.y = _y;
     this.dir=(_dir+360)%360;
-    this.draw = function(){
-      NetworkTables.setValue('/data/Destination/X', this.x*zoom);
-      NetworkTables.setValue('/data/Destination/X', this.y*zoom);
-      NetworkTables.setValue('/data/Destination/X', this.dir*zoom);
+    this.draw = function(){/*
+      p.print((this.y - height/2)*zoom);
+      var x = (this.x- width/2)*zoom;
+      var y = this.y*zoom;
+      var dir = this.dir*zoom;
+      NetworkTables.setDouble('/data/Destination/X', x);
+
+      NetworkTables.setDouble('/data/Destination/X', y);
+      NetworkTables.setDouble('/data/Destination/X', dir);*/
       p.fill(0,0,255);
       p.ellipse(this.x,height-this.y, 10, 10);
     }

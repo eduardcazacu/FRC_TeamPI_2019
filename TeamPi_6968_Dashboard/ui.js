@@ -103,9 +103,10 @@ ui.calibrateButton.onclick = function() {
 }
 
 ui.SendCordinate.onclick = function(){
+	/*
 	NetworkTables.setValue('/data/Destination/X', ui.inputX.innerHTML);
 	NetworkTables.setValue('/data/Destination/Y',ui.inputY.innerHTML);
-	NetworkTables.setValue('/data/Destination/Angle',ui.inputAngle.innerHTML);
+	NetworkTables.setValue('/data/Destination/Angle',ui.inputAngle.innerHTML);*/
 	//mapClass.destination.x = NetworkTables.setValue('/data/Position/X', ui.inputX.innerHTML);
 	//mapClass.destination.y = NetworkTables.setValue('/data/Position/Y',ui.inputY.innerHTML);
 	//mapClass.destination.dir = NetworkTables.setValue('/data/Position/Angle',ui.inputAngle.innerHTML);

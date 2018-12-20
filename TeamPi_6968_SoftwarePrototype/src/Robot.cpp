@@ -70,10 +70,14 @@ public:
     PiPathfinding *pathfinding = new PiPathfinding(piMovement);
     PiTransform *autoTarget;
 
-    PiTransform *autoTarget0 = new PiTransform(PiVector3(0, 2000, 0),
+    PiTransform *autoTarget0 = new PiTransform(PiVector3(0, 1000, 0),
             PiVector3(0, 0, 0));
-    PiTransform *autoTarget1 = new PiTransform(PiVector3(0, 0, 0),
+    PiTransform *autoTarget1 = new PiTransform(PiVector3(500, 1000, 0),
             PiVector3(0, 0, 0));
+    PiTransform *autoTarget2 = new PiTransform(PiVector3(500, 2000, 0),
+                PiVector3(0, 0, 0));
+    PiTransform *autoTarget3 = new PiTransform(PiVector3(0, 3000, 0),
+                   PiVector3(0, 0, 0));
 
 	int nOfTargets = 2;
 	int currentTarget = 0;
@@ -102,7 +106,7 @@ public:
 			//double c = Ultra1->UltrasoonMasurment(1, 1);
 			//std::cout << "This is the distance in front of ultra1: " << c << std::endl;
 		std::cout<<"Object: "<<Ultra1->UltrasoonObject(10)<<std::endl;
-
+		positioningStuff();
 	}
 
 	void positioningStuff() {
@@ -137,7 +141,7 @@ public:
 		}
 
 	void AutonomousInit() {
-			autoTarget = autoTarget1;
+			autoTarget = autoTarget0;
 		}
 
 	void AutonomousPeriodic() {
@@ -145,29 +149,19 @@ public:
 			//do auto stuff
 			//piMovement->autoMove(0, 0.2);
 			//std::cout << Ultra1->UltrasoonObject(30) << '\n';
-			if(Ultra1->UltrasoonObject(30)){	//in centimeters
+			/*if(Ultra1->UltrasoonObject(20)){	//in centimeters
 				piMovement->pause();
 			}
-			else{
+			else{*/
 				piMovement->resume();
-				switch (currentTarget) {
-				case 0:
-					autoTarget = autoTarget0;
-					break;
-				case 1:
-					autoTarget = autoTarget1;
-					break;
-				default:
-					break;
 
-				}
 
-				/*if (pathfinding->GoTO(position, autoTarget)) {
+				if (pathfinding->GoTO(position, autoTarget)) {
 					std::cout << "Going new places \n";
 					//go to next target:
 					currentTarget++;
-				}*/
-			}
+				}
+			//}
 
 			switch (currentTarget) {
 			case 0:
@@ -176,16 +170,18 @@ public:
 			case 1:
 				autoTarget = autoTarget1;
 				break;
+			case 2:
+				autoTarget = autoTarget2;
+				break;
+			case 3:
+				autoTarget = autoTarget3;
+				break;
 			default:
 				break;
 
 			}
 
-			if (pathfinding->GoTO(position, autoTarget)) {
-				std::cout << "Going new places \n";
-				//go to next target:
-				currentTarget++;
-			}
+
 			/*pathfinding->GoTO(position, new PiTransform(PiVector3(dashboard->XDestination, dashboard->YDestination, 0),
 		            PiVector3(0, 0, 0))))*/
 

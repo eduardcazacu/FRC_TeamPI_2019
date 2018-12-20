@@ -85,6 +85,14 @@ bool PiMovement::driveFor(double dist, double speed) {
  * RETURN:		orientation reached or not
  */
 bool PiMovement::rotate(double angle, double speed) {
+	int offset = 10;
+
+	if(angle > 0){
+		angle = angle + angle * 0.1;
+	}
+	else if(angle < 0){
+		angle = angle - angle * 0.1;
+	}
 	bool gotThere = false;
 	if (!autoRotating) {
 		//store start position:
@@ -94,12 +102,12 @@ bool PiMovement::rotate(double angle, double speed) {
 	}
 	if (goodToGo) {
 		//if allowed to by obstacle avoidance systems, move:
-		/*if(angle <= 180 && angle > 0){*/
-			autoMove(0, speed * (angle / abs(angle)));
-		/*}
+		if(angle <= 180 && angle > 0){
+			autoMove(0, speed *-1* (angle / abs(angle)));
+		}
 		else{
-			autoMove(0, speed * -(angle / abs(angle)));
-		}*/
+			autoMove(0, speed * (angle / abs(angle)));
+		}
 
 	}
 
