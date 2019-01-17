@@ -41,8 +41,14 @@ void PiMovement::move(double speed, double zRotation) {
 	m_robotDrive.ArcadeDrive(speed, zRotation);
 }
 void PiMovement::autoMove(double speed, double zRotation) {
-	_rightFront->Set((-zRotation + speed));
-	leftPWM->Set(-(zRotation + speed));
+	if(zRotation > 0){
+		_rightFront->Set((-zRotation + speed)/1.5);
+		leftPWM->Set(-(zRotation + speed)/1.5);
+	}
+	else{
+		_rightFront->Set((-zRotation + speed));
+		leftPWM->Set(-(zRotation + speed));
+	}
 }
 
 /*
@@ -79,6 +85,14 @@ bool PiMovement::driveFor(double dist, double speed) {
  * RETURN:		orientation reached or not
  */
 bool PiMovement::rotate(double angle, double speed) {
+	int offset = 10;
+
+	if(angle > 0){
+		angle = angle + angle * 0.1;
+	}
+	else if(angle < 0){
+		angle = angle - angle * 0.1;
+	}
 	bool gotThere = false;
 	if (!autoRotating) {
 		//store start position:
@@ -89,10 +103,10 @@ bool PiMovement::rotate(double angle, double speed) {
 	if (goodToGo) {
 		//if allowed to by obstacle avoidance systems, move:
 		if(angle <= 180 && angle > 0){
-			autoMove(0, speed * (angle / abs(angle)));
+			autoMove(0, speed *-1* (angle / abs(angle)));
 		}
 		else{
-			autoMove(0, speed * -(angle / abs(angle)));
+			autoMove(0, speed * (angle / abs(angle)));
 		}
 
 	}

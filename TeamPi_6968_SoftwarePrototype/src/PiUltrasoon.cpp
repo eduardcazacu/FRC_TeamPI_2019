@@ -69,19 +69,48 @@ double PiUltrasoon::UltrasoonMasurment(int what, int Samples){
 			   }
 			double Duration = endTimeUsec - startTimeUsec;
 			AllSamples[x]= Duration/58;
-
-			SampleSum = AllSamples[x]+SampleSum;
-			double avergeNow = SampleSum/x;
-			if(AllSamples[x] > 1.2*avergeNow||AllSamples[x]< 0.8*avergeNow){
-				AllSamples[x]=avergeNow;
-			}
 	}
 
 	for(int y=0; y<Samples; y++){
 		SampleSum = SampleSum+ AllSamples[y];
 	}
 	double average = SampleSum/Samples;
+	double PrevAvg;
+	for(int z = 0; z< this->arrSize; z++){
+		if(this->previousValues[z] == 0){
+			previousValues[z] = 50;
+		}
+		PrevAvg += this->previousValues[z];
+	}
+	PrevAvg = PrevAvg/this->arrSize;
+	if(average == 0){
+		average = PrevAvg;
+	}
+	if(average > 400){
+		average = PrevAvg;
+	}
+
+	//updating prev value
+	double RememberPrevVal = average;
+	for(int w = 0; w<this->arrSize; w++){
+		double valNow = this->previousValues[w];
+		this->previousValues[w] = RememberPrevVal;
+		RememberPrevVal = valNow;
+	}
+	if(average < PrevAvg*0.5||average>PrevAvg*1.5){
+		return PrevAvg;
+	}
 	return average;
+}
+
+bool PiUltrasoon::UltrasoonObject(double Distance){
+	std::cout << UltrasoonMasurment(1,1) << '\n';
+	if(UltrasoonMasurment(1,1) < Distance){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 double PiUltrasoon::UltrasoonValue(int What, int samples){
