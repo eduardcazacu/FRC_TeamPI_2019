@@ -13,7 +13,7 @@
 //Can id
 
 //I2C id
-#define PIXYID 0x54
 
 
 //SPI SS pin
+#define PIXYSPI 0;
