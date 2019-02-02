@@ -1,6 +1,8 @@
 
 
-#include "PI_Pixy.h"
+
+#include "SPI.h"
+/*
 
 Pixy::Pixy(){
     spi = SPI(SPI.Port port);
@@ -17,7 +19,7 @@ Pixy::Pixy(){
   
     // You need to write send(), which takes a pointer to the data you want to send and the number of 
     // bytes to send via your serial port (SPI, I2C or UART).  It returns the number of bytes successfully sent.
-    extern uint8_t send(uint8_t *data, uint8_t len);
+    extern uint8_t SPI.send(uint8_t *data, uint8_t len);
     
     // You also need to write recv(), which takes a pointer to a data buffer where the received data
     // will be written/returned and the number of bytes to receive via your serial port (SPI, I2C or UART).  
@@ -26,11 +28,11 @@ Pixy::Pixy(){
     extern uint8_t recv(uint8_t *data, uint8_t len);
     
     // clear out any stale data
-    while(recv(recvBuf, 1));
+    while(spi.receive(recvBuf, 1));
     
     spi.send(versionRequest, 4);   
     delayMillisecond(1); // delay a little so we don't receive too fast (may not be necessary.)  
-    lenReceived = recv(recvBuf, 6 + 16); // 6 bytes of header and checksum and 16 bytes of version data
+    lenReceived = spi.receive(recvBuf, 6 + 16); // 6 bytes of header and checksum and 16 bytes of version data
     
     // print result
     printf("Received %hhu bytes.\n", lenReceived);
@@ -39,4 +41,4 @@ Pixy::Pixy(){
   
     
     
-}
+}*/

@@ -11,7 +11,6 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include "src"
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);

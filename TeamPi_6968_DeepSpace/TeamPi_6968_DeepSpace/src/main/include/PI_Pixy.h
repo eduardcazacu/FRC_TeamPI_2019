@@ -8,7 +8,7 @@
 
 
 class Pixy {
-
+/*
 private:
     bool pixyConnected = false;
     SPI spi;
@@ -16,6 +16,6 @@ private:
 public:
     Pixy();
 
-
+*/
 
 };
