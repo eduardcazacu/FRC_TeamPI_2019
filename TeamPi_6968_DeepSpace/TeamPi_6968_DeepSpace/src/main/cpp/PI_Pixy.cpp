@@ -1,12 +1,14 @@
 
 
-
+#include "PI_Pixy.h"
 #include "SPI.h"
-/*
+
 
 Pixy::Pixy(){
-    spi = SPI(SPI.Port port);
-    frc::SetChipSelectActiveHigh(0);
+    spi = frc::SPI();
+    spi.SetChipSelectActiveHigh();
+
+    uint8_t data;
 
     uint8_t i, lenReceived, recvBuf[32];
     uint8_t versionRequest[] =
@@ -16,10 +18,14 @@ Pixy::Pixy(){
       0x0e,  // this is the version request type
       0x00   // data_length is 0
     };
+
+    spi.begin();
+    spi.Transaction
   
     // You need to write send(), which takes a pointer to the data you want to send and the number of 
     // bytes to send via your serial port (SPI, I2C or UART).  It returns the number of bytes successfully sent.
-    extern uint8_t SPI.send(uint8_t *data, uint8_t len);
+    spi.Write(uint8_t *data, uint8_t len);
+    spi.Write()
     
     // You also need to write recv(), which takes a pointer to a data buffer where the received data
     // will be written/returned and the number of bytes to receive via your serial port (SPI, I2C or UART).  
@@ -41,4 +47,4 @@ Pixy::Pixy(){
   
     
     
-}*/
+}

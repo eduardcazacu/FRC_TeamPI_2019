@@ -8,14 +8,15 @@
 
 
 class Pixy {
-/*
+
 private:
     bool pixyConnected = false;
-    SPI spi;
+    frc::SPI spi;
 
 public:
+
     Pixy();
 
-*/
+
 
 };
