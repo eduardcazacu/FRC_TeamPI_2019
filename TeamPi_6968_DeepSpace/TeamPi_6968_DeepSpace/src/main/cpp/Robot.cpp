@@ -13,13 +13,14 @@
 #include <frc/I2C.h>
 
 
+
 frc::I2C *I2CBus;
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  //I2CBus = new frc::I2C(frc::I2C.Port.kOnboard, 8);
+  I2CBus = new frc::I2C(frc::I2C::kMXP, 8);
 }
 
 /**
@@ -57,18 +58,21 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
-  std::cout << "main function\n";
+  //std::cout << "main function\n";
   if (m_autoSelected == kAutoNameCustom) {
     // Custom Auto goes here
   } else {
     // Default Auto goes here
   }
 
-  //std::cout <<Wire.AddressOnly()<<;
-
-
-
-
+  /*uint8_t *buff[6];
+  std::cout <<I2CBus->AddressOnly();
+  bool worked = I2CBus->Read(6,6,buff);
+  //frc::string s(reinterpret_cast<const char *>(p), 30);
+  //std::string s(reinterpret_cast<buff>(p), 30);
+  std::cout <<*buff[0]<<"\n";
+  //std::cout <<worked<<"\n";*/
+  
 }
 
 void Robot::TeleopInit() {}
