@@ -1,19 +1,22 @@
 #pragma once
 
 
-//DIO Pins
+//--------------------------------DIO Pins----------------------------
 
 
-//PWM Pins
+//--------------------------------PWM Pins----------------------------
 
-//Relay Pins
+//-------------------------------Relay Pins---------------------------
 
-//Analog Pins
+//-------------------------------Analog Pins--------------------------
+//Ir distance sensors:
+#define IR_FRONT 0
+#define IR_BACK 1
+//---------------------------------Can id------------------------------
 
-//Can id
-
-//I2C id
-
-
-//SPI SS pin
-#define PIXYSPI 0;
+//---------------------------------I2C id------------------------------
+//ultrasound current sensors
+#define US_LEFT 0x40
+#define US_RIGHT 0x41
+//--------------------------------SPI SS pin---------------------------
+#define PIXYSPI 0

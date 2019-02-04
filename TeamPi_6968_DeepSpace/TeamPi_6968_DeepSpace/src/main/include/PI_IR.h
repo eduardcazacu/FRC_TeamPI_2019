@@ -4,12 +4,16 @@
 
 #pragma once
 
+#include <AnalogInput.h>
+
 class PI_IR
 {
   private:
-    int _roboRioPin;
-    int _triggerValue;
-    int analogReadIR();
+    frc::AnalogInput* _analogInput; //the analog pin
+    int _triggerValue;    //value at which to consider or not an object detected
+
+
+    int analogReadIR(void);   //helper function for reading the analog pin
 
   public:
     // Constructor
@@ -23,7 +27,12 @@ class PI_IR
         Input:          triggerValue[int] = the threshold for detecting an object 
         Output:         object in range? [bool]
     */
-
     bool objectInRange(int triggerValue);
     bool objectInRange();
+
+    /*  Description:    change the default trigger value
+        Input:          int triggerValue [0,1023]
+        Output:         void
+    */
+    void setTRiggerValue(int triggerValue);
 };
