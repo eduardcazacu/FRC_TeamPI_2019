@@ -1,22 +1,5 @@
 
-#pragma once
-
-#include <WPILib.h>
-#include "PI_Pins.h"
-#include <iostream>
-#include <SPI.h>
+/*#pragma once
 
 
-class Pixy {
-
-private:
-    bool pixyConnected = false;
-    frc::SPI spi;
-
-public:
-
-    Pixy();
-
-
-
-};
+#include <SPI.h>*/

@@ -1,14 +1,11 @@
+/*
 
-
-#include "PI_Pixy.h"
-#include "SPI.h"
+#include "include/PI_Pixy.h"
 
 
 Pixy::Pixy(){
-    spi = frc::SPI();
-    spi.SetChipSelectActiveHigh();
 
-    uint8_t data;
+  uint8_t data;
 
     uint8_t i, lenReceived, recvBuf[32];
     uint8_t versionRequest[] =
@@ -18,6 +15,20 @@ Pixy::Pixy(){
       0x0e,  // this is the version request type
       0x00   // data_length is 0
     };
+
+  uint8_t port = 0;
+  
+  HAL_SPIPort port =kOnboardCS0 
+  int32_t HAL_TransactionSPI(HAL_SPIPort port, const uint8_t* dataToSend,
+                           uint8_t* dataReceived, int32_t size);
+    int32_t HAL_WriteSPI(HAL_SPIPort port, const uint8_t* dataToSend,
+                     int32_t sendSize);
+                     int32_t HAL_ReadSPI(HAL_SPIPort port, uint8_t* buffer, int32_t count);
+                     void HAL_CloseSPI(HAL_SPIPort port);
+                     void HAL_SetSPIChipSelectActiveHigh(HAL_SPIPort port, int32_t* status);
+
+
+    
 
     spi.begin();
     spi.Transaction
@@ -47,4 +58,4 @@ Pixy::Pixy(){
   
     
     
-}
+}*/
