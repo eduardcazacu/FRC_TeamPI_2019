@@ -426,7 +426,7 @@ int16_t Adafruit_INA219::getPower_raw() {
     @return the shunt voltage converted to millivolts
 */
 /**************************************************************************/
-float Adafruit_INA219::getShuntVoltage_mV() {
+double Adafruit_INA219::getShuntVoltage_mV() {
   int16_t value;
   value = getShuntVoltage_raw();
   return value * 0.01;
@@ -438,7 +438,7 @@ float Adafruit_INA219::getShuntVoltage_mV() {
     @return the bus voltage converted to volts
 */
 /**************************************************************************/
-float Adafruit_INA219::getBusVoltage_V() {
+double Adafruit_INA219::getBusVoltage_V() {
   int16_t value = getBusVoltage_raw();
   return value * 0.001;
 }
@@ -450,8 +450,8 @@ float Adafruit_INA219::getBusVoltage_V() {
     @return the current reading convereted to milliamps
 */
 /**************************************************************************/
-float Adafruit_INA219::getCurrent_mA() {
-  float valueDec = getCurrent_raw();
+double Adafruit_INA219::getCurrent_mA() {
+  double valueDec = getCurrent_raw();
   valueDec /= ina219_currentDivider_mA;
   return valueDec;
 }
@@ -463,8 +463,8 @@ float Adafruit_INA219::getCurrent_mA() {
     @return power reading converted to milliwatts
 */
 /**************************************************************************/
-float Adafruit_INA219::getPower_mW() {
-  float valueDec = getPower_raw();
+double Adafruit_INA219::getPower_mW() {
+  double valueDec = getPower_raw();
   valueDec *= ina219_powerMultiplier_mW;
   return valueDec;
 }
