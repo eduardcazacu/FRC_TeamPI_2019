@@ -12,15 +12,23 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/I2C.h>
 
-
-
+//our libraries:
+#include "S01_PI_Sensors.h"
+#include "Adafruit_INA219.h"
 frc::I2C *I2CBus;
+S01_PI_Sensors *sensors;
 
-void Robot::RobotInit() {
+int count = 0;
+
+void Robot::RobotInit()
+{
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  I2CBus = new frc::I2C(frc::I2C::kMXP, 8);
+
+  //sensors:
+  sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
+  I2CBus = new frc::I2C(frc::I2C::kOnboard, 0x40);
 }
 
 /**
@@ -44,24 +52,32 @@ void Robot::RobotPeriodic() {}
  * if-else structure below with additional strings. If using the SendableChooser
  * make sure to add them to the chooser code above as well.
  */
-void Robot::AutonomousInit() {
+void Robot::AutonomousInit()
+{
   m_autoSelected = m_chooser.GetSelected();
   // m_autoSelected = SmartDashboard::GetString(
   //     "Auto Selector", kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
 
-  if (m_autoSelected == kAutoNameCustom) {
+  if (m_autoSelected == kAutoNameCustom)
+  {
     // Custom Auto goes here
-  } else {
+  }
+  else
+  {
     // Default Auto goes here
   }
 }
 
-void Robot::AutonomousPeriodic() {
+void Robot::AutonomousPeriodic()
+{
   //std::cout << "main function\n";
-  if (m_autoSelected == kAutoNameCustom) {
+  if (m_autoSelected == kAutoNameCustom)
+  {
     // Custom Auto goes here
-  } else {
+  }
+  else
+  {
     // Default Auto goes here
   }
 
@@ -72,15 +88,30 @@ void Robot::AutonomousPeriodic() {
   //std::string s(reinterpret_cast<buff>(p), 30);
   std::cout <<*buff[0]<<"\n";
   //std::cout <<worked<<"\n";*/
-  
 }
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic()
+{
+  //test the Ultrasound sensors:
+  //std::cout<<"Ultrasound current: "<<sensors->USLeft->getCurrent()<<"\n";
+  //std::cout<<"Ultrasound distance: "<<sensors->USLeft->getDist()<<"\n";
+  //std::cout<<"IR detect? : "<<sensors->IRFront->objectInRange()<<"\n";
+
+  if (count == 50)
+  {
+    std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
+    std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
+  }
+  count = (count + 1) % 100;
+}
 
 void Robot::TestPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
+int main()
+{
+  return frc::StartRobot<Robot>();
+}
 #endif
