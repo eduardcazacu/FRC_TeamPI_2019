@@ -15,8 +15,11 @@
 //our libraries:
 #include "S01_PI_Sensors.h"
 #include "Adafruit_INA219.h"
-frc::I2C *I2CBus;
+#include "ArduinoI2C.h"
+
+//frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
+ArduinoI2C *arduino;
 
 int count = 0;
 
@@ -28,7 +31,9 @@ void Robot::RobotInit()
 
   //sensors:
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
-  I2CBus = new frc::I2C(frc::I2C::kOnboard, 0x40);
+  //I2CBus =  new frc::I2C(frc::I2C::Port::kOnboard,0x08);
+
+  arduino = new ArduinoI2C(frc::I2C::Port::kOnboard, PIXY_ARDUINO_I2C);
 }
 
 /**
@@ -94,15 +99,23 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic()
 {
-  //test the Ultrasound sensors:
-  //std::cout<<"Ultrasound current: "<<sensors->USLeft->getCurrent()<<"\n";
-  //std::cout<<"Ultrasound distance: "<<sensors->USLeft->getDist()<<"\n";
-  //std::cout<<"IR detect? : "<<sensors->IRFront->objectInRange()<<"\n";
 
   if (count == 50)
   {
-    std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
-    std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
+    //test the Ultrasound sensors:
+    //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
+    //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
+
+    //test arduno communication :
+    uint8_t data[2];
+    if(arduino->read(data,2))
+      std::cout<<"Read error \n";
+
+    for(int i=0;i<2;i++){
+      std::cout<<data[i];
+    }
+    std::cout<<"\n";
+
   }
   count = (count + 1) % 100;
 }

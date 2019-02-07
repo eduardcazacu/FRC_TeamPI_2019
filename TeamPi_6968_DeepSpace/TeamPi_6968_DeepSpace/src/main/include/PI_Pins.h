@@ -20,3 +20,4 @@
 #define US_RIGHT 0x41
 //--------------------------------SPI SS pin---------------------------
 #define PIXYSPI 0
+#define PIXY_ARDUINO_I2C 0x8
