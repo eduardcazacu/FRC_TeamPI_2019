@@ -15,21 +15,25 @@
 
 
 #pragma once 
-#include "CANTalon.h"
-#include "ctre/Phoenix.h"
-#include "Constance.h"
 
-class C00_PI_Talon : public WPI_TalonSRX{
+#define kTimeoutMs 30
+
+
+#include <ctre/Phoenix.h>
+//#include "Constance.h"
+
+class C00_PI_Talon{
     private:
         /*the variables*/
-        double TotalDistance, DeltaDistance, Speed, Acceleration;
-        double CalibrationMultiplication, RotateRadios, TalonRPM;
-        TalonSRX *PiTalon;
+        double totalDistance, deltaDistance, speed, acceleration;
+        double calibrationMultiplication, rotateRadios, talonRPM;
+
+        WPI_TalonSRX *PiTalon;
         
 
     public: 
         /* constructor */
-        C00_PI_Talon(int CanBusDeviceID, double _RotateRadios, double _CalibrationMultiplication);
+        C00_PI_Talon(int CanBusDeviceID, double _RotateRadios, double _CalibrationMultiplication, double kPIDLoopIdx = 0, double kSlotIdx = 0);
         
         /* Set the amount of encoders that have to turn */
         void TravelEncoderSteps(int amount);
@@ -41,7 +45,7 @@ class C00_PI_Talon : public WPI_TalonSRX{
         void ReadEncoder();        
 
 
-        TalonSRX GetTalonObject();
+        WPI_TalonSRX* GetTalonObject();
         double GetDeltaDistance();
         double GetSpeed();
         double GetAcceleration();

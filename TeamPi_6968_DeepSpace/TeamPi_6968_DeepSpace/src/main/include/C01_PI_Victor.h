@@ -5,16 +5,16 @@
     -*constructor
     -*GetVictorObject()
 */
-#pragma one
-#include "ctre/Phoenix.h"
+#pragma once
+#include <ctre/Phoenix.h>
 
 
-class C01_PI_Victor : public WPI_VictorSPX
+class C01_PI_Victor
 {
 private:
     WPI_VictorSPX *PiVictor;
 public:
-    C01_PI_Victor(int CanBusDeviceID));
-    void GetVictorObject()
+    C01_PI_Victor(int CanBusDeviceID);
+    WPI_VictorSPX* GetVictorObject();
 };
 
