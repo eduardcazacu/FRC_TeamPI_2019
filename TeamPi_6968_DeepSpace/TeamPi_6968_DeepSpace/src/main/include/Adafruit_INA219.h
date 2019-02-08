@@ -22,7 +22,6 @@
 #include <cstdint>
 #include <frc/I2C.h>
 #include "PI_Pins.h"
-#include <Timer.h>
 
 /**************************************************************************/
 /*!

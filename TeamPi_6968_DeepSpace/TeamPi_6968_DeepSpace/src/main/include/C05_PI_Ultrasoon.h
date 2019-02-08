@@ -7,6 +7,9 @@
 /*  from the Elobau ultrasound distance sensors. It also handles the conversion to  */
 /*  mm when the default range is set on the sensors themselves.                     */
 /*                                                                                  */
+/*  This class can handle multiple sensors by sending a pwm sync pulse to each of   */
+/*  the ultrasound sensors                                                          */
+/*                                                                                  */
 /*  Ultrasound sensors used: ELOBAU UC18MIC090S                                     */
 /*  Default range is 100mm - 900mm                                                  */
 
@@ -21,10 +24,16 @@
 #define D_MIN 100
 #define D_MAX 900
 
+//sync pin defaults for UC18MIC090S 
+#define SYNC_T 10       //sync signal period in ms
+#define SYNC_MIN 0.5    //min sync pulse time in ms
+#define SYNC_MAX 1      //max sync pulse time in ms
+
+
 #include <cstdint>
 #include <frc/I2C.h>
 #include "Adafruit_INA219.h"    //current sensor library
-
+#include <frc/PWM.h>
 
 
 class C05_PI_Ultrasoon
@@ -42,12 +51,20 @@ class C05_PI_Ultrasoon
     */
     double map(double x, double xMin, double xMax, double yMin, double yMax);
 
+    //the pwm signal used to sync the sensors
+    frc::PWM *syncPWM;
+
     public:
     /*
         Description:    constructor
         Input:          char address - the hex value of the address of the current sensor
+                        (optional for multiple sensors) [uint8_t] nOfSensors    -  the total number of sensors used
+                                                        [uint8_t] priority      -  the priority of the sensor (0 = first)
+                                                                                    2 Sensors SHOULD NOT be the same priority
+                                                        [uint8_t] syncPin       -  The DIO pin used to send the pwm sync pulse    
         Output:         void
     */
+    C05_PI_Ultrasoon(frc::I2C::Port i2c_port,uint8_t address,uint8_t nOfSensors, uint8_t priority, uint8_t syncPin, double rangeMin = D_MIN, double rangeMax = D_MAX);
     C05_PI_Ultrasoon(frc::I2C::Port i2c_port,uint8_t address, double rangeMin = D_MIN, double rangeMax = D_MAX);
     C05_PI_Ultrasoon(uint8_t address, double rangeMin = D_MIN, double rangeMax = D_MAX);
 

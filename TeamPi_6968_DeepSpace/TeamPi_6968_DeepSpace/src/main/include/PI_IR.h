@@ -6,6 +6,8 @@
 
 #include <frc/AnalogInput.h>
 
+#define IR_DIST_THRESHOLD  500          //IR sensor step detection threshold
+
 class PI_IR
 {
   private:

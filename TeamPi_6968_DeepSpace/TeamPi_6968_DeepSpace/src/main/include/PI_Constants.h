@@ -7,4 +7,8 @@ created by Eduard Cazacu on 05 February 2019
 Team pi 6968
 */
 
-#define IR_DIST_THRESHOLD  500          //IR sensor step detection threshold
+//-------------------------------INPUT---------------------------------------
+
+
+
+//sensors:

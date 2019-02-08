@@ -1,5 +1,21 @@
 #include "C05_PI_Ultrasoon.h"
 
+C05_PI_Ultrasoon::C05_PI_Ultrasoon(frc::I2C::Port i2c_port, uint8_t address, uint8_t nOfSensors, uint8_t priority, uint8_t syncPin, double rangeMin, double rangeMax)
+{
+    this->_currentSensor = new Adafruit_INA219(i2c_port, address);
+    this->_currentSensor->setCalibration_16V_400mA();
+
+    this->_rangeMin = rangeMin;
+    this->_rangeMax = rangeMax;
+
+    //sync:
+    syncPWM = new frc::PWM(syncPin);                                                       //create the new pwm object
+    syncPWM->SetBounds(SYNC_MAX, SYNC_MAX, (SYNC_MIN + SYNC_MAX) / 2, SYNC_MIN, SYNC_MIN); //set the range of the pwm signal in mm
+
+    //set the PWM according to the number of total sensors and the priority:
+    syncPWM->SetRaw(1 + priority * 2000 / nOfSensors);
+}
+
 C05_PI_Ultrasoon::C05_PI_Ultrasoon(frc::I2C::Port i2c_port, uint8_t address, double rangeMin, double rangeMax)
 {
     this->_currentSensor = new Adafruit_INA219(i2c_port, address);
@@ -34,3 +50,5 @@ double C05_PI_Ultrasoon::map(double x, double xMin, double xMax, double yMin, do
 {
     return (yMin + (x - xMin) * (yMax - yMin) / (xMax - xMin));
 }
+
+//helper methods:
