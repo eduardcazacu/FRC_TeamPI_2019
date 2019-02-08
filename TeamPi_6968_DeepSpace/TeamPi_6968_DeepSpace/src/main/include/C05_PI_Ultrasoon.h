@@ -12,14 +12,35 @@
 
 #pragma once
 
+#define DEFAULT_PORT frc::I2C::Port::kOnboard
+
+//ultrasound sensor reported current range
+#define I_MIN 4             
+#define I_MAX 20
+//ultrasound sensor default distance range(in mm)
+#define D_MIN 100
+#define D_MAX 900
+
 #include <cstdint>
 #include <frc/I2C.h>
+#include "Adafruit_INA219.h"    //current sensor library
+
+
 
 class C05_PI_Ultrasoon
 {
     private:
-    char *_address;
+    Adafruit_INA219 *_currentSensor;
+    double _rangeMin,_rangeMax;
 
+    /*
+        Description:    A map function similar to the arduino one
+                        Probably only works for positive value. Too braindead to think 
+                        about it right now.
+        Input:          The value to map, range for the value to map, range for the mapped value
+        Output:         Mapped value         
+    */
+    double map(double x, double xMin, double xMax, double yMin, double yMax);
 
     public:
     /*
@@ -27,7 +48,8 @@ class C05_PI_Ultrasoon
         Input:          char address - the hex value of the address of the current sensor
         Output:         void
     */
-    C05_PI_Ultrasoon(char address);
+    C05_PI_Ultrasoon(frc::I2C::Port i2c_port,uint8_t address, double rangeMin = D_MIN, double rangeMax = D_MAX);
+    C05_PI_Ultrasoon(uint8_t address, double rangeMin = D_MIN, double rangeMax = D_MAX);
 
     /*
         description:    returns the distance recorded by the distance sensor.
@@ -40,6 +62,13 @@ class C05_PI_Ultrasoon
         Input           void;
         Output          [char] raw current sensor value
     */
-    uint8_t getRaw();
+    uint16_t getRaw();
 
+    /*
+        description:    Get the current value reported by the current sensor
+        Input:          void
+        Output:         [double] current in mA
+    */
+   double getCurrent();
+    
 };

@@ -12,15 +12,28 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/I2C.h>
 
+//our libraries:
+#include "S01_PI_Sensors.h"
+#include "Adafruit_INA219.h"
+#include "ArduinoI2C.h"
 
+//frc::I2C *I2CBus;
+S01_PI_Sensors *sensors;
+ArduinoI2C *arduino;
 
-frc::I2C *I2CBus;
+int count = 0;
 
-void Robot::RobotInit() {
+void Robot::RobotInit()
+{
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  I2CBus = new frc::I2C(frc::I2C::kMXP, 8);
+
+  //sensors:
+  sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
+  //I2CBus =  new frc::I2C(frc::I2C::Port::kOnboard,0x08);
+
+  arduino = new ArduinoI2C(frc::I2C::Port::kOnboard, PIXY_ARDUINO_I2C);
 }
 
 /**
@@ -44,24 +57,32 @@ void Robot::RobotPeriodic() {}
  * if-else structure below with additional strings. If using the SendableChooser
  * make sure to add them to the chooser code above as well.
  */
-void Robot::AutonomousInit() {
+void Robot::AutonomousInit()
+{
   m_autoSelected = m_chooser.GetSelected();
   // m_autoSelected = SmartDashboard::GetString(
   //     "Auto Selector", kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
 
-  if (m_autoSelected == kAutoNameCustom) {
+  if (m_autoSelected == kAutoNameCustom)
+  {
     // Custom Auto goes here
-  } else {
+  }
+  else
+  {
     // Default Auto goes here
   }
 }
 
-void Robot::AutonomousPeriodic() {
+void Robot::AutonomousPeriodic()
+{
   //std::cout << "main function\n";
-  if (m_autoSelected == kAutoNameCustom) {
+  if (m_autoSelected == kAutoNameCustom)
+  {
     // Custom Auto goes here
-  } else {
+  }
+  else
+  {
     // Default Auto goes here
   }
 
@@ -72,15 +93,38 @@ void Robot::AutonomousPeriodic() {
   //std::string s(reinterpret_cast<buff>(p), 30);
   std::cout <<*buff[0]<<"\n";
   //std::cout <<worked<<"\n";*/
-  
 }
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic()
+{
+
+  if (count == 50)
+  {
+    //test the Ultrasound sensors:
+    //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
+    //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
+
+    //test arduno communication :
+    uint8_t data[2];
+    if(arduino->read(data,2))
+      std::cout<<"Read error \n";
+
+    for(int i=0;i<2;i++){
+      std::cout<<data[i];
+    }
+    std::cout<<"\n";
+
+  }
+  count = (count + 1) % 100;
+}
 
 void Robot::TestPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
+int main()
+{
+  return frc::StartRobot<Robot>();
+}
 #endif
