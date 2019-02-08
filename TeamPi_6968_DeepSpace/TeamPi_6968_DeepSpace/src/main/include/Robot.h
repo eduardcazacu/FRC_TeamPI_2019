@@ -12,6 +12,15 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
+//our libraries:
+#include "S01_PI_Sensors.h"
+#include "Adafruit_INA219.h"
+#include "ArduinoI2C.h"
+#include "S02_PI_Input.h"
+#include "C01_PI_Victor.h"
+#include "C00_PI_Talon.h"
+#include "S04_PI_Drivetrain.h"
+
 class Robot : public frc::TimedRobot {
  public:
   void RobotInit() override;
@@ -27,4 +36,25 @@ class Robot : public frc::TimedRobot {
   const std::string kAutoNameDefault = "Default";
   const std::string kAutoNameCustom = "My Auto";
   std::string m_autoSelected;
+
+
+  //frc::I2C *I2CBus;
+  S01_PI_Sensors *sensors;
+  
+  //motors:
+  C00_PI_Talon* talonL;
+  C00_PI_Talon* talonR;
+  C01_PI_Victor* victorL1;
+  C01_PI_Victor* victorL2;
+  C01_PI_Victor* victorR1;
+  C01_PI_Victor* victorR2;
+
+  //drivetrain:
+  S04_PI_Drivetrain *drivetrain;
+
+  //input:
+  S02_PI_Input *input;
+
+  
+
 };

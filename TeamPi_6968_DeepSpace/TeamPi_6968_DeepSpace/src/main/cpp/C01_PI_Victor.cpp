@@ -7,5 +7,5 @@ C01_PI_Victor::C01_PI_Victor(int CanBusDeviceID)
 
 WPI_VictorSPX *C01_PI_Victor::GetVictorObject()
 {
-    return PiVictor;
+    return this->PiVictor;
 }
