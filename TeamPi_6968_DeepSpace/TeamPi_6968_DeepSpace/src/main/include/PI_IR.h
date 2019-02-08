@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <AnalogInput.h>
+#include <frc/AnalogInput.h>
 
 class PI_IR
 {
