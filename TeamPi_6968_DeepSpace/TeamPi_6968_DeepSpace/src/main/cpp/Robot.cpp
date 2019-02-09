@@ -27,13 +27,18 @@ void Robot::RobotInit()
   input = new S02_PI_Input();
 
   //initialize drivers:
-  talonR =  new C00_PI_Talon(1,76.2,1);
-  victorR1 =  new C01_PI_Victor(2);
-  victorR2 =  new C01_PI_Victor(3);
-    talonL =  new C00_PI_Talon(4,76.2,1);
+  talonR = new C00_PI_Talon(1, 76.2, 1);
+  victorR1 = new C01_PI_Victor(2);
+  victorR2 = new C01_PI_Victor(3);
+
+  //debug follow:
+  //victorR1->GetVictorObject()->Follow(*(talonR->GetTalonObject()));
+  //victorR2->GetVictorObject()->Follow(*(talonR->GetTalonObject()));
+
+  talonL =  new C00_PI_Talon(4,76.2,1);
   victorL1 =  new C01_PI_Victor(5);
   victorL2 =  new C01_PI_Victor(6);
-
+  
 
   //drivetrain:
   drivetrain = new S04_PI_Drivetrain(talonL,victorL1,victorL2,talonR,victorR1,victorR2);
@@ -88,7 +93,6 @@ void Robot::AutonomousPeriodic()
   {
     // Default Auto goes here
   }
-
 }
 
 void Robot::TeleopInit() {}
@@ -97,8 +101,8 @@ void Robot::TeleopPeriodic()
 {
 
   //drive:
-  drivetrain->drive(input->driver->m_stick->GetY(),input->driver->m_stick->GetZ());
-
+  drivetrain->drive(input->driver->m_stick->GetY(),input->driver->m_stick->GetX());
+  //talonR->GetTalonObject()->Set(ControlMode::PercentOutput, input->driver->m_stick->GetY());
   if (count == 50)
   {
     //test the Ultrasound sensors:
@@ -115,7 +119,6 @@ void Robot::TeleopPeriodic()
     }
     std::cout<<"\n";
     */
-
   }
   count = (count + 1) % 100;
 }
