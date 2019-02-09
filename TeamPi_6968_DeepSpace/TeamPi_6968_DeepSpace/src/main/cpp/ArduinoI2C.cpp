@@ -28,7 +28,7 @@ bool ArduinoI2C::write(uint8_t *data, int count)
 bool ArduinoI2C::read(uint8_t *data, int count)
 {
     //send some garbage data to notify the arduino of a request:
-    uint8_t garbage = 0xFF;
+    //uint8_t garbage = 0xFF;
     //return _i2c->Transaction(&garbage,1,data,count);
     return _i2c->ReadOnly(count, data);
 }
