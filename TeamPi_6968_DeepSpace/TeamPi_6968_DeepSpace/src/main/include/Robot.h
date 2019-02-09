@@ -23,6 +23,7 @@
 #include "C00_PI_Talon.h"
 #include "S04_PI_Drivetrain.h"
 #include "PI_Camera.h"
+#include "S00_PI_Network.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -57,6 +58,8 @@ class Robot : public frc::TimedRobot {
 
   //camera
   PI_Camera* camera;
+
+  S00_PI_Network* NetworkTable;
 
   //input:
   S02_PI_Input *input;

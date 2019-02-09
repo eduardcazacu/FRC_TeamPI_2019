@@ -38,6 +38,7 @@ void Robot::RobotInit()
   
   camera = new PI_Camera();
 
+  NetworkTable = new S00_PI_Network();
   //drivetrain:
   //drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2);
 }
