@@ -11,6 +11,8 @@
 
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <iostream>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 //our libraries:
 #include "S01_PI_Sensors.h"
@@ -20,6 +22,7 @@
 #include "C01_PI_Victor.h"
 #include "C00_PI_Talon.h"
 #include "S04_PI_Drivetrain.h"
+#include "PI_Camera.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -51,6 +54,9 @@ class Robot : public frc::TimedRobot {
 
   //drivetrain:
   S04_PI_Drivetrain *drivetrain;
+
+  //camera
+  PI_Camera* camera;
 
   //input:
   S02_PI_Input *input;

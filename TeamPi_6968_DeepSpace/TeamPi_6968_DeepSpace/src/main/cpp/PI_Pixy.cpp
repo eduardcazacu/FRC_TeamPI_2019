@@ -21,13 +21,13 @@ void PI_Pixy::Update()
     std::cout << (int)check[i] << "\n";
   std::cout << "\n";
 
-  if(vectorList.size != 0){
-    for(int i = 0; i<vectorList.size; i++){
-      if(index == vectorList.at(i).index){
+  if(vectorList.size() != 0){
+    for(int i = 0; i<vectorList.size(); i++){
+      if(newVector.index == vectorList.at(i).index){
         vectorList.at(i) = newVector;
         break;
       }
-      if(i == (vectorList.size-1))
+      if(i == (vectorList.size()-1))
         vectorList.push_back(newVector);
     }
   }

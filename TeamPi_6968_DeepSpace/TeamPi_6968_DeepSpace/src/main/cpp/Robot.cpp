@@ -7,10 +7,7 @@
 
 #include "Robot.h"
 
-#include <iostream>
 
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/I2C.h>
 
 int count = 0;
 
@@ -39,6 +36,7 @@ void Robot::RobotInit()
   victorL1 =  new C01_PI_Victor(5);
   victorL2 =  new C01_PI_Victor(6);
   
+  camera = new PI_Camera();
 
   //drivetrain:
   //drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2);
