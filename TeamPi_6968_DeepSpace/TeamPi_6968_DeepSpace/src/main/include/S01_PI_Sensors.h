@@ -35,4 +35,5 @@ C05_PI_Ultrasoon *USRight;
 PI_IR *IRFront;
 PI_IR *IRBack;
 //Pixy cams:
+PI_Pixy *PixyDown;
 };
