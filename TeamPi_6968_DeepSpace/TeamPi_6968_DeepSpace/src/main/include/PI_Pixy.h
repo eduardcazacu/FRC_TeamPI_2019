@@ -12,8 +12,11 @@ class PI_Pixy{
     private:
 
     ArduinoI2C *i2cBus;
+    void AddVector(PI_Vector vector);
 
     public:
+
+    PI_Vector latestVector;
 
     //This is a list with all the Vectors
     std::vector<PI_Vector> vectorList;
