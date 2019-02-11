@@ -7,25 +7,19 @@
  *      to controle the pneumatics 
  *
  */
-#ifndef SRC_PI_PNEUMATICS_H_
-#define SRC_PI_PNEUMATICS_H_
-
 #pragma once
 #include <WPILib.h>
-#include <Solenoid.h>
-
-using namespace frc;
+#include <DoubleSolenoid.h>
 
 class PI_Pneumatics
 {
 private: 
- DoubleSolenoid pistons{0,1};
+ frc::DoubleSolenoid pistons{0,1};
 
 
 public:
-
-void OpenPiston();
-void ClosePiston();
+PI_Pneumatics();
+void OpenValve();
+void CloseValve();
 };
 
-#endif
