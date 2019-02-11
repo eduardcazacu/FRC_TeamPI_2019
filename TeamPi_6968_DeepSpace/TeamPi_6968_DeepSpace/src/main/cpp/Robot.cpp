@@ -6,7 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 #include "Robot.h"
-
+#include "frc/smartdashboard/SmartDashboard.h"
 
 
 int count = 0;
