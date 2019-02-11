@@ -8,18 +8,18 @@
  *
  */
 #pragma once
-#include <WPILib.h>
-#include <DoubleSolenoid.h>
+#include <WPILib.h> //include WPILib.h file
+#include <DoubleSolenoid.h> //include the DoubleSolenoid.h file
 
-class PI_Pneumatics
+class PI_Pneumatics//make a class called PI_Pneumatics
 {
 private: 
- frc::DoubleSolenoid pistons{0,1};
-
+ frc::DoubleSolenoid pistons{0,1};//difine the output pins for the solonoids
 
 public:
 PI_Pneumatics();
-void OpenValve();
-void CloseValve();
+void OpenPiston();//difine function for fully opening the piston
+void ClosePiston();//difine function for fully closing the piston
+void PistonStatus();
 };
 
