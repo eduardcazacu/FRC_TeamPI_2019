@@ -4,7 +4,6 @@
 
 PI_Pixy::PI_Pixy(frc::I2C::Port, int address)
 {
-
   i2cBus = new ArduinoI2C(frc::I2C::Port::kOnboard, 8);
 }
 

@@ -24,6 +24,7 @@
 #include "S04_PI_Drivetrain.h"
 #include "PI_Camera.h"
 #include "S00_PI_Network.h"
+#include "PI_Pixy.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -59,11 +60,11 @@ class Robot : public frc::TimedRobot {
   //camera
   PI_Camera* camera;
 
-  S00_PI_Network* NetworkTable;
+  //S00_PI_Network* NetworkTable;
 
   //input:
   S02_PI_Input *input;
-
+  PI_Pixy pixy;
   
 
 };
