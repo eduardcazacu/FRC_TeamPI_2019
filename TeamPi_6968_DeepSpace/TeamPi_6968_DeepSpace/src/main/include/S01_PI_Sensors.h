@@ -14,7 +14,7 @@ licensed under the FIRST BSD license
 //Add the headers for all the sensors here:
 #include "C05_PI_Ultrasoon.h"
 #include "PI_IR.h"
-#include "PI_Pixy.h"
+#include "C04_PI_Pixy.h"
 
 class S01_PI_Sensors
 {
@@ -35,5 +35,5 @@ C05_PI_Ultrasoon *USRight;
 PI_IR *IRFront;
 PI_IR *IRBack;
 //Pixy cams:
-PI_Pixy *PixyDown;
+//PI_Pixy *PixyDown;
 };
