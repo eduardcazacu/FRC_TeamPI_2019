@@ -37,7 +37,9 @@ void Robot::RobotInit()
   victorL2 =  new C01_PI_Victor(6);
   
   camera = new PI_Camera();
+  pixy = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
 
+  //NetworkTable = new S00_PI_Network();
   //drivetrain:
   //drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2);
 }
@@ -104,6 +106,8 @@ void Robot::TeleopPeriodic()
   if (count == 50)
   {
     sensors->refresh();
+    pixy.Update();
+    std::cout << pixy.latestVector.x0;
     //test the Ultrasound sensors:
     //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
     //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';

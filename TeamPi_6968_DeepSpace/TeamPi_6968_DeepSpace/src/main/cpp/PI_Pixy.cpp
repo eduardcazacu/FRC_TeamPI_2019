@@ -4,7 +4,6 @@
 
 PI_Pixy::PI_Pixy(frc::I2C::Port, int address)
 {
-
   i2cBus = new ArduinoI2C(frc::I2C::Port::kOnboard, 8);
 }
 
@@ -24,7 +23,7 @@ void PI_Pixy::Update()
   if(vectorList.size() != 0){
     for(int i = 0; i<vectorList.size(); i++){
       if(newVector.index == vectorList.at(i).index){
-        vectorList.at(i) = newVector;
+        AddVector(newVector);
         break;
       }
       if(i == (vectorList.size()-1))
@@ -32,6 +31,11 @@ void PI_Pixy::Update()
     }
   }
   else{
-    vectorList.push_back(newVector);
+    AddVector(newVector);
   }
+}
+
+void PI_Pixy::AddVector(PI_Vector vector){
+  vectorList.push_back(vector);
+  latestVector = vector;
 }

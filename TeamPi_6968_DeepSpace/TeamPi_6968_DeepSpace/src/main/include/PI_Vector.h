@@ -2,6 +2,7 @@
 #pragma once
 
 #include <iostream>
+#include "PI_Vector.h"
 
 class PI_Vector{
     private:
