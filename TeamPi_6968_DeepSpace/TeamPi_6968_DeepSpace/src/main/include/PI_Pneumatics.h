@@ -10,16 +10,21 @@
 #pragma once
 #include <WPILib.h> //include WPILib.h file
 #include <DoubleSolenoid.h> //include the DoubleSolenoid.h file
+#include <DigitalInput.h> 
+#include <PI_Pins.h>
 
 class PI_Pneumatics//make a class called PI_Pneumatics
 {
 private: 
- frc::DoubleSolenoid pistons{0,1};//difine the output pins for the solonoids
+int _one;
+int _two;
+int _ex;
+int _re;
 
 public:
-PI_Pneumatics();
+PI_Pneumatics(int one,int two, int re, int ex);
 void OpenPiston();//difine function for fully opening the piston
 void ClosePiston();//difine function for fully closing the piston
-void PistonStatus();
+bool PistonStatus();
 };
 
