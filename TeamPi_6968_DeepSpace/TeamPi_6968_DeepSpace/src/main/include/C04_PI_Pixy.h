@@ -6,7 +6,7 @@
 #include "PI_Vector.h"
 #include <vector>
 
-class PI_Pixy{
+class C04_PI_Pixy{
 
     private:
 
@@ -16,12 +16,7 @@ class PI_Pixy{
     public:
     //This needs the port and address and creates a connection with the arduino
     //returns nothing
-    PI_Pixy(frc::I2C::Port port, int address);
-
-    //Constructor
-    //This needs the port and address and creates a connection with the arduino
-    //returns nothing
-    PI_Pixy(frc::I2C::Port, uint8_t address);
+    C04_PI_Pixy(frc::I2C::Port port, int address);
 
     PI_Vector* latestVector;
 

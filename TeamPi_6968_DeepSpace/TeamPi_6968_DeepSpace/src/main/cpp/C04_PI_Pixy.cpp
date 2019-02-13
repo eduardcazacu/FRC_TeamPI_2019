@@ -2,12 +2,12 @@
 
 #include "C04_PI_Pixy.h"
 
-PI_Pixy::PI_Pixy(frc::I2C::Port port, int address)
+C04_PI_Pixy::C04_PI_Pixy(frc::I2C::Port port, int address)
 {
   i2cBus = new ArduinoI2C(port, address);
 }
 
-void PI_Pixy::Update()
+void C04_PI_Pixy::Update()
 {
   std::cout << "arduino value  ";
   uint8_t check[5];
@@ -21,7 +21,6 @@ void PI_Pixy::Update()
   std::cout << "\n";
 
   latestVector = newVector;
-
 
 
   if(vectorList->size() != 0){
@@ -39,7 +38,7 @@ void PI_Pixy::Update()
   }
 }
 
-void PI_Pixy::AddVector(PI_Vector vector){
+void C04_PI_Pixy::AddVector(PI_Vector vector){
   vectorList->push_back(vector);
   latestVector = &vector;
 }
