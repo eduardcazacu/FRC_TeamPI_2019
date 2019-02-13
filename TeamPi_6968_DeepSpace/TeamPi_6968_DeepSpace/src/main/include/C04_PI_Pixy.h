@@ -5,7 +5,7 @@
 #include "ArduinoI2C.h"
 #include "PI_Vector.h"
 #include <vector>
-/*
+
 class PI_Pixy{
 
     private:
@@ -23,7 +23,7 @@ class PI_Pixy{
     //returns nothing
     PI_Pixy(frc::I2C::Port, uint8_t address);
 
-    PI_Vector *latestVector;
+    PI_Vector* latestVector;
 
     //This is a list with all the Vectors
     std::vector<PI_Vector>* vectorList;
@@ -33,4 +33,4 @@ class PI_Pixy{
     void Update();
 
     
-};*/
+};
