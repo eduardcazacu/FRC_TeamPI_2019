@@ -21,7 +21,7 @@ private:
 
     // actuators !edit when classes are clear
     int servo;
-    C01_PI_Victor VictorDC;
+    C01_PI_Victor *VictorDC;
     int Cylinder;
     
     //standard values
@@ -42,7 +42,7 @@ public:
         Paremeters:     PneumaticValveCanbusID, Motor  
         Output:         -
     */
-    S06_PI_Grabber(/* PneumaticValveCanbusID, Victor*/);
+   // S06_PI_Grabber(/* PneumaticValveCanbusID, Victor*/);
 
     /*
         Description:     Extending gripper 

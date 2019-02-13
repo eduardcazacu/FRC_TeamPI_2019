@@ -3,15 +3,16 @@
 S06_PI_Grabber::S06_PI_Grabber(/*pneumaticValveCanbusID, Servo*/)
 {
     this->Cylinder;
-    this->Servo;
+    //this->Servo;
 }
 
-S06_PI_Grabber::S06_PI_Grabber(/*pneumaticValveCanbusID,*/ VictorCanbusID)
-{
+//S06_PI_Grabber::S06_PI_Grabber(/*pneumaticValveCanbusID,*/ VictorCanbusID)
+/*{
     this->Cylinder;
     this->VictorDC = new C01_PI_Victor(VictorCanbusID);
 }
-
+*/
+/*
 void S06_PI_Grabber::ExtendGripper()
 {
     this->Cylinder;
@@ -82,3 +83,4 @@ bool S06_PI_Grabber::getClampPosition()
         return this->VictorStatus;
     }
 }
+*/

@@ -4,22 +4,29 @@
  *  Created on: 2 FEB 2019
  *      Author: Bas Dieben
  *
- *      to controle the pneumatics 
+ *      to control the pneumatics 
  *
  */
 #pragma once
-#include <WPILib.h> //include WPILib.h file
-#include <DoubleSolenoid.h> //include the DoubleSolenoid.h file
+#include "frc/DoubleSolenoid.h"
 
 class PI_Pneumatics//make a class called PI_Pneumatics
 {
 private: 
- frc::DoubleSolenoid pistons{0,1};//difine the output pins for the solonoids
+ frc::DoubleSolenoid *piston;
 
 public:
-PI_Pneumatics();
+
+/*
+    Constructor:    setup one piston controlled with a double solenoid
+    Input:          CAN pneumatics controller channels 
+    output:         none
+*/
+PI_Pneumatics(uint8_t fwd, uint8_t rev);
+
+
 void OpenPiston();//difine function for fully opening the piston
 void ClosePiston();//difine function for fully closing the piston
-void PistonStatus();
+bool PistonStatus();
 };
 

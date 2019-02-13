@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 #include "Robot.h"
-<<<<<<< HEAD
 //#include <frc/livewindow/LiveWindow.h>
 
 #include <iostream>
@@ -22,10 +21,6 @@
 
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
-=======
-#include "frc/smartdashboard/SmartDashboard.h"
-
->>>>>>> 666d7101f15bfd4345645919260d23e0114eecc0
 
 int count = 0;
 
@@ -123,9 +118,11 @@ void Robot::TeleopPeriodic()
   //talonR->GetTalonObject()->Set(ControlMode::PercentOutput, input->driver->m_stick->GetY());
   if (count == 50)
   {
+    //execute code in here roughly once a second.
+
     sensors->refresh();
-    pixy.Update();
-    std::cout << pixy.latestVector.x0;
+    pixy->Update();
+    std::cout << pixy->latestVector->x0;
     //test the Ultrasound sensors:
     //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
     //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';

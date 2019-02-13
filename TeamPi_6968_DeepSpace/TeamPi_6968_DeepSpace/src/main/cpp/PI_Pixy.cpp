@@ -2,9 +2,10 @@
 
 #include "PI_Pixy.h"
 
-PI_Pixy::PI_Pixy(frc::I2C::Port, int address)
+PI_Pixy::PI_Pixy(frc::I2C::Port, uint8_t address)
 {
-  i2cBus = new ArduinoI2C(frc::I2C::Port::kOnboard, 8);
+i2cBus = new ArduinoI2C(frc::I2C::Port::kOnboard, address);
+latestVector =  new PI_Vector(); //create an empty vector
 }
 
 void PI_Pixy::Update()
@@ -37,5 +38,5 @@ void PI_Pixy::Update()
 
 void PI_Pixy::AddVector(PI_Vector vector){
   vectorList.push_back(vector);
-  latestVector = vector;
+  *latestVector = vector;
 }

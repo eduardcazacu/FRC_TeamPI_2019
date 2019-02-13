@@ -16,14 +16,17 @@ class PI_Pixy{
 
     public:
 
-    PI_Vector latestVector;
+    //Constructor
+    //This needs the port and address and creates a connection with the arduino
+    //returns nothing
+    PI_Pixy(frc::I2C::Port, uint8_t address);
+
+    PI_Vector *latestVector;
 
     //This is a list with all the Vectors
     std::vector<PI_Vector> vectorList;
 
-    //This needs the port and address and creates a connection with the arduino
-    //returns nothing
-    PI_Pixy(frc::I2C::Port, int address);
+
     
     //this updates the vector list by reading from the arduino
     void Update();

@@ -9,8 +9,8 @@ make sure the pixycame is conneced propperly and is sending the right data.
 Created by Jorn Veenendaal on 10 February 2019
 Team PI 6968
 */
-#include "Timer.h"
-#include <cmaht>
+#include "frc/Timer.h"
+#include <cmath>
 
 class S09_PI_Aim
 {

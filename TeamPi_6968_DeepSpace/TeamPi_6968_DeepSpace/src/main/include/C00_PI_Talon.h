@@ -18,8 +18,7 @@
 #define kTimeoutMs 30
 
 #include <ctre/Phoenix.h>
-#include <frc/PIDBace.h>
-#include <chrono>
+#include <frc/PIDBase.h>
 
 //#include "Constance.h"
 
@@ -27,14 +26,15 @@ class C00_PI_Talon
 {
   private:
     /*the variables*/
-    double totalDistance, deltaDistance, speed, acceleration;
-    double calibrationMultiplication, rotateRadios, talonRPM, MotorCurrent;
+    double totalDistance, speed, acceleration;
+    double calibrationMultiplication, rotateRadius, talonRPM, MotorCurrent;
     int setpointEncoder, encoderPref;
     uint64_t PrefTime = 0;
     uint64_t DeltaT; // time in ms
     WPI_TalonSRX *PiTalon;
     /*can later be added for better control over the motors*/
     //PowerDistributionPanel *PDPChanel;
+    frc::Timer *tmr;
 
   public:
     /* Description: constructor 
@@ -42,13 +42,13 @@ class C00_PI_Talon
             Returns: -
             Possible addition in the future PDP chanel.
         */
-    C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double kPIDLoopIdx = 0, double kSlotIdx = 0);
+    C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double radius, double kPIDLoopIdx = 0, double kSlotIdx = 0);
 
     /*Description: PIDFContstructor if you want to harness the power of the PID control you need initialise these functions
          Parementers:  CanbusDeviceID[addres on canbus], CalibrationMultiplication[ motor offset] default value = 1, double kPIDLoopIdx = pid configuration can be multipal so selection 0,1,2 standard = 0, double kSlotIdx amount of feedback loops, kf, kp, kI,kD)
          returns:      -  
         */
-    c00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double kPIDLoopIdx = 0, double kSlotIdx = 0, double _kF, double _kP, double _kI, double kD);
+    C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double radius, double _kP, double _kI, double kD, double _kF, double kPIDLoopIdx = 0, double kSlotIdx = 0);
 
     /*
             Description:     This method sets the amount of encoder steps to take by the talon it self
@@ -64,7 +64,7 @@ class C00_PI_Talon
         output:         True if reached, false if not reached.
        */
     bool Arrived();
-    void closedLoopControl(double setpoint);
+    void closedLoopControl(int encoderSteps);
 
     /*
         Returns talon object for wpiLip manipulations
@@ -74,7 +74,16 @@ class C00_PI_Talon
         */
     double GetAcceleration();
 
-    double getTotalEncoderDistance();
+    double GetSpeed();
+
+    /*
+        Description:    Return the distance travelled since last function call;
+                        For precise values it should be called every loop;
+
+        Input:          none;
+        Output          [double] distance since last call
+    */
+    double deltaDistance();
 
     // double getMotorCurrent();
 

@@ -1,12 +1,12 @@
 #include "C00_PI_Talon.h"
 
-C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID,  double _CalibrationMultiplication, double kPIDLoopIdx, double kSlotIdx, int _PDPChannel)
+C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double radius, double kPIDLoopIdx, double kSlotIdx)
 {
     this->PiTalon = new WPI_TalonSRX(CanBusDeviceID);
-     /*Factory default to make sure that the all settings are set the right way*/
+    /*Factory default to make sure that the all settings are set the right way*/
     this->PiTalon->ConfigFactoryDefault();
     this->PiTalon->SetInverted(false); //this is to set the derection of the value, -values or plus values
-    
+
     /*to do setting control mode! how will we define our control input */
     //this->PiTalon->set(ControlMode::PercentOutput,input);
 
@@ -15,20 +15,25 @@ C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID,  double _CalibrationMultiplicatio
     this->PiTalon->SetSensorPhase(true); /*value so that motor output and sensor velocity are the same polarity. Do this before closed-looping
 
     /* Setting up system properties */
-    this->rotateRadios = _RotateRadios;
+    this->rotateRadius = radius;
     this->calibrationMultiplication = _CalibrationMultiplication;
 
     /*PID Setup 
     lets grab the 360 degree position of the MagEncoder's absolute position */
     int absolutePosition = PiTalon->GetSelectedSensorPosition(0) & 0xFFF; /* mask out the bottom12 bits, we don't care about the wrap arounds */
     this->PiTalon->SetSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
+
+    //timer:
+    this->tmr = new frc::Timer();
+    tmr->Start();
 }
-c00_PI_Talon::c00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double kPIDLoopIdx = 0, double kSlotIdx = 0,double _kF, double _kP, double _kI, double kD){
+C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double radius, double _kP, double _kI, double kD, double _kF, double kPIDLoopIdx, double kSlotIdx)
+{
     this->PiTalon = new WPI_TalonSRX(CanBusDeviceID);
-     /*Factory default to make sure that the all settings are set the right way*/
+    /*Factory default to make sure that the all settings are set the right way*/
     this->PiTalon->ConfigFactoryDefault();
     this->PiTalon->SetInverted(false); //this is to set the derection of the value, -values or plus values
-    
+
     /*to do setting control mode! how will we define our control input */
     //this->PiTalon->set(ControlMode::PercentOutput,input);
 
@@ -37,71 +42,73 @@ c00_PI_Talon::c00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication
     this->PiTalon->SetSensorPhase(true); /*value so that motor output and sensor velocity are the same polarity. Do this before closed-looping
 
     /* Setting up system properties */
-    this->rotateRadios = _RotateRadios;
+    this->rotateRadius = radius;
     this->calibrationMultiplication = _CalibrationMultiplication;
 
     /*PID Setup 
     lets grab the 360 degree position of the MagEncoder's absolute position */
     int absolutePosition = PiTalon->GetSelectedSensorPosition(0) & 0xFFF; /* mask out the bottom12 bits, we don't care about the wrap arounds */
     this->PiTalon->SetSelectedSensorPosition(absolutePosition, kPIDLoopIdx, kTimeoutMs);
-//////////////////////////////setup pid ////////////////////////////////////////////////
+    //////////////////////////////setup pid ////////////////////////////////////////////////
     /*Setting the current values for the PIDF max and minimum values*/
     this->PiTalon->ConfigNominalOutputForward(0, kTimeoutMs);
     this->PiTalon->ConfigNominalOutputReverse(0, kTimeoutMs);
-    this->PiTalon->configPeakOutputForward(1, kTimeoutMs);
-    this->PiTalon->configPeakOutputReverse(-1, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputForward(1, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputReverse(-1, kTimeoutMs);
 
     /*Set closed loop Gains so the Kf, Kp, Ki, Kd*/
     this->PiTalon->Config_kF(kPIDLoopIdx, 0.0, kTimeoutMs);
     this->PiTalon->Config_kP(kPIDLoopIdx, 0.1, kTimeoutMs);
-    this->Pitalon->Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
+    this->PiTalon->Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
     this->PiTalon->Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
+
+    //timer:
+    this->tmr = new frc::Timer();
+    tmr->Start();
 }
 
-void C00_PI_Talon::closedLoopControl(int EncoderSteps)
+void C00_PI_Talon::closedLoopControl(int encoderSteps)
 {
-     // 20A current max
-    this->PiTalon->set(ControlMode::Current, Vector * 20);
-    if(this->setpointEncoders != EncoderSteps){
-        this->setpointEncoders = encoderSteps;
-        this->encoderPref = this->PiTalon->getSelectedSensorPosition();
+    // 20A current max
+    //this->PiTalon->Set(ControlMode::Current, Vector * 20);
+    if (this->setpointEncoder != encoderSteps)
+    {
+        this->setpointEncoder = encoderSteps;
+        this->encoderPref = this->PiTalon->GetSelectedSensorPosition();
     }
-    
+
     /* Position mode - button just pressed */
     //targetPositionRotations = distance / (2 * pi) * 4096;        /* 10 Rotations in either direction */
-    
-    /*set the amount of encoder steps we would like to make*/ 
 
-    //needs to be tested if it will tget stuk on this line of code or if it will go on 
-    Pitalon->Set(ControlMode::Position, EncoderSteps); /* 10 rotations in either direction */
+    /*set the amount of encoder steps we would like to make*/
+
+    //needs to be tested if it will tget stuk on this line of code or if it will go on
+    PiTalon->Set(ControlMode::Position, encoderSteps); /* 10 rotations in either direction */
 }
 
-bool C00_PI_Talon::Arrived(){
-    if(this->encoderPref + this->setpointEncoder<= this->PiTalon->getSelectedSensorPosition()){
+bool C00_PI_Talon::Arrived()
+{
+    if (this->encoderPref + this->setpointEncoder <= this->PiTalon->GetSelectedSensorPosition())
+    {
         return true;
     }
-    else{
+    else
+    {
         return false;
     }
 }
 double C00_PI_Talon::ReadEncoder()
 {
-    this->PiTalon->getPulseWithPosition();
-    //this->PiTalon->getSelectedSensorVelocity(); // sensor velocity
-    //this->PiTalon->getSelectedSensorPosition(); // sensor position
-    //this->PiTalon->getMotorOutputPercent();     // Motor precentage
-    //this->PiTalon->SensorOutOfPhase();          // out of phase
-    // get the rotation speed of talon.
-    this->DeltaT = (NT::Now()-this->PrefTime)/1000; // time in ms
-    double magVel_UnitsPer100ms = this->PiTalon->GetSelectedSensorVelocity(0);
-    /* convert to RPM */
-    // https://github.com/CrossTheRoadElec/Phoenix-Documentation#what-are-the-units-of-my-sensor
-    //MagRPM = magVel [units/kT] * 600 [kTs/minute] / 4096(units/rev), where kT = 100ms
-    return this->talonRPM = magVel_UnitsPer100ms * 600 / 4096;
 
-    //ad calibration
-    //this->talonRPM = this->calibrationMultiplication * this->talonRPM;
-    //this->speed = (2 * 3.14159265359 / 60) * this->talonRPM;
+	// get the velocity of left channle encoder
+	double magVel_UnitsPer100ms = this->PiTalon->GetSelectedSensorVelocity(0);
+
+	/* convert to RPM */
+	// https://github.com/CrossTheRoadElec/Phoenix-Documentation#what-are-the-units-of-my-sensor
+	//MagRPM = magVel [units/kT] * 600 [kTs/minute] / 4096(units/rev), where kT = 100ms
+	double magRPM = magVel_UnitsPer100ms * 600 / 4096;
+
+	return magRPM;
 }
 
 WPI_TalonSRX *C00_PI_Talon::GetTalonObject()
@@ -116,18 +123,30 @@ double C00_PI_Talon::GetSpeed()
 
 double C00_PI_Talon::GetAcceleration()
 {
-    this->acceleration = (this->talonRPM*60/(2*3.1415))/this->deltaT;
+    this->acceleration = (this->talonRPM * 60 / (2 * 3.1415)) / this->DeltaT;
     return this->acceleration;
 }
-double C00_PI_Talon::getTotalEncoderDistance();
-/*double C00_PI_Talon::getMotorCurrent(){
-    return this->PDPchanel->getCurrent()
+double C00_PI_Talon::deltaDistance()
+{
+	//get raw reading:
+	double magVel_UnitsPer100ms = this->PiTalon->GetSelectedSensorVelocity(0);
+	//find out how much of a rotation happens in 1ms:
+	double encVel = magVel_UnitsPer100ms / 4096 / 100;
+
+	//find the distance travelled since the last reading in mm:
+	double wheelVel = rotateRadius * 2.0 * M_PI * encVel * tmr->Get() * 1000; //speed in mm/ms
+	double dist = wheelVel;
+
+	//reset tmr:
+	tmr->Reset();
+
+	return dist;
 }
-*/
+
 /*test of Jorn dont look do not take serious */
 void C00_PI_Talon::PIDFControl(double Target)
 {
-    double error = target - this->current;
+    //double error = target - this->current
 }
 
 /*Jorns research maybe interesting: 
@@ -139,8 +158,6 @@ Set Peak Current params to 0 if desired behavior is to immediately current-limit
 //talon.ConfigPeakCurrentDuration(200, 10); /* 200ms */
 //talon.ConfigContinuousCurrentLimit(30, 10); /* 30A */
 //talon.EnableCurrentLimit(true); /* turn it on */
-
-
 
 //int sensorPos = 0; // sensor units
 //talon.SetSelectedSensorPosition(sensorPos, 0, 10);

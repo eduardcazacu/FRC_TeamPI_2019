@@ -2,14 +2,15 @@
 #pragma once
 
 #include <iostream>
-#include "PI_Vector.h"
 
 class PI_Vector{
     private:
+
     public:
 
     //creates the vectors from an array what it gets from the arduino
     PI_Vector(uint8_t info[5]);
+    PI_Vector();
 
     uint8_t index;
     uint8_t x0;
