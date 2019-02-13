@@ -10,14 +10,15 @@
 
 #pragma once
 
-#include "frc/WPILib.h"
 #include "C00_PI_Talon.h"
 #include "C01_PI_Victor.h"
+#include <frc/drive/DifferentialDrive.h>
 
 class S04_PI_Drivetrain
 {
   public:
     /*
+    
             Description:    Constructor. 
             Input:          TalonL, TalonR, Victor L1, Victor L2, Victor L3, Victor R1, Victor R2, Victor R3
             output:         none
@@ -30,14 +31,16 @@ class S04_PI_Drivetrain
                             Z [double][-1,1] - rotation 
             output:         none
     */
-   void drive(double speed, double rotation);
+    void drive(double speed, double rotation);
 
   private:
-
     //the differential drive used:
-  DifferentialDrive *_diffDrive =  new DifferentialDrive();
+    frc::DifferentialDrive *_diffDrive;
 
-  C00_PI_Talon *_talonL,_talonR;
-  C01_PI_Victor *_victorL1,*_victorL2,*_victorR1,*_victorR2;
-
+    C00_PI_Talon *_talonL;
+    C00_PI_Talon *_talonR;
+    C01_PI_Victor *_victorL1;
+    C01_PI_Victor *_victorL2;
+    C01_PI_Victor *_victorR1;
+    C01_PI_Victor *_victorR2;
 };

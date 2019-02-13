@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 #include "Robot.h"
+<<<<<<< HEAD
 //#include <frc/livewindow/LiveWindow.h>
 
 #include <iostream>
@@ -21,6 +22,10 @@
 
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
+=======
+#include "frc/smartdashboard/SmartDashboard.h"
+
+>>>>>>> 666d7101f15bfd4345645919260d23e0114eecc0
 
 int count = 0;
 
@@ -32,6 +37,29 @@ void Robot::RobotInit()
 
   //sensors:
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
+
+  //input:
+  input = new S02_PI_Input();
+
+  //initialize drivers:
+  talonR = new C00_PI_Talon(1, 76.2, 1);
+  victorR1 = new C01_PI_Victor(2);
+  victorR2 = new C01_PI_Victor(3);
+
+  //debug follow:
+  //victorR1->GetVictorObject()->Follow(*(talonR->GetTalonObject()));
+  //victorR2->GetVictorObject()->Follow(*(talonR->GetTalonObject()));
+
+  talonL =  new C00_PI_Talon(4,76.2,1);
+  victorL1 =  new C01_PI_Victor(5);
+  victorL2 =  new C01_PI_Victor(6);
+  
+  camera = new PI_Camera();
+  pixy = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
+
+  //NetworkTable = new S00_PI_Network();
+  //drivetrain:
+  //drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2);
 }
 
 /**
@@ -83,7 +111,6 @@ void Robot::AutonomousPeriodic()
   {
     // Default Auto goes here
   }
-
 }
 
 void Robot::TeleopInit() {}
@@ -91,8 +118,14 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic()
 {
 
+  //drive:
+  drivetrain->drive(input->driver->m_stick->GetY(),input->driver->m_stick->GetX());
+  //talonR->GetTalonObject()->Set(ControlMode::PercentOutput, input->driver->m_stick->GetY());
   if (count == 50)
   {
+    sensors->refresh();
+    pixy.Update();
+    std::cout << pixy.latestVector.x0;
     //test the Ultrasound sensors:
     //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
     //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
@@ -107,12 +140,13 @@ void Robot::TeleopPeriodic()
     }
     std::cout<<"\n";
     */
-
   }
-  count = (count + 1) % 100;
+  count = (count + 10) % 100;
 }
 
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic()
+{
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main()

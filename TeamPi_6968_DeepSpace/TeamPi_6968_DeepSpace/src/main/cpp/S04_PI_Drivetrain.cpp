@@ -1,16 +1,14 @@
 #include "S04_PI_Drivetrain.h"
 
-S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2,
-                                     C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2)
-
+S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2)
 {
     //assign the drivers:
-    this->_talonL = talonL;
-    this->_talonR = talonR;
-    this->_victorL1 = victorL1;
-    this->_victorL2 = victorL2;
-    this->_victorR1 = victorR1;
-    this->_victorR2 = victorR2;
+    _talonL = talonL;
+    _talonR = talonR;
+    _victorL1 = victorL1;
+    _victorL2 = victorL2;
+    _victorR1 = victorR1;
+    _victorR2 = victorR2;
 
     //set the defaults:
     //TODO: add in their coresponding constructors
@@ -24,12 +22,14 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     */
 
     //set the followers:
-    this->_victorL1->Follow(_talonL);
-    this->_victorL2->Follow(_talonL);
-    this->_victorR1->Follow(_talonR);
-    this->_victorR2->Follow(_talonT);
+    this->_victorL1->GetVictorObject()->Follow(*(_talonL->GetTalonObject()));
+    this->_victorL2->GetVictorObject()->Follow(*(_talonL->GetTalonObject()));
+    this->_victorR1->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
+    this->_victorR2->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
 
-    _diffDrive = new DifferentialDrive(_talonL, _talonR);
+    this->_diffDrive = new frc::DifferentialDrive(*(_talonL->GetTalonObject()), *(_talonR->GetTalonObject()));
 }
 
-void S04_PI_Drivetrain::drive(double speed, double rotation);
+void S04_PI_Drivetrain::drive(double speed, double rotation){
+    _diffDrive->ArcadeDrive(speed,rotation);
+}
