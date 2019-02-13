@@ -2,12 +2,12 @@
 
 #include <cameraserver/CameraServer.h>
 
-class PI_Camera{
+class C03_PI_Camera{
 
     private:
 
     public:
-    PI_Camera();
+    C03_PI_Camera();
 
 
 

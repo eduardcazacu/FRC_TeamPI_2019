@@ -6,8 +6,21 @@
 /*----------------------------------------------------------------------------*/
 
 #include "Robot.h"
-#include "frc/smartdashboard/SmartDashboard.h"
+//#include <frc/livewindow/LiveWindow.h>
 
+#include <iostream>
+#include <frc/WPILib.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/I2C.h>
+
+//our libraries:
+#include "S01_PI_Sensors.h"
+#include "Adafruit_INA219.h"
+#include "ArduinoI2C.h"
+#include "S02_PI_Input.h"
+
+//frc::I2C *I2CBus;
+S01_PI_Sensors *sensors;
 
 int count = 0;
 
@@ -36,8 +49,8 @@ void Robot::RobotInit()
   victorL1 =  new C01_PI_Victor(5);
   victorL2 =  new C01_PI_Victor(6);
   
-  camera = new PI_Camera();
-  pixy = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
+  camera = new C03_PI_Camera();
+  //pixy = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
 
   //NetworkTable = new S00_PI_Network();
   //drivetrain:
@@ -105,9 +118,11 @@ void Robot::TeleopPeriodic()
   //talonR->GetTalonObject()->Set(ControlMode::PercentOutput, input->driver->m_stick->GetY());
   if (count == 50)
   {
+    //execute code in here roughly once a second.
+
     sensors->refresh();
-    pixy.Update();
-    std::cout << pixy.latestVector.x0;
+    //pixy->Update();
+    //std::cout << pixy->latestVector->x0;
     //test the Ultrasound sensors:
     //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
     //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';

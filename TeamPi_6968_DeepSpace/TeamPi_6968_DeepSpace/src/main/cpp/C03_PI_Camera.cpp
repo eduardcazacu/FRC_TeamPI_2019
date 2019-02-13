@@ -1,7 +1,7 @@
 
-#include "PI_Camera.h"
+#include "C03_PI_Camera.h"
 
-PI_Camera::PI_Camera(){
+C03_PI_Camera::C03_PI_Camera(){
     frc::CameraServer::GetInstance()->StartAutomaticCapture();
 }
 

@@ -5,7 +5,7 @@
 #include <networktables/NetworkTableEntry.h>
 #include <networktables/NetworkTableInstance.h>
 
-#include <TimedRobot.h>
+#include <frc/TimedRobot.h>
 
 #include <iostream>
 #include <vector>
@@ -33,9 +33,5 @@ class S00_PI_Network{
     //get the value of the entry
     double getValue(int id);
     
-
-
-
-
 
 };*/

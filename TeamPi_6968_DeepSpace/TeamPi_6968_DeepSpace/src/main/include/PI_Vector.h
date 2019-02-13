@@ -2,19 +2,39 @@
 #pragma once
 
 #include <iostream>
-#include "PI_Vector.h"
+#include <stdint.h>
+#include <math.h>
 
 class PI_Vector{
+
     private:
-    public:
 
-    //creates the vectors from an array what it gets from the arduino
-    PI_Vector(uint8_t info[5]);
+    //calculate the direction of the vector
+    double Dir();
+    double Height();
 
-    uint8_t index;
     uint8_t x0;
     uint8_t x1;
     uint8_t y0;
     uint8_t y1;
+
+    public:
+
+    uint8_t index;
+
+    //creates the vectors from an array what it gets from the arduino
+    PI_Vector(uint8_t info[5]);
+    //PI_Vector(uint8_t _index, uint8_t _x0, uint8_t _y0, uint8_t _x1, uint8_t _y1);
+
+   
+
+    double CenterX(); //pixel x of the center
+    double CenterY(); //pixel y of the center
+    double Angle(); //angle in radians between -PI/2 and PI/2
+    double Length(); //pixel length
+
+    //parallel gives -1 back
+    double IntersectX(PI_Vector vector2);
+    double IntersectY(PI_Vector vector2);
 
 };
