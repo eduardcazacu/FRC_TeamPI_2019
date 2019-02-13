@@ -1,6 +1,8 @@
 /*
 Input that concerns the movement of the drivetrain
 
+NOT TO BE CONFUSED WITH PI_DRIVETRAIN
+
 created by Eduard Cazacu on 08 February 2019
 */
 

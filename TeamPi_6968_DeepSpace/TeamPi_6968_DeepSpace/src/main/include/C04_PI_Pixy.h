@@ -18,7 +18,12 @@ class PI_Pixy{
     //returns nothing
     PI_Pixy(frc::I2C::Port port, int address);
 
-    PI_Vector latestVector;
+    //Constructor
+    //This needs the port and address and creates a connection with the arduino
+    //returns nothing
+    PI_Pixy(frc::I2C::Port, uint8_t address);
+
+    PI_Vector *latestVector;
 
     //This is a list with all the Vectors
     std::vector<PI_Vector>* vectorList;

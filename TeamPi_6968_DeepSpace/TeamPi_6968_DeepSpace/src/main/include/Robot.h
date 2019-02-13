@@ -64,7 +64,7 @@ class Robot : public frc::TimedRobot {
 
   //input:
   S02_PI_Input *input;
-  PI_Pixy pixy;
+  PI_Pixy *pixy;
   
 
 };
