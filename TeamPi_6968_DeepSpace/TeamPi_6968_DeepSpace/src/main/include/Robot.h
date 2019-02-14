@@ -51,11 +51,10 @@ class Robot : public frc::TimedRobot {
   //camera
   C03_PI_Camera* camera;
 
-  //S00_PI_Network* NetworkTable;
+  S00_PI_Network* NetworkTable;
 
   //input:
   S02_PI_Input *input;
-  //PI_Pixy *pixy;
 
   //lift:
    S05_PI_Lift *lift;

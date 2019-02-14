@@ -9,12 +9,33 @@
 #include <vector>
 
 
+
+/*
+
+1.First ask for an ID and store it (The String is the location in the table just like your file explorer)
+2.Use this id together with your veriable to update the networkTable
+
+//example:
+
+int networkID;
+
+setup(){
+    networkID = networkTable->GetEntryId("/test");
+}
+loop(){
+    number++;
+    networkTable->changeValue(networkID,number);
+}
+
+
+*/
+
 class S00_PI_Network{
 
     private:
 
     static NetworkTable* dashboardTable;
-    std::vector<nt::NetworkTableEntry>* entries;
+    std::vector<nt::NetworkTableEntry> entries;
     
 
     public:

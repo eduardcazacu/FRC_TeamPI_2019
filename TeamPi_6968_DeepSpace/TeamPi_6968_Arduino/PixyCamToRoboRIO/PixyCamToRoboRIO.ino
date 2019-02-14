@@ -18,7 +18,7 @@
 
 Pixy2 pixy;
 
-/this are the values of the vectors it sees
+//this are the values of the vectors it sees
 uint8_t index;
 uint8_t x0;
 uint8_t y0;
@@ -26,10 +26,10 @@ uint8_t x1;
 uint8_t y1;
 
 void setup()
-{/*
+{
   Serial.begin(115200);
   Serial.print("Starting...\n");
-*/
+
 
   // change to the line_tracking program.  Note, changeProg can use partial strings, so for example,
   // you can change to the line_tracking program by calling changeProg("line") instead of the whole
@@ -38,8 +38,8 @@ void setup()
   // we need to initialize the pixy object
   pixy.init();
   // Change to line tracking program
-  pixy.changeProg("line");
-
+  pixy.changeProg(LINE_MODE_WHITE_LINE);
+  pixy.setLamp(1, 1);
   //int8_t setLamp(uint8_t upper, uint8_t lower)
 
 
@@ -53,8 +53,8 @@ void loop()
   //scan camera's
   pixy.line.getMainFeatures();
 
-  /*if (pixy.line.numVectors)
-    Serial.println(pixy.line.vectors->m_x0);*/
+  if (pixy.line.numVectors)
+    Serial.println(pixy.line.vectors->m_x0);
   index = pixy.line.vectors->m_index;
   x0 = pixy.line.vectors->m_x0;
   y0 = pixy.line.vectors->m_y0;
