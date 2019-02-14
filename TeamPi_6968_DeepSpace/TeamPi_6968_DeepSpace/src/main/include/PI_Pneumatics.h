@@ -8,25 +8,22 @@
  *
  */
 #pragma once
-#include "frc/DoubleSolenoid.h"
+#include <WPILib.h> //include WPILib.h file
+#include <DoubleSolenoid.h> //include the DoubleSolenoid.h file
+#include <DigitalInput.h> //include the DigitalInput.h file
 
 class PI_Pneumatics//make a class called PI_Pneumatics
 {
 private: 
- frc::DoubleSolenoid *piston;
+int _one;//pin one for controle
+int _two;//pin two for controle
+int _ex;//extendsion endswitch
+int _re;//retraction endswitch
 
 public:
-
-/*
-    Constructor:    setup one piston controlled with a double solenoid
-    Input:          CAN pneumatics controller channels 
-    output:         none
-*/
-PI_Pneumatics(uint8_t fwd, uint8_t rev);
-
-
+PI_Pneumatics(int one,int two, int re, int ex);
 void OpenPiston();//difine function for fully opening the piston
 void ClosePiston();//difine function for fully closing the piston
-bool PistonStatus();
+int PistonStatus(); // gives the status of the piston 0 is retrected 1 is extended 2 is neutral
 };
 
