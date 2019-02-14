@@ -18,6 +18,8 @@ Team PI 6968
 #include <PIDOutput.h>
 #include "S01_PI_Sensors.h"
 
+#define maxSpeed 0.7
+
 class S09_PI_Aim
 {
 private:
@@ -40,11 +42,8 @@ private:
     double PixyDistance;
 
     /*system variables*/ 
-    double errorAngle, errorDistance;
+    double Angle, Distance;
     double maxSpeed;
-
-    /*Place holders*/
-    double PLACEHOLDER0, PLACEHOLDER2;
 
 public:
     /*  description: constructor
@@ -55,7 +54,7 @@ public:
 
     /*
         Description:  uses the  FPID value to calculate the next motor input
-        Parameter:    Set angle standerd 0 [rad], _setDistance in pixels,_setErrorMargenCorner = error in %,  _setErrorMargenDistance = error in %
+        Parameter:    Set angle standerd 0 [rad], _setDistance in pixels recomended ~15,_setErrorMargenCorner = error in %,  _setErrorMargenDistance = error in %
         output:       1 = error, 0 no error   
     */
 
@@ -68,12 +67,7 @@ public:
     */
     bool UpdateAim();
 
-    /*
-        Description: this mehtod will convert the cante in angle in to a change in motor speed
-        Paremeters:  Change in angle,
-        Output:      chang in motor Speed.
-    */
-    double DrivtrainConverter(/*change in angle*/);    
+    double map(double x, double xMin, double xMax, double yMin, double yMax);    
 };
 
 
