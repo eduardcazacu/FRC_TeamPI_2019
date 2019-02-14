@@ -7,8 +7,8 @@
 #include <vector>
 
 
-#define PIXY_HEIGHT 51
-#define PIXY_WIDTH 78
+//pixels on the x = 316
+//pixels on the y = 208
 
 #define AMOUNTOFVECTORS 10
 class C04_PI_Pixy{
@@ -32,7 +32,6 @@ class C04_PI_Pixy{
     //returns nothing
     void Update();
     PI_Vector LatestVector();
-    PI_Vector BestVector();
 
     
 };
