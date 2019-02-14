@@ -10,24 +10,30 @@ Created by Jorn Veenendaal on 10 February 2019
 Team PI 6968
 */
 #include "frc/Timer.h"
+#include <PIDBase.h>
 #include <cmath>
+#include <PIDSource.h>
+#include <PIDOutput.h>
 
 class S09_PI_Aim
 {
 private:
     /*FPID values */
-    double kP, kI, kD, kF;
-    double OldError;
-    double errorInter;
-    double Error;
-    double AngleChange;
+    frc::PIDBase::PIDBase PIDCorner;
+    frc::PIDBase::PIDBase PIDDistance; 
 
-    /*system variables*/
-    int quadrent;
-    double currentAngle;
-    //timer
-    int pixyWidth = 200;
-    int Xcenter = pixyWidth/2;
+    /* PID calculation values*/
+    double setangle, setDistance;
+
+
+    //in put output 
+
+    /*system variables*/ 
+    double errorAngle, errorDistance;
+    double maxSpeed;
+
+    /*Place holders*/
+    double PLACEHOLDER0, PLACEHOLDER2;
 
 public:
     /*  description: constructor
@@ -38,11 +44,18 @@ public:
 
     /*
         Description:  uses the  FPID value to calculate the next motor input
-        Parameter:    Set angle standerd 0 [rad]
+        Parameter:    Set angle standerd 0 [rad], _setDistance in pixels,_setErrorMargenCorner = error in %,  _setErrorMargenDistance = error in %
         output:       1 = error, 0 no error   
     */
 
-    bool Aim(double SetAngle);
+    bool Aim(double Setangle, double SetDistance);
+
+    /*
+        Description:    Use to run the pid loop. you can set a set point but it will use it previously set setpoint and drive to wards it
+        Paramter:       -
+        Output:         0 not in error margen, 1 within error margen
+    */
+    bool UpdateAim();
 
     /*
         Description: this mehtod will convert the cante in angle in to a change in motor speed
