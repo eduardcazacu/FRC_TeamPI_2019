@@ -11,18 +11,14 @@
 #include <iostream>
 #include <frc/WPILib.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/I2C.h>
 
-//our libraries:
-#include "S01_PI_Sensors.h"
-#include "Adafruit_INA219.h"
-#include "ArduinoI2C.h"
-#include "S02_PI_Input.h"
 
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
 
 int count = 0;
+
+int LiftLevel=0;
 
 void Robot::RobotInit()
 {
@@ -36,25 +32,12 @@ void Robot::RobotInit()
   //input:
   input = new S02_PI_Input();
 
-  //initialize drivers:
-  talonR = new C00_PI_Talon(1, 76.2, 1);
-  victorR1 = new C01_PI_Victor(2);
-  victorR2 = new C01_PI_Victor(3);
-
-  //debug follow:
-  //victorR1->GetVictorObject()->Follow(*(talonR->GetTalonObject()));
-  //victorR2->GetVictorObject()->Follow(*(talonR->GetTalonObject()));
-
-  talonL =  new C00_PI_Talon(4,76.2,1);
-  victorL1 =  new C01_PI_Victor(5);
-  victorL2 =  new C01_PI_Victor(6);
-  
-  camera = new C03_PI_Camera();
-  //pixy = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
-
   //NetworkTable = new S00_PI_Network();
-  //drivetrain:
-  //drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2);
+  lift = new S05_PI_Lift(7);  //create a lift using the talon on CAN 7
+
+  //manual:
+  manual = new M00_PI_Manual(input, lift);
+
 }
 
 /**
@@ -108,19 +91,31 @@ void Robot::AutonomousPeriodic()
   }
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+
+
+}
 
 void Robot::TeleopPeriodic()
 {
+  sensors->refresh();
 
-  //drive:
-  drivetrain->drive(input->driver->m_stick->GetY(),input->driver->m_stick->GetX());
-  //talonR->GetTalonObject()->Set(ControlMode::PercentOutput, input->driver->m_stick->GetY());
-  if (count == 50)
+  //manual stuff:
+  manual->driving();
+  manual->functions();
+
+  if (count == 100)
   {
     //execute code in here roughly once a second.
 
-    sensors->refresh();
+
+
+    //switch between the levels:
+    //lift->goToLvl(LiftLevel);
+
+    LiftLevel=(LiftLevel+1)%3; //loop
+
+
     //pixy->Update();
     //std::cout << pixy->latestVector->x0;
     //test the Ultrasound sensors:
@@ -138,7 +133,7 @@ void Robot::TeleopPeriodic()
     std::cout<<"\n";
     */
   }
-  count = (count + 10) % 100;
+  count = (count + 1) % 200;
 }
 
 void Robot::TestPeriodic()

@@ -67,14 +67,14 @@ C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication
     tmr->Start();
 }
 
-void C00_PI_Talon::closedLoopControl(int encoderSteps)
+void C00_PI_Talon::closedLoopControl(double encoderRevs)
 {
-    // 20A current max
-    //this->PiTalon->Set(ControlMode::Current, Vector * 20);
+    int encoderSteps =  encoderRevs * 4096;
+
     if (this->setpointEncoder != encoderSteps)
     {
         this->setpointEncoder = encoderSteps;
-        this->encoderPref = this->PiTalon->GetSelectedSensorPosition();
+        this->encoderPrev = this->PiTalon->GetSelectedSensorPosition();
     }
 
     /* Position mode - button just pressed */
@@ -88,7 +88,7 @@ void C00_PI_Talon::closedLoopControl(int encoderSteps)
 
 bool C00_PI_Talon::Arrived()
 {
-    if (this->encoderPref + this->setpointEncoder <= this->PiTalon->GetSelectedSensorPosition())
+    if (this->encoderPrev + this->setpointEncoder <= this->PiTalon->GetSelectedSensorPosition())
     {
         return true;
     }
@@ -126,8 +126,11 @@ double C00_PI_Talon::GetAcceleration()
     this->acceleration = (this->talonRPM * 60 / (2 * 3.1415)) / this->DeltaT;
     return this->acceleration;
 }
+
 double C00_PI_Talon::deltaDistance()
 {
+
+    //TODO: fix multiple calls in one loop.
 	//get raw reading:
 	double magVel_UnitsPer100ms = this->PiTalon->GetSelectedSensorVelocity(0);
 	//find out how much of a rotation happens in 1ms:

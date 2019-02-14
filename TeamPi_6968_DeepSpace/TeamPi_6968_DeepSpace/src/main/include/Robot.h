@@ -15,16 +15,15 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 //our libraries:
-#include "S01_PI_Sensors.h"
-#include "Adafruit_INA219.h"
 #include "ArduinoI2C.h"
 #include "S02_PI_Input.h"
-#include "C01_PI_Victor.h"
-#include "C00_PI_Talon.h"
-#include "S04_PI_Drivetrain.h"
 #include "C03_PI_Camera.h"
 #include "S00_PI_Network.h"
-#include "C04_PI_Pixy.h"
+#include "S05_PI_Lift.h"
+#include "M00_PI_Manual.h"
+#include "S01_PI_Sensors.h"
+#include "S02_PI_Input.h"
+
 
 class Robot : public frc::TimedRobot {
  public:
@@ -45,17 +44,9 @@ class Robot : public frc::TimedRobot {
 
   //frc::I2C *I2CBus;
   S01_PI_Sensors *sensors;
-  
-  //motors:
-  C00_PI_Talon* talonL;
-  C00_PI_Talon* talonR;
-  C01_PI_Victor* victorL1;
-  C01_PI_Victor* victorL2;
-  C01_PI_Victor* victorR1;
-  C01_PI_Victor* victorR2;
 
-  //drivetrain:
-  S04_PI_Drivetrain *drivetrain;
+  //manual:
+  M00_PI_Manual *manual;
 
   //camera
   C03_PI_Camera* camera;
@@ -65,6 +56,8 @@ class Robot : public frc::TimedRobot {
   //input:
   S02_PI_Input *input;
   //PI_Pixy *pixy;
-  
+
+  //lift:
+   S05_PI_Lift *lift;
 
 };
