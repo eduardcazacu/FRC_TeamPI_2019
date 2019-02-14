@@ -8,13 +8,11 @@ S01_PI_Sensors::S01_PI_Sensors(){
     IRFront =  new PI_IR(IR_FRONT,IR_DIST_THRESHOLD);
     IRBack =  new PI_IR(IR_BACK,IR_DIST_THRESHOLD);
 
-    //PixyDown = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
+    PixyDown = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
 }   
 
 void S01_PI_Sensors::refresh(){
     //encoder stuff here probably:
 
-
-
-    //PixyDown->Update();
+    PixyDown->Update();
 }

@@ -35,5 +35,6 @@ C05_PI_Ultrasoon *USRight;
 PI_IR *IRFront;
 PI_IR *IRBack;
 //Pixy cams:
-//PI_Pixy *PixyDown;
+PI_Pixy *PixyDown; //For lines on the ground
+PI_Pixy *PixyUp; //For the lines on the rocket
 };
