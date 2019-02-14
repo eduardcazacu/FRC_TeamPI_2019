@@ -13,47 +13,50 @@ void C04_PI_Pixy::Update()
   uint8_t check[5];
   i2cBus->read(check, 5);
 
-  PI_Vector* newVector = new PI_Vector(check);
+  PI_Vector *newVector = new PI_Vector(check);
   //newVector->Print();
-  
+
   AddVector(*newVector);
-  if(vectorList.size()>AMOUNTOFVECTORS)
+  if (vectorList.size() > AMOUNTOFVECTORS)
     vectorList.pop_back();
 
-  std::cout<<(int)LatestVector().index<<"\n";
-  //LatestVector().Print();
-  /*
-  if(vectorList->size() != 0){
-    for(int i = 0; i<vectorList->size(); i++){
-      if(newVector->index == vectorList->at(i).index){
-        AddVector(*newVector);
-        break;
-      }
-      if(i == (vectorList->size()-1))
-        AddVector(*newVector);
-    }
-  }
-  else{
-    AddVector(*newVector);
-  }*/
+  std::cout << (int)LatestVector().lifeTime << "\n";
 }
 
-void C04_PI_Pixy::AddVector(PI_Vector vector){
-  if(vectorList.empty()){
+void C04_PI_Pixy::AddVector(PI_Vector vector)
+{
+  if (vectorList.empty())
+  {
     vectorList.push_back(vector);
   }
-  else{
+  else
+  {
     bool found = false;
-    for(int i = 0; i<vectorList.size(); i++){
-      if(vectorList.at(i).index==vector.index){
+    for (int i = 0; i < vectorList.size(); i++)
+    {
+      if (vectorList.at(i).index == vector.index)
+      {
         //the vector already exist
-        vectorList.erase(vectorList.begin()+i);
+        vector.lifeTime = vectorList.at(i).lifeTime + 1;
+        vectorList.erase(vectorList.begin() + i);
       }
     }
-    vectorList.insert(vectorList.begin(),vector);
+    vectorList.insert(vectorList.begin(), vector);
   }
 }
 
-PI_Vector C04_PI_Pixy::LatestVector(){
+PI_Vector C04_PI_Pixy::LatestVector()
+{
   return vectorList.front();
+}
+
+PI_Vector C04_PI_Pixy::BestVector()
+{
+  PI_Vector bestVector = vectorList.at(0);
+  for (int i = 1; i < vectorList.size(); i++)
+  {
+    if (bestVector.lifeTime < vectorList.at(i).lifeTime)
+      bestVector = vectorList.at(i);
+  }
+  return bestVector;
 }
