@@ -21,6 +21,7 @@ class PI_Vector{
     public:
 
     uint8_t index;
+    unsigned int lifeTime = 0;
 
     //creates the vectors from an array what it gets from the arduino
     PI_Vector(uint8_t info[5]);
@@ -32,6 +33,8 @@ class PI_Vector{
     double CenterY(); //pixel y of the center
     double Angle(); //angle in radians between -PI/2 and PI/2
     double Length(); //pixel length
+
+    double NearestY();
 
     //parallel gives -1 back
     double IntersectX(PI_Vector vector2);
