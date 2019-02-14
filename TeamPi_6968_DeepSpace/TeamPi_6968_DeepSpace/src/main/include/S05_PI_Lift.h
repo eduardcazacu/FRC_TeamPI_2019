@@ -18,11 +18,20 @@ Team Pi 6968
 #pragma once
 
 //the heights (in rotations) of all the levels from the bottom:
+#define LVL0 5
 #define LVL1 10
-#define LVL2 50
-#define LVL3 100
+#define LVL2 15
 
 #include "C00_PI_Talon.h"
+
+#define WINCH_RADIUS 10
+
+#define KP  0.125
+#define KF  0 
+#define KI  0.0125
+#define KD  6.5
+
+#define RAMP_T 0.5
 
 class S05_PI_Lift{
     public:
@@ -41,6 +50,14 @@ class S05_PI_Lift{
        void goTo(double pos);
 
         /*
+            Description:    Go to a certain rocket level.
+            Input:          [uint8_t] level index (0,1,2) where 0 is ground level
+            output:         none
+
+        */
+       void goToLvl(uint8_t index);
+
+        /*
             Description:    go down until the limit switch confirms and reset the current position to 0
             Input:          none;
             Output:         none;
@@ -49,6 +66,8 @@ class S05_PI_Lift{
 
     private:
 
+    //the speed controller + encoder for the winch.
+    C00_PI_Talon *winch;
     double *_pos;   //the current position of the robot.
 
 };

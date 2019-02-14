@@ -28,7 +28,7 @@ class C00_PI_Talon
     /*the variables*/
     double totalDistance, speed, acceleration;
     double calibrationMultiplication, rotateRadius, talonRPM, MotorCurrent;
-    int setpointEncoder, encoderPref;
+    int setpointEncoder, encoderPrev;
     uint64_t PrefTime = 0;
     uint64_t DeltaT; // time in ms
     WPI_TalonSRX *PiTalon;
@@ -64,7 +64,8 @@ class C00_PI_Talon
         output:         True if reached, false if not reached.
        */
     bool Arrived();
-    void closedLoopControl(int encoderSteps);
+
+    void closedLoopControl(double encoderRevs);
 
     /*
         Returns talon object for wpiLip manipulations
