@@ -6,6 +6,9 @@
 #include "PI_Vector.h"
 #include <vector>
 
+
+//pixels on the x = 316
+//pixels on the y = 208
 class C04_PI_Pixy{
 
     private:
