@@ -14,6 +14,17 @@
 #include "C01_PI_Victor.h"
 #include <frc/drive/DifferentialDrive.h>
 #include "PiVector3.h"
+#include "frc/PIDController.h"
+#include "PI_PIDSource.h"
+#include "PI_PIDOutput.h"
+#include "S03_PI_Positioning.h"
+
+
+#define KP_R    0.005   
+#define KD_R    0.001   
+#define KI_R    0.001
+#define KF_R    0
+
 
 class S04_PI_Drivetrain
 {
@@ -25,7 +36,7 @@ class S04_PI_Drivetrain
             output:         none
         */
     S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2);
-
+    S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S03_PI_Positioning *robotPos);
     /*
             Description:    Differential drive.
             Input:          Y [double][-1,1] - speed
@@ -38,6 +49,7 @@ class S04_PI_Drivetrain
         Description:    Rotates the robot with PID to the target orientation. Makes use of positioning 
         Input:          [PiVector3] target orientations in absolute values. e.g: you read the current position
                         of the robot and you mak the target that value + 180 to turn around.
+                        Use Z axis for orientation.
         output:         [bool] target reached? falese for no , true for got there.
     */
     bool rotateTo(PiVector3 target);
@@ -52,4 +64,11 @@ class S04_PI_Drivetrain
     C01_PI_Victor *_victorL2;
     C01_PI_Victor *_victorR1;
     C01_PI_Victor *_victorR2;
+
+    bool usingPositioning;
+    S03_PI_Positioning *robotPos;
+
+    frc::PIDController *pid;
+    PI_PIDSource *input;
+    PI_PIDOutput *output;
 };

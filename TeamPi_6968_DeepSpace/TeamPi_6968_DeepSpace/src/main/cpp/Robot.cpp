@@ -104,16 +104,17 @@ void Robot::TeleopPeriodic()
   manual->driving();
   manual->functions();
 
-  if (count == 50)
+  if (count == 100)
   {
     //execute code in here roughly once a second.
 
 
 
     //switch between the levels:
-    lift->goToLvl(LiftLevel);
+    //lift->goToLvl(LiftLevel);
 
-    LiftLevel=(LiftLevel+1)/2; //loop
+    LiftLevel=(LiftLevel+1)%3; //loop
+
 
     //pixy->Update();
     //std::cout << pixy->latestVector->x0;
@@ -132,7 +133,7 @@ void Robot::TeleopPeriodic()
     std::cout<<"\n";
     */
   }
-  count = (count + 10) % 100;
+  count = (count + 1) % 200;
 }
 
 void Robot::TestPeriodic()

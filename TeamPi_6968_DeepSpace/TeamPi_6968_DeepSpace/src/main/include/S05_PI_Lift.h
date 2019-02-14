@@ -18,19 +18,20 @@ Team Pi 6968
 #pragma once
 
 //the heights (in rotations) of all the levels from the bottom:
-#define LVL0 10
-#define LVL1 50
-#define LVL2 100
+#define LVL0 5
+#define LVL1 10
+#define LVL2 15
 
 #include "C00_PI_Talon.h"
 
 #define WINCH_RADIUS 10
 
-#define KP  0.2
+#define KP  0.125
 #define KF  0 
-#define KI  0.002
-#define KD  0.001
+#define KI  0.0125
+#define KD  6.5
 
+#define RAMP_T 0.5
 
 class S05_PI_Lift{
     public:

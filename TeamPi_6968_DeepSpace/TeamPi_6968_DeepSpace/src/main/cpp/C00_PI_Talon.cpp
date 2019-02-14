@@ -69,8 +69,6 @@ C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication
 
 void C00_PI_Talon::closedLoopControl(double encoderRevs)
 {
-    // 20A current max
-    //this->PiTalon->Set(ControlMode::Current, Vector * 20);
     int encoderSteps =  encoderRevs * 4096;
 
     if (this->setpointEncoder != encoderSteps)

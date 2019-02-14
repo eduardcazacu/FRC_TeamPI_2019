@@ -22,5 +22,10 @@ class PI_Driver
     
     frc::Joystick *m_stick;         //main joystick for driving;
     frc::JoystickButton *aimBtn;    //button for aiming
+    //lift buttons:
+    frc::JoystickButton *lvl0Btn; 
+    frc::JoystickButton *lvl1Btn;
+    frc::JoystickButton *lvl2Btn;
+
   private:
 };
