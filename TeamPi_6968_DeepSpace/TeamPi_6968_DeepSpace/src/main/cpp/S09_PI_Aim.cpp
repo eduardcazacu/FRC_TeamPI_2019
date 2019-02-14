@@ -2,8 +2,8 @@
 
 S09_PI_Aim::S09_PI_Aim(double _maxSpeed, double _kPcorn, double _kIcorn, double _kDcorn, double _kFcorn,double _kPdis, double _kIdis, double _kDdis, double _kFdis)
 {
-    this->PIDCorner = new PIDBase(_kPcorn,_kIcorn,_kDcorn, PLACEHOLDER0, PLACEHOLDER2);
-    this->PIDDistance = new PIDBase(_kPdis,_kIdis,_kDdis, PLACEHOLDER0, PLACEHOLDER2);
+    this->PIDCorner = new PIDBase(_kPcorn,_kIcorn,_kDcorn, this->CornerSource, this->CornerOutput);
+    this->PIDDistance = new PIDBase(_kPdis,_kIdis,_kDdis, this->DistanceSource, this->DistanceOutput);
 }
 
 bool S09_PI_Aim::Aim(double _Setangle, double _SetDistance, double _setErrorMargenCorner, double _setErrorMargenDistance)
@@ -14,6 +14,8 @@ bool S09_PI_Aim::Aim(double _Setangle, double _SetDistance, double _setErrorMarg
     this->PIDCorner->SetPercentTolerance(_setErrorMargenCorner);
     this->PIDDistance->SetPercentTolerance(_setErrorMargenDistance);
 
+
+
     this->PIDCorner->Calculate();
     this->PIDDistance->Calculate();
 
@@ -21,6 +23,10 @@ bool S09_PI_Aim::Aim(double _Setangle, double _SetDistance, double _setErrorMarg
     this->errorDistance = this->PIDDistance->get();
 }
 bool S09_PI_Aim::UpdateAim(){
+    // read new values:
+    this->CornerSource->set(this->PixyCorner);
+    this->DistanceSource->set(this->PixyDistance);
+
     this->PIDCorner->Calculate();
     this->PIDDistance->Calculate();
 }

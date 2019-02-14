@@ -10,10 +10,13 @@ Created by Jorn Veenendaal on 10 February 2019
 Team PI 6968
 */
 #include "frc/Timer.h"
+#include "PI_PIDOutput.h"
+#include "PI_PIDSource.h"
 #include <PIDBase.h>
 #include <cmath>
 #include <PIDSource.h>
 #include <PIDOutput.h>
+#include "S01_PI_Sensors.h"
 
 class S09_PI_Aim
 {
@@ -26,7 +29,15 @@ private:
     double setangle, setDistance;
 
 
-    //in put output 
+    //PID source and Output
+    PI_PIDSource *CornerSource = new PI_PIDSource();
+    PI_PIDOutput *CornerOutput = new PI_PIDOutput();
+    PI_PIDSource *DistanceSource = new PI_PIDSource();
+    PI_PIDOutput *DistanceOutput = new PI_PIDOutput();
+   
+    // pixy data 
+    double PixyCorner;
+    double PixyDistance;
 
     /*system variables*/ 
     double errorAngle, errorDistance;
