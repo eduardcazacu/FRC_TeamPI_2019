@@ -13,6 +13,7 @@
 #include "C00_PI_Talon.h"
 #include "C01_PI_Victor.h"
 #include <frc/drive/DifferentialDrive.h>
+#include "PiVector3.h"
 
 class S04_PI_Drivetrain
 {
@@ -32,6 +33,14 @@ class S04_PI_Drivetrain
             output:         none
     */
     void drive(double speed, double rotation);
+
+    /*
+        Description:    Rotates the robot with PID to the target orientation. Makes use of positioning 
+        Input:          [PiVector3] target orientations in absolute values. e.g: you read the current position
+                        of the robot and you mak the target that value + 180 to turn around.
+        output:         [bool] target reached? falese for no , true for got there.
+    */
+    bool rotateTo(PiVector3 target);
 
   private:
     //the differential drive used:
