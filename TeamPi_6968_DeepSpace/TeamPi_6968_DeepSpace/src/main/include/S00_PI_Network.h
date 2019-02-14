@@ -5,18 +5,16 @@
 #include <networktables/NetworkTableEntry.h>
 #include <networktables/NetworkTableInstance.h>
 
-#include <frc/TimedRobot.h>
-
 #include <iostream>
 #include <vector>
-#include <Robot.h>
-/*
+
+
 class S00_PI_Network{
 
     private:
 
-    static NetworkTable dashboardTable;
-    std::vector<nt::NetworkTableEntry> entries;
+    static NetworkTable* dashboardTable;
+    std::vector<nt::NetworkTableEntry>* entries;
     
 
     public:
@@ -34,4 +32,4 @@ class S00_PI_Network{
     double getValue(int id);
     
 
-};*/
+};
