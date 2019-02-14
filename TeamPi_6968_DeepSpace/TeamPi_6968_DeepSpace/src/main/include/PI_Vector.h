@@ -37,4 +37,6 @@ class PI_Vector{
     double IntersectX(PI_Vector vector2);
     double IntersectY(PI_Vector vector2);
 
+    void Print();
+
 };

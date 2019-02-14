@@ -68,3 +68,14 @@ double PI_Vector::Angle(){
 double PI_Vector::Length(){
     return sqrt(pow(x1-x0,2)+pow(y1-y0,2));
 }
+
+void PI_Vector::Print(){
+
+    std::cout<<"\n";
+    std::cout<<"Vector:\n";
+    std::cout<<"index: "<<(int)index<<"\n";
+    std::cout<<"x0: "<<(int)x0<<"\n";
+    std::cout<<"y0: "<<(int)y0<<"\n";
+    std::cout<<"x1: "<<(int)x1<<"\n";
+    std::cout<<"y1: "<<(int)y1<<"\n";
+}
