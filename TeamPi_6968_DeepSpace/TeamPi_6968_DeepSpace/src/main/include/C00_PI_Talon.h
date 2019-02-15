@@ -85,7 +85,7 @@ class C00_PI_Talon
         Output          [double] distance since last call
     */
     double deltaDistance();
-    void SetFPID(double _kP, double _kI, double kD, double _kF, double kPIDLoopIdx = 0, double kSlotIdx = 0);
+    void SetFPID(double _kP, double _kI, double _kD, double _kF, double kPIDLoopIdx = 0, double kSlotIdx = 0);
 
     // double getMotorCurrent();
 

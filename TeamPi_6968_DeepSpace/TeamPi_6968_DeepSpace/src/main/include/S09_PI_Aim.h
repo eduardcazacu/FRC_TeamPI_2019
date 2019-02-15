@@ -9,21 +9,22 @@ make sure the pixycame is conneced propperly and is sending the right data.
 Created by Jorn Veenendaal on 10 February 2019
 Team PI 6968
 */
+
+#pragma once
+
 #include "frc/Timer.h"
 #include "PI_PIDOutput.h"
 #include "PI_PIDSource.h"
-#include <PIDBase.h>
+#include <frc/PIDBase.h>
 #include <cmath>
-#include <PIDSource.h>
-#include <PIDOutput.h>
 #include "S01_PI_Sensors.h"
 
 class S09_PI_Aim
 {
 private:
     /*FPID values */
-    frc::PIDBase::PIDBase PIDCorner;
-    frc::PIDBase::PIDBase PIDDistance; 
+    frc::PIDBase *PIDCorner;
+    frc::PIDBase *PIDDistance; 
 
     /* PID calculation values*/
     double setangle, setDistance;
@@ -51,7 +52,8 @@ public:
         Paremeters:  pixy, drivetrain, kP,kI,kD,kF 
         output:      -
     */
-    S09_PI_Aim(double _kP, double _kI, double _kD, double _kF);
+    S09_PI_Aim(double _maxSpeed, double _kPcorn, double _kIcorn, double _kDcorn, double _kFcorn,double _kPdis, double _kIdis, double _kDdis, double _kFdis);
+
 
     /*
         Description:  uses the  FPID value to calculate the next motor input
@@ -59,7 +61,7 @@ public:
         output:       1 = error, 0 no error   
     */
 
-    bool Aim(double Setangle, double SetDistance);
+    bool Aim(double _Setangle, double _SetDistance, double _setErrorMargenCorner, double _setErrorMargenDistance);
 
     /*
         Description:    Use to run the pid loop. you can set a set point but it will use it previously set setpoint and drive to wards it
