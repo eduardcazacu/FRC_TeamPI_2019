@@ -7,7 +7,7 @@ PI_Vector::PI_Vector(uint8_t info[5])
     x0 = info[1];
     y0 = info[2];
     x1 = info[3];
-    y1 = info[3];
+    y1 = info[4];
 }
 
 /*PI_Vector::PI_Vector(uint8_t _index, uint8_t _x0, uint8_t _y0, uint8_t _x1, uint8_t _y1)
@@ -67,4 +67,21 @@ double PI_Vector::Angle(){
 
 double PI_Vector::Length(){
     return sqrt(pow(x1-x0,2)+pow(y1-y0,2));
+}
+
+double PI_Vector::NearestY(){
+    if(y0>y1)
+    return y0;
+    return y1;
+}
+
+void PI_Vector::Print(){
+
+    std::cout<<"\n";
+    std::cout<<"Vector:\n";
+    std::cout<<"index: "<<(int)index<<"\n";
+    std::cout<<"x0: "<<(int)x0<<"\n";
+    std::cout<<"y0: "<<(int)y0<<"\n";
+    std::cout<<"x1: "<<(int)x1<<"\n";
+    std::cout<<"y1: "<<(int)y1<<"\n";
 }

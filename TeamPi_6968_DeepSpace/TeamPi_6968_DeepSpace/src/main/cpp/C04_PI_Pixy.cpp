@@ -9,36 +9,54 @@ C04_PI_Pixy::C04_PI_Pixy(frc::I2C::Port port, int address)
 
 void C04_PI_Pixy::Update()
 {
-  std::cout << "arduino value  ";
+  //std::cout << "arduino value  ";
   uint8_t check[5];
   i2cBus->read(check, 5);
 
-  PI_Vector* newVector = new PI_Vector(check);
-  
+  PI_Vector *newVector = new PI_Vector(check);
+  //newVector->Print();
 
-  for (int i = 0; i < 5; i++)
-    std::cout << (int)check[i] << "\n";
-  std::cout << "\n";
+  AddVector(*newVector);
+  if (vectorList.size() > AMOUNTOFVECTORS)
+    vectorList.pop_back();
 
-  latestVector = newVector;
+  std::cout << (int)LatestVector().lifeTime << "\n";
+}
 
-
-  if(vectorList->size() != 0){
-    for(int i = 0; i<vectorList->size(); i++){
-      if(newVector->index == vectorList->at(i).index){
-        AddVector(*newVector);
-        break;
-      }
-      if(i == (vectorList->size()-1))
-        AddVector(*newVector);
-    }
+void C04_PI_Pixy::AddVector(PI_Vector vector)
+{
+  if (vectorList.empty())
+  {
+    vectorList.push_back(vector);
   }
-  else{
-    AddVector(*newVector);
+  else
+  {
+    bool found = false;
+    for (int i = 0; i < vectorList.size(); i++)
+    {
+      if (vectorList.at(i).index == vector.index)
+      {
+        //the vector already exist
+        vector.lifeTime = vectorList.at(i).lifeTime + 1;
+        vectorList.erase(vectorList.begin() + i);
+      }
+    }
+    vectorList.insert(vectorList.begin(), vector);
   }
 }
 
-void C04_PI_Pixy::AddVector(PI_Vector vector){
-  vectorList->push_back(vector);
-  latestVector = &vector;
+PI_Vector C04_PI_Pixy::LatestVector()
+{
+  return vectorList.front();
+}
+
+PI_Vector C04_PI_Pixy::BestVector()
+{
+  PI_Vector bestVector = vectorList.at(0);
+  for (int i = 1; i < vectorList.size(); i++)
+  {
+    if (bestVector.lifeTime < vectorList.at(i).lifeTime)
+      bestVector = vectorList.at(i);
+  }
+  return bestVector;
 }

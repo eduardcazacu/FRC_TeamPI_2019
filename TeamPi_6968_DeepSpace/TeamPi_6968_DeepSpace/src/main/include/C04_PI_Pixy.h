@@ -7,8 +7,10 @@
 #include <vector>
 
 
-//pixels on the x = 316
-//pixels on the y = 208
+#define PIXY_HEIGHT 51
+#define PIXY_WIDTH 78
+
+#define AMOUNTOFVECTORS 10
 class C04_PI_Pixy{
 
     private:
@@ -24,11 +26,13 @@ class C04_PI_Pixy{
     PI_Vector* latestVector;
 
     //This is a list with all the Vectors
-    std::vector<PI_Vector>* vectorList;
+    std::vector<PI_Vector> vectorList;
     
     //this updates the vector list by reading from the arduino
     //returns nothing
     void Update();
+    PI_Vector LatestVector();
+    PI_Vector BestVector();
 
     
 };
