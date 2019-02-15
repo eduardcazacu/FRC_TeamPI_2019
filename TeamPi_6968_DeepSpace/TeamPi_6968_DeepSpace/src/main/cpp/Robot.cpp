@@ -12,13 +12,12 @@
 #include <frc/WPILib.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
-
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
 
 int count = 0;
 
-int LiftLevel=0;
+int LiftLevel = 0;
 
 void Robot::RobotInit()
 {
@@ -33,11 +32,10 @@ void Robot::RobotInit()
   input = new S02_PI_Input();
 
   //NetworkTable = new S00_PI_Network();
-  lift = new S05_PI_Lift(7);  //create a lift using the talon on CAN 7
+  lift = new S05_PI_Lift(7); //create a lift using the talon on CAN 7
 
   //manual:
   manual = new M00_PI_Manual(input, lift);
-
 }
 
 /**
@@ -91,9 +89,8 @@ void Robot::AutonomousPeriodic()
   }
 }
 
-void Robot::TeleopInit() {
-
-
+void Robot::TeleopInit()
+{
 }
 
 void Robot::TeleopPeriodic()
@@ -104,36 +101,16 @@ void Robot::TeleopPeriodic()
   manual->driving();
   manual->functions();
 
-  if (count == 100)
+  if (count == 50)
   {
     //execute code in here roughly once a second.
 
-
-
-    //switch between the levels:
-    //lift->goToLvl(LiftLevel);
-
-    LiftLevel=(LiftLevel+1)%3; //loop
-
-
-    //pixy->Update();
-    //std::cout << pixy->latestVector->x0;
     //test the Ultrasound sensors:
-    //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
-    //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
+    std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
+    std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
 
-    //test arduno communication :
-    /*uint8_t data[2];
-    if(arduino->read(data,2))
-      std::cout<<"Read error \n";
-
-    for(int i=0;i<2;i++){
-      std::cout<<data[i];
-    }
-    std::cout<<"\n";
-    */
   }
-  count = (count + 1) % 200;
+  count = (count + 1) % 100;
 }
 
 void Robot::TestPeriodic()
