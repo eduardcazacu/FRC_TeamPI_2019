@@ -2,31 +2,24 @@
 #include "S07_PI_AutoClimb.h"
 
 
-S07_PI_AutoClimb::S07_PI_AutoClimb(PI_Climb *climbSystem, S04_PI_Drivetrain *drivetrain)
+S07_PI_AutoClimb::S07_PI_AutoClimb(PI_Climb *_climbSystem, S04_PI_Drivetrain *_drivetrain)
 {
-    _climbSystem = climbSystem;
-    _drivetrain = drivetrain;
+    climbSystem = _climbSystem;
+    drivetrain = _drivetrain;
 }
-
 /*
+
 bool S07_PI_AutoClimb::climb()
 {
 
-    if (oldIndex != index)
-    {
-        if (index != 0)
-        {
-            index = 0;
-        }
-        else
-        {
-            index = 1;
-        }
-    }
+    
 
     if (NextOption())
     {
+        if(index<9)
         index++;
+        else
+        index = 0;
         oldIndex = index;
         return true;
     }
@@ -42,32 +35,25 @@ bool S07_PI_AutoClimb::NextOption()
     case 0:
         //do nothing
         return false;
-    case 1:
-<<<<<<< HEAD
-        //turn 180 degree
-        return drivetrain.Rotate();
-=======
-        return (_climbSystem->extendAll());
->>>>>>> 94db83807c2b83bee2b768eca62fbbf93c68784e
     case 2:
-        //use ultrasonic to get straight in front of wall
-        return false;
+        r
     case 3:
-        return (front->PneuOut() && back->PneuOut());
+        return (climbSystem->extendAll());
     case 4:
-        return (front->Drive(speed));
+        return (front->PneuOut() && back->PneuOut());
     case 5:
-        return (back->PneuIn());
+        return (front->Drive(speed));
     case 6:
+        return (back->PneuIn());
+    case 7:
         //move drivetrain here
         return (front->Drive(speed));
-    case 7:
-        return (front->PneuIn());
     case 8:
+        return (front->PneuIn());
+    case 9:
         //drive forward
         return false;
     }
 
-}
+}*/
 
-*/

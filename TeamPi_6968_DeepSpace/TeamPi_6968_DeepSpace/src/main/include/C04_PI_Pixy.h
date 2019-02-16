@@ -17,12 +17,13 @@ class C04_PI_Pixy{
     private:
 
     ArduinoI2C *i2cBus;
+    uint8_t id;
     void AddVector(PI_Vector vector);
 
     public:
     //This needs the port and address and creates a connection with the arduino
     //returns nothing
-    C04_PI_Pixy(frc::I2C::Port port, int address);
+    C04_PI_Pixy(frc::I2C::Port port, int address, uint8_t _id);
 
     PI_Vector* latestVector;
 

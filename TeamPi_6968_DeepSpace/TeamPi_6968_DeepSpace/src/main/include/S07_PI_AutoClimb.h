@@ -9,8 +9,8 @@ class S07_PI_AutoClimb
 {
 
   private:
-    PI_Climb *_climbSystem;
-    S04_PI_Drivetrain *_drivetrain;
+    PI_Climb *climbSystem;
+    S04_PI_Drivetrain *drivetrain;
 
     int oldIndex = index;
     bool NextOption();
@@ -20,7 +20,7 @@ class S07_PI_AutoClimb
     /*
       Description:  Create an auto climb object based ine 
     */
-    S07_PI_AutoClimb(PI_Climb *climbSystem, S04_PI_Drivetrain *drivetrain);
+    S07_PI_AutoClimb(PI_Climb *_climbSystem, S04_PI_Drivetrain *_drivetrain);
     int index = 0;
     bool climb();
 };
