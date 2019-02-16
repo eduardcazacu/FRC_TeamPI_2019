@@ -9,11 +9,12 @@
 
 #pragma once
 
-#define DRIVETRAIN_WIDTH 40
+#define DRIVETRAIN_WIDTH 60
 
 //the custom talon class that also has the encoder distance calculations:
 #include "C00_PI_Talon.h"
 #include "PiTransform.h"
+#include "S00_PI_Network.h"
 
 class S03_PI_Positioning
 {
@@ -23,7 +24,7 @@ public:
         Input:          Left and Right Talon objects with encoder support [C00_PI_Talon]
         Output:         None
     */
-    S03_PI_Positioning(C00_PI_Talon* leftEnc, C00_PI_Talon* rightEnc, double drivetrainWidth = DRIVETRAIN_WIDTH);
+    S03_PI_Positioning(S00_PI_Network *network, C00_PI_Talon* leftEnc, C00_PI_Talon* rightEnc, double drivetrainWidth = DRIVETRAIN_WIDTH);
     /*
         Description:    Get the transform object that stores the position, speed etc of the robot
         Input:          None
@@ -60,5 +61,10 @@ private:
     C00_PI_Talon *_rEnc;
 
     double totalDistance;
+
+
+    //network id for the position:
+    S00_PI_Network *_network;
+    int networkX, networkY, networkR;
 
 };

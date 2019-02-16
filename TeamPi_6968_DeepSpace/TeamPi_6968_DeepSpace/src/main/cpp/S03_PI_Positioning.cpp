@@ -1,6 +1,6 @@
 #include "S03_PI_Positioning.h"
 
-S03_PI_Positioning::S03_PI_Positioning(C00_PI_Talon *leftEnc, C00_PI_Talon *rightEnc, double drivetrainWidth)
+S03_PI_Positioning::S03_PI_Positioning(S00_PI_Network *network, C00_PI_Talon *leftEnc, C00_PI_Talon *rightEnc, double drivetrainWidth)
 {
     _lEnc = leftEnc;
     _rEnc = rightEnc;
@@ -10,6 +10,12 @@ S03_PI_Positioning::S03_PI_Positioning(C00_PI_Talon *leftEnc, C00_PI_Talon *righ
     _drivetrainWidth = drivetrainWidth;
 
     this->totalDistance = 0;
+
+    _network = network;
+
+    networkX = _network->GetEntryId("/position/x");
+    networkY = _network->GetEntryId("/position/y");
+    networkR = _network->GetEntryId("/position/r");
 }
 
 void S03_PI_Positioning::refresh()
@@ -34,6 +40,12 @@ void S03_PI_Positioning::refresh()
 
     //add the distance to the total distance:
     totalDistance += distance;
+
+    //update the network:
+    _network->changeValue(networkX,_pos->position->x);
+    _network->changeValue(networkX,_pos->position->y);
+    _network->changeValue(networkX,_pos->rotation->z);
+
 }
 
 PiTransform *S03_PI_Positioning::Get()

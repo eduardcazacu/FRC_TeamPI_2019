@@ -25,6 +25,7 @@
 #include "S01_PI_Sensors.h"
 #include "S02_PI_Input.h"
 #include "M01_PI_Auto.h"
+#include "S00_PI_Network.h"
 
 class Robot : public frc::TimedRobot
 {
@@ -43,6 +44,9 @@ class Robot : public frc::TimedRobot
    const std::string kAutoNameCustom = "My Auto";
    std::string m_autoSelected;
 
+
+  //networking
+  S00_PI_Network *network;
 
    //drivetrain:
    //motors:

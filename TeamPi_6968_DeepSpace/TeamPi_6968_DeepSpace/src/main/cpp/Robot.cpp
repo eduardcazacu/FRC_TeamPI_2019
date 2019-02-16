@@ -26,6 +26,8 @@ void Robot::RobotInit()
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
+  network =  new S00_PI_Network();
+
   //input:
   input = new S02_PI_Input();
 
@@ -39,7 +41,7 @@ void Robot::RobotInit()
   victorL2 = new C01_PI_Victor(6);
 
   //positioning:
-  positioning = new S03_PI_Positioning(talonL, talonR);
+  positioning = new S03_PI_Positioning(network,talonL, talonR);
 
   //setup the drivetrain:
   drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2, positioning);
@@ -63,8 +65,6 @@ void Robot::RobotInit()
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 
   autoFunctions = new M01_PI_Auto(grabber);
-
-  std::cout << "Robot ini done \n";
 }
 
 /**
@@ -131,6 +131,10 @@ void Robot::TeleopPeriodic()
     //test the Ultrasound sensors:
     //std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
     //std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
+
+    std::cout<<"current coordinates: x:"<<positioning->Get()->position->x<<" y:"<<positioning->Get()->position->y<<'\n';
+    std::cout<<"current orientation: "<<positioning->Get()->rotation->z<<'\n';
+
   }
   count = (count + 1) % 100;
 }
