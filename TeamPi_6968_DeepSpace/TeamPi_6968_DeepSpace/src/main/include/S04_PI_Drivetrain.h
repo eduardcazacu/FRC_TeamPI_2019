@@ -75,7 +75,7 @@ class S04_PI_Drivetrain
     //auto rotation:
     bool usingPositioning;
     bool pidRotationStarted = false;
-    S03_PI_Positioning *robotPos;
+    S03_PI_Positioning *_robotPos;
 
     frc::PIDController *pidRotation;
     PI_PIDSource *input;

@@ -66,11 +66,11 @@ void S06_PI_Grabber::toggleArm()
 
 int S06_PI_Grabber::getArm()
 {
-    if (_retractedReed->Get())
+    if (!_retractedReed->Get())
     {
         return -1;
     }
-    else if (_extendedReed->Get())
+    else if (!_extendedReed->Get())
         return 1;
 
     return 0;

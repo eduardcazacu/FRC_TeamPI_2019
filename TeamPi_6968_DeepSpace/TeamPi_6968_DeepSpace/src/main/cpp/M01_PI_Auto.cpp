@@ -5,6 +5,7 @@ M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber)
     //grabbing:
     this->grabber = grabber;
     grabState = GrabState::grab_idle;
+    on=false;
 }
 
 void M01_PI_Auto::functions()

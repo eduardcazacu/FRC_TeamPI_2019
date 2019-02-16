@@ -22,8 +22,10 @@ void PI_Pneumatics::ClosePiston()//function to fully close a piston
 
 int PI_Pneumatics::PistonStatus()// returns the current status of the piston
 {
-    if (_ex->Get()) return 1;
-    if (_re->Get()) return -1;
+    //the digital pin is pulled up so when the switch reads an action
+    //the digital pin becomes 0:
+    if (!_ex->Get()) return 1;
+    if (!_re->Get()) return -1;
     else return 0;
 }
 

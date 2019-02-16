@@ -11,6 +11,7 @@
 #include <iostream>
 #include <frc/WPILib.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "frc/DigitalInput.h"
 
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
@@ -24,6 +25,9 @@ void Robot::RobotInit()
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
+  //input:
+  input = new S02_PI_Input();
 
   //drivetrain:
   //initialize drivers:
@@ -43,27 +47,24 @@ void Robot::RobotInit()
   //sensors:
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
 
-  //input:
-  input = new S02_PI_Input();
-
   //NetworkTable = new S00_PI_Network();
   lift = new S05_PI_Lift(7); //create a lift using the talon on CAN 7
 
   //climb system:
-  frontL = new PI_Pneumatics(climb_PCMID, climb_piston_FL_channel_fwd, climb_piston_FL_channel_rev, climb_piston_FL_reed_retracted, climb_piston_FL_reed_extended);
-  frontR = new PI_Pneumatics(climb_PCMID_2, climb_piston_FR_channel_fwd, climb_piston_FR_channel_rev, climb_piston_FR_reed_retracted, climb_piston_FR_reed_extended);
-  backL = new PI_Pneumatics(climb_PCMID, climb_piston_BL_channel_fwd, climb_piston_BL_channel_rev, climb_piston_BL_reed_retracted, climb_piston_BL_reed_extended);
-  backR = new PI_Pneumatics(climb_PCMID, climb_piston_BR_channel_fwd, climb_piston_BR_channel_rev, climb_piston_BR_reed_retracted, climb_piston_BR_reed_extended);
-
+  frontPneu = new PI_Pneumatics(PCMID, climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
+  backPneu = new PI_Pneumatics(PCMID, climb_piston_B_channel_fwd, climb_piston_B_channel_rev, climb_piston_B_reed_retracted, climb_piston_B_reed_extended);
+  
   climbMotor = new C01_PI_Victor(climb_victor_CANID);
-  climbSystem = new PI_Climb(frontL, frontR, backL, backR, climbMotor);
+  climbSystem = new PI_Climb(frontPneu, backPneu, climbMotor);
 
   //grabbing system:
-  grabber = new S06_PI_Grabber(grabber_PCMID, grabber_piston_channel_fwd, grabber_piston_channel_rev, grabber_reed_retracted, grabber_reed_extended, grabber_servo_pin);
+  grabber = new S06_PI_Grabber(PCMID, grabber_piston_channel_fwd, grabber_piston_channel_rev, grabber_reed_retracted, grabber_reed_extended, grabber_servo_pin);
   //manual:
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 
   autoFunctions = new M01_PI_Auto(grabber);
+
+  std::cout << "Robot ini done \n";
 }
 
 /**
@@ -77,14 +78,18 @@ void Robot::RobotInit()
 void Robot::RobotPeriodic()
 {
 }
-
+void Robot::AutonomousInit()
+{
+}
+void Robot::AutonomousPeriodic()
+{
+}
 void Robot::TeleopInit()
 {
 }
 
 void Robot::TeleopPeriodic()
 {
-
   //handle user input here:
   //go to the function bellow for more info.
   readUserInput();
@@ -117,28 +122,28 @@ void Robot::TeleopPeriodic()
   //for testing:
   if (count == 50)
   {
+
+    if(autoFunctions->on){
+      std::cout<<"Auto action happening now \n";
+    }
     //execute code in here roughly once a second.
 
     //test the Ultrasound sensors:
-    //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
-    //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
+    //std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
+    //std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
   }
   count = (count + 1) % 100;
 }
 
 void Robot::readUserInput()
 {
+  
   //handle all the button presses and function calls here:
-  if (input->driver->autoGrabBtn->Get())
-    autoFunctions->grabHatchEnable();
+ 
+}
 
-  if (input->driver->autoPlaceBtn->Get())
-    autoFunctions->placeHatchEnable();
-
-  if (input->driver->autoAimBtn->Get())
-  {
-    std::cout << "Auto aiming not setup yet \n";
-  }
+void Robot::TestPeriodic()
+{
 }
 
 #ifndef RUNNING_FRC_TESTS

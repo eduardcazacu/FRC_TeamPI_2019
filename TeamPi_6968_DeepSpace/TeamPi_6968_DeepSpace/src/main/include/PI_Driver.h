@@ -37,6 +37,12 @@ public:
   //auto:
   frc::JoystickButton *autoPlaceBtn;
   frc::JoystickButton *autoGrabBtn;
-  frc::JoystickButton *autoAimBtn;
+  frc::JoystickButton *gripBtn;
+
+  //keep track of the last button state:
+  bool lastGripperExtendBtn;
+  bool lastGripperRetractBtn;
+
+  bool lastGripBtn;
 private:
 };

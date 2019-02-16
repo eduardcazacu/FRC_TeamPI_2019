@@ -31,11 +31,11 @@ class Robot : public frc::TimedRobot
  public:
    void RobotInit() override;
    void RobotPeriodic() override;
-   //void AutonomousInit() override;
-   //void AutonomousPeriodic() override;
+   void AutonomousInit() override;
+   void AutonomousPeriodic() override;
    void TeleopInit() override;
    void TeleopPeriodic() override;
-   //void TestPeriodic() override;
+   void TestPeriodic() override;
 
  private:
    frc::SendableChooser<std::string> m_chooser;
@@ -73,10 +73,8 @@ class Robot : public frc::TimedRobot
    S05_PI_Lift *lift;
 
    //climb system
-   PI_Pneumatics *frontL;
-   PI_Pneumatics *frontR;
-   PI_Pneumatics *backL;
-   PI_Pneumatics *backR;
+   PI_Pneumatics *frontPneu;
+   PI_Pneumatics *backPneu;
 
    PI_Climb *climbSystem;
    C01_PI_Victor *climbMotor;
