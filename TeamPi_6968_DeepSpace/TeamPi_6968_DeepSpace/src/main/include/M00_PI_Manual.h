@@ -19,31 +19,34 @@ Team PI 6968
 #include "PI_Climb.h"
 #include "S06_PI_Grabber.h"
 
-
 class M00_PI_Manual
 {
-  public:
-    /*
+public:
+  /*
+  When this in true, all automatic functions are skipped and reset and the driver regains manual controll
+  */
+  bool manualOverride = false;
+
+  /*
         Description:    Constructor.
     */
-    M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input,S05_PI_Lift *lift, PI_Climb *climbSystem, S06_PI_Grabber *grabber, bool verbose = 0);
+  M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input, S05_PI_Lift *lift, PI_Climb *climbSystem, S06_PI_Grabber *grabber, bool verbose = 0);
 
-    void driving();
-    void functions();
+  void driving();
+  void functions();
 
-  private:
+private:
+  S04_PI_Drivetrain *_drivetrain;
 
-    S04_PI_Drivetrain *_drivetrain;
+  //input:
+  S02_PI_Input *_input;
 
-    //input:
-    S02_PI_Input *_input;
+  //special functions:
+  S05_PI_Lift *_lift;
 
-    //special functions:
-    S05_PI_Lift *_lift;
+  //climb system:
+  PI_Climb *_climbSystem;
 
-    //climb system:
-    PI_Climb *_climbSystem;
-
-    //gripping system
-    S06_PI_Grabber *_grabber;
+  //gripping system
+  S06_PI_Grabber *_grabber;
 };

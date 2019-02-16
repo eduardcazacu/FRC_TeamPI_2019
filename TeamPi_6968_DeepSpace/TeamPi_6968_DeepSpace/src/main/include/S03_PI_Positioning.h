@@ -36,6 +36,13 @@ public:
         Input:          None
         Output:         none;
     */
+
+   /*
+        Description:    return the distance traveled in any direction
+        input:          none
+        Output:         [double] total distance travelled.
+   */
+   double getDistance();
     void refresh();
     /*
         Description:    reset the current position of the robot to a new known one to remove the error
@@ -51,5 +58,7 @@ private:
     //encoder objects:
     C00_PI_Talon *_lEnc;
     C00_PI_Talon *_rEnc;
+
+    double totalDistance;
 
 };

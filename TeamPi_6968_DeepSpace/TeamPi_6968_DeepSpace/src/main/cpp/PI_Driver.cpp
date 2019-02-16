@@ -15,4 +15,9 @@ PI_Driver::PI_Driver(uint8_t joystickID)
     gripperExtendBtn =  new frc::JoystickButton(m_stick, 6);
     gripperRetractBtn =  new frc::JoystickButton(m_stick, 4);
 
+    //auto:
+    autoGrabBtn = new frc::JoystickButton(m_stick,3);
+    autoPlaceBtn =  new frc::JoystickButton(m_stick,5);
+    autoAimBtn =  new frc::JoystickButton(m_stick,2);
+
 }

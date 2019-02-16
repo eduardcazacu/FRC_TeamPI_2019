@@ -8,7 +8,7 @@
  *
  */
 #pragma once
-#include <WPILib.h> //include WPILib.h file
+#include <frc/WPILib.h> //include WPILib.h file
 
 class PI_Servo
 {

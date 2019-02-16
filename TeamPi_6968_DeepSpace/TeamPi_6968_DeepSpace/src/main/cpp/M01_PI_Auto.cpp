@@ -1,10 +1,54 @@
 #include "M01_PI_Auto.h"
 
-M01_PI_Auto::M01_PI_Auto()
+M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber)
 {
     //grabbing:
-    grabber = new S06_PI_Grabber(GRABBER_CONTROLLER_ID, GRABBER_PISTON_FWD_PIN, GRABBER_PISTON_REV_PIN, GRABBER_RETRACT_REED_PIN, GRABBER_EXTEND_REED_PIN, GRABBER_SERVO_PIN);
+    this->grabber = grabber;
     grabState = GrabState::grab_idle;
+}
+
+void M01_PI_Auto::functions()
+{
+    grabHatch();
+    placeHatch();
+}
+
+void M01_PI_Auto::reset()
+{
+    grabHatchReset();
+    placeHatchReset();
+    on=false;
+}
+
+void M01_PI_Auto::grabHatchEnable()
+{
+    //only work when supposed to.
+    if (grabState == GrabState::grab_idle && placeState == PlaceState::place_idle)
+    {
+        grabState = GrabState::grab_extend; //progress to the next state;
+    }
+}
+
+void M01_PI_Auto::placeHatchEnable()
+{
+    //only work when it is supposed to
+    if (placeState == PlaceState::place_idle && grabState == GrabState::grab_idle)
+    {
+        placeState = PlaceState::place_extend; //progress to the next state;
+    }
+}
+
+void M01_PI_Auto::grabHatchReset()
+{
+    //TODO: handle all the resetting stuff:
+
+    grabState = GrabState::grab_idle;
+}
+
+void M01_PI_Auto::placeHatchReset()
+{
+    //TODO: handle all the restting stuff.
+    placeState = PlaceState::place_idle;
 }
 
 bool M01_PI_Auto::grabHatch(bool *error)
@@ -14,10 +58,7 @@ bool M01_PI_Auto::grabHatch(bool *error)
     switch (grabState)
     {
     case GrabState::grab_idle:
-        //new request has been made after already returning true before.
-        grabState = GrabState::grab_extend;
-        //notify that auto is happening:
-        on = true;
+        //wait here for grab state to be changed by grabHatchEnable
         break;
 
     case GrabState::grab_extend:
@@ -101,10 +142,7 @@ bool M01_PI_Auto::placeHatch(bool *error)
     switch (placeState)
     {
     case PlaceState::place_idle:
-        //notify that auto is happening:
-        on = true;
-        //new request has been made after already returning true before.
-        placeState = PlaceState::place_extend;
+        //wait here until activated.
         break;
 
     case PlaceState::place_extend:
@@ -128,7 +166,7 @@ bool M01_PI_Auto::placeHatch(bool *error)
         if (grabber->getGripper() == -1)
         {
             //done:
-           placeState = PlaceState::place_cleared;
+            placeState = PlaceState::place_cleared;
         }
         break;
     case PlaceState::place_cleared:
@@ -146,7 +184,7 @@ bool M01_PI_Auto::placeHatch(bool *error)
         if (grabber->getArm() == -1)
         {
             //done retracting. go next
-           placeState =PlaceState::place_done;
+            placeState = PlaceState::place_done;
         }
         break;
     case PlaceState::place_done:

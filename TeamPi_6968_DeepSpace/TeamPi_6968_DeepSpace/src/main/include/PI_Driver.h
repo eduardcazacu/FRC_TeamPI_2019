@@ -33,5 +33,10 @@ public:
 
   frc::JoystickButton *gripperExtendBtn;
   frc::JoystickButton *gripperRetractBtn;
+
+  //auto:
+  frc::JoystickButton *autoPlaceBtn;
+  frc::JoystickButton *autoGrabBtn;
+  frc::JoystickButton *autoAimBtn;
 private:
 };

@@ -14,21 +14,10 @@ Team Pi 6968
 #include "S06_PI_Grabber.h"
 #include <ctre/Phoenix.h>
 
-//Pins and constants:
-#define GRABBER_CONTROLLER_ID 0
-#define GRABBER_PISTON_FWD_PIN 0
-#define GRABBER_PISTON_REV_PIN 1
-//CHANGE THESE!
-#define GRABBER_RETRACT_REED_PIN 0
-#define GRABBER_EXTEND_REED_PIN 1
-//---------------------
 #define GRABBER_SERVO_PIN 0
 #define START_GRAB_RATIO 0.5
 #define GRAB_RATIO_INCREMENT 0.1
-#define GRAB_RATIO_LIMIT 1     
-
-
-
+#define GRAB_RATIO_LIMIT 1
 
 //grab sequence states
 typedef enum GrabState
@@ -59,10 +48,54 @@ class M01_PI_Auto
         Input:          None;
         Output:         none;
     */
-    M01_PI_Auto();
+    M01_PI_Auto(S06_PI_Grabber *grabber);
+
+    /*
+        Description:    Call this periodically. It handles the auto operations when 
+                        requested
+        Input:          none
+        Output:         none;
+    */
+    void functions();
+    /*
+        Description:    Reset all functions to their default states and positions
+        Input:          none;
+        OutputL         none;
+    */
+   void reset();
 
     //is there an auto action happening?
     bool on;
+    /*
+        Description:    call this method to enable the grabHatch sequence;
+        Input:          None;
+        Output:         None;
+    */
+    void grabHatchEnable();
+    /*
+        Reset the hatch grabbing sequence;
+        It will move all mechanisms to default position
+    */
+    void grabHatchReset();
+
+        /*
+        Description:    call this method to enable the placeHatch sequence;
+        Input:          None;
+        Output:         None;
+    */
+    void placeHatchEnable();
+    /*
+        Reset the hatch placing sequence;
+        It will move all mechanisms to default position
+    */
+    void placeHatchReset();
+
+  private:
+    //hatch grabbing:
+    S06_PI_Grabber *grabber;
+    bool grabbingInProgress;
+    GrabState grabState = GrabState::grab_idle;
+    bool grabRatio;
 
     /*
             Description:    This sequence will try to grab the hatch automatically. 
@@ -73,6 +106,10 @@ class M01_PI_Auto
     bool grabHatch();
     bool grabHatch(bool *error);
 
+    //hatch placing:
+    bool placingInProgress;
+    PlaceState placeState = PlaceState::place_idle;
+
     /*
             Description:    This sequence will place a hatch. Will return an error if no hatch is on
                             Call periodically until done.
@@ -82,16 +119,4 @@ class M01_PI_Auto
         */
     bool placeHatch();
     bool placeHatch(bool *error);
-
-  private:
-    //hatch grabbing:
-    S06_PI_Grabber *grabber;
-    bool grabbingInProgress;
-    GrabState grabState = GrabState::grab_idle;
-    bool grabRatio;
-    
-
-    //hatch placing:
-    bool placingInProgress;
-    PlaceState placeState = PlaceState::place_idle;
 };

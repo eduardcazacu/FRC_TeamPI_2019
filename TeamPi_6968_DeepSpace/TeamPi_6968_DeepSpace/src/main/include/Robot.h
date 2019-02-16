@@ -15,6 +15,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 //our libraries:
+#include "PI_Pins.h"
 #include "ArduinoI2C.h"
 #include "S02_PI_Input.h"
 #include "C03_PI_Camera.h"
@@ -23,17 +24,18 @@
 #include "M00_PI_Manual.h"
 #include "S01_PI_Sensors.h"
 #include "S02_PI_Input.h"
+#include "M01_PI_Auto.h"
 
 class Robot : public frc::TimedRobot
 {
  public:
    void RobotInit() override;
    void RobotPeriodic() override;
-   void AutonomousInit() override;
-   void AutonomousPeriodic() override;
+   //void AutonomousInit() override;
+   //void AutonomousPeriodic() override;
    void TeleopInit() override;
    void TeleopPeriodic() override;
-   void TestPeriodic() override;
+   //void TestPeriodic() override;
 
  private:
    frc::SendableChooser<std::string> m_chooser;
@@ -41,38 +43,6 @@ class Robot : public frc::TimedRobot
    const std::string kAutoNameCustom = "My Auto";
    std::string m_autoSelected;
 
-   //pins:
-   const int climb_PCMID = 0;
-   const int climb_PCMID_2 = 1; //the rest of the pistons
-
-   const int grabber_piston_channel_fwd = 2;
-   const int grabber_piston_channel_rev = 3;
-   const int grabber_PCMID = 0;
-   const int grabber_reed_extended = 8;
-   const int grabber_reed_retracted = 9;
-   const int grabber_servo_pin = 0;
-
-   const int climb_piston_FR_channel_fwd = 0;
-   const int climb_piston_FR_channel_rev = 1;
-   const int climb_piston_FR_reed_extended = 0;
-   const int climb_piston_FR_reed_retracted = 1;
-
-   const int climb_piston_FL_channel_fwd = 0;
-   const int climb_piston_FL_channel_rev = 1;
-   const int climb_piston_FL_reed_extended = 2;
-   const int climb_piston_FL_reed_retracted = 3;
-
-   const int climb_piston_BR_channel_fwd = 4;
-   const int climb_piston_BR_channel_rev = 5;
-   const int climb_piston_BR_reed_extended = 4;
-   const int climb_piston_BR_reed_retracted = 5;
-
-   const int climb_piston_BL_channel_fwd = 6;
-   const int climb_piston_BL_channel_rev = 7;
-   const int climb_piston_BL_reed_extended = 6;
-   const int climb_piston_BL_reed_retracted = 7;
-
-   const int climb_victor_CANID = 8;
 
    //drivetrain:
    //motors:
@@ -113,4 +83,14 @@ class Robot : public frc::TimedRobot
 
    //grabber:
    S06_PI_Grabber *grabber;
+
+   //positioning:
+   S03_PI_Positioning *positioning;
+
+   //auto functions:
+  M01_PI_Auto *autoFunctions;
+
+
+  void readUserInput();
+
 };

@@ -34,8 +34,11 @@ void Robot::RobotInit()
   victorL1 = new C01_PI_Victor(5);
   victorL2 = new C01_PI_Victor(6);
 
+  //positioning:
+  positioning = new S03_PI_Positioning(talonL, talonR);
+
   //setup the drivetrain:
-  drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2);
+  drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2, positioning);
 
   //sensors:
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
@@ -58,7 +61,9 @@ void Robot::RobotInit()
   //grabbing system:
   grabber = new S06_PI_Grabber(grabber_PCMID, grabber_piston_channel_fwd, grabber_piston_channel_rev, grabber_reed_retracted, grabber_reed_extended, grabber_servo_pin);
   //manual:
-  manual = new M00_PI_Manual(drivetrain,input, lift, climbSystem, grabber);
+  manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
+
+  autoFunctions = new M01_PI_Auto(grabber);
 }
 
 /**
@@ -69,47 +74,8 @@ void Robot::RobotInit()
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {}
-
-/**
- * This autonomous (along with the chooser code above) shows how to select
- * between different autonomous modes using the dashboard. The sendable chooser
- * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
- * remove all of the chooser code and uncomment the GetString line to get the
- * auto name from the text box below the Gyro.
- *
- * You can add additional auto modes by adding additional comparisons to the
- * if-else structure below with additional strings. If using the SendableChooser
- * make sure to add them to the chooser code above as well.
- */
-void Robot::AutonomousInit()
+void Robot::RobotPeriodic()
 {
-  m_autoSelected = m_chooser.GetSelected();
-  // m_autoSelected = SmartDashboard::GetString(
-  //     "Auto Selector", kAutoNameDefault);
-  std::cout << "Auto selected: " << m_autoSelected << std::endl;
-
-  if (m_autoSelected == kAutoNameCustom)
-  {
-    // Custom Auto goes here
-  }
-  else
-  {
-    // Default Auto goes here
-  }
-}
-
-void Robot::AutonomousPeriodic()
-{
-  //std::cout << "main function\n";
-  if (m_autoSelected == kAutoNameCustom)
-  {
-    // Custom Auto goes here
-  }
-  else
-  {
-    // Default Auto goes here
-  }
 }
 
 void Robot::TeleopInit()
@@ -118,12 +84,37 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic()
 {
+
+  //handle user input here:
+  //go to the function bellow for more info.
+  readUserInput();
+
   sensors->refresh();
 
   //manual stuff:
-  manual->driving();
-  manual->functions();
+  if (!autoFunctions->on || manual->manualOverride)
+  {
+    //if no auto operations happening or override is on
+    manual->driving();
+    manual->functions();
+  }
 
+  if (!manual->manualOverride)
+  {
+    //take care of auto function here if needed:
+    //the auto functions here will be activated only by calling their corresponding enable/disable commands
+    autoFunctions->functions();
+  }
+  else
+  {
+    //reset auto functions here:
+    autoFunctions->reset();
+  }
+
+  //positioning update:
+  positioning->refresh();
+
+  //for testing:
   if (count == 50)
   {
     //execute code in here roughly once a second.
@@ -135,8 +126,19 @@ void Robot::TeleopPeriodic()
   count = (count + 1) % 100;
 }
 
-void Robot::TestPeriodic()
+void Robot::readUserInput()
 {
+  //handle all the button presses and function calls here:
+  if (input->driver->autoGrabBtn->Get())
+    autoFunctions->grabHatchEnable();
+
+  if (input->driver->autoPlaceBtn->Get())
+    autoFunctions->placeHatchEnable();
+
+  if (input->driver->autoAimBtn->Get())
+  {
+    std::cout << "Auto aiming not setup yet \n";
+  }
 }
 
 #ifndef RUNNING_FRC_TESTS

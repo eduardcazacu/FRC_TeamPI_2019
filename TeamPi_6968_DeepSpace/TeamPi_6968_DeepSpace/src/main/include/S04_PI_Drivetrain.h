@@ -19,13 +19,6 @@
 #include "PI_PIDOutput.h"
 #include "S03_PI_Positioning.h"
 
-
-#define KP_R    0.005   
-#define KD_R    0.001   
-#define KI_R    0.001
-#define KF_R    0
-
-
 class S04_PI_Drivetrain
 {
   public:
@@ -50,11 +43,25 @@ class S04_PI_Drivetrain
         Input:          [PiVector3] target orientations in absolute values. e.g: you read the current position
                         of the robot and you mak the target that value + 180 to turn around.
                         Use Z axis for orientation.
-        output:         [bool] target reached? falese for no , true for got there.
+        output:         [bool] target reached? false for no , true for got there.
     */
-    bool Rotate(double target);
+    bool Rotate(double angle);
+
+    /*
+        Description:    Drive a certain distance. No fancy PID yet.
+        Input:          [double] distance in mm;
+        Output:         [bool] reached the target? false=  not yet.       
+    */
+    bool driveDist(double distance);
 
   private:
+    //pid constants:
+    const double KP_R = 0.005;
+    const double KD_R = 0.001;
+    const double KI_R = 0.001;
+    const double KF_R = 0;
+    const double errorTolerance = 1;
+
     //the differential drive used:
     frc::DifferentialDrive *_diffDrive;
 
@@ -65,10 +72,24 @@ class S04_PI_Drivetrain
     C01_PI_Victor *_victorR1;
     C01_PI_Victor *_victorR2;
 
+    //auto rotation:
     bool usingPositioning;
+    bool pidRotationStarted = false;
     S03_PI_Positioning *robotPos;
 
-    frc::PIDController *pid;
+    frc::PIDController *pidRotation;
     PI_PIDSource *input;
     PI_PIDOutput *output;
+
+    double targetAngle;
+    int turnDirection; //which way should the robot turn. -1 =  counter clockwise
+
+    //normalize the angle to 0,359
+    double normalizeAngle(double angle);
+
+    //auto drive forward:
+    double targetDistance;
+    bool autoDriveStarted = false;
+
+    const double autoDriveSpeed = 0.2;
 };
