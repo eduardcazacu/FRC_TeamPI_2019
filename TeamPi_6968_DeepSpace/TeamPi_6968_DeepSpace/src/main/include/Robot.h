@@ -24,39 +24,93 @@
 #include "S01_PI_Sensors.h"
 #include "S02_PI_Input.h"
 
-
-class Robot : public frc::TimedRobot {
+class Robot : public frc::TimedRobot
+{
  public:
-  void RobotInit() override;
-  void RobotPeriodic() override;
-  void AutonomousInit() override;
-  void AutonomousPeriodic() override;
-  void TeleopInit() override;
-  void TeleopPeriodic() override;
-  void TestPeriodic() override;
+   void RobotInit() override;
+   void RobotPeriodic() override;
+   void AutonomousInit() override;
+   void AutonomousPeriodic() override;
+   void TeleopInit() override;
+   void TeleopPeriodic() override;
+   void TestPeriodic() override;
 
  private:
-  frc::SendableChooser<std::string> m_chooser;
-  const std::string kAutoNameDefault = "Default";
-  const std::string kAutoNameCustom = "My Auto";
-  std::string m_autoSelected;
+   frc::SendableChooser<std::string> m_chooser;
+   const std::string kAutoNameDefault = "Default";
+   const std::string kAutoNameCustom = "My Auto";
+   std::string m_autoSelected;
 
+   //pins:
+   const int climb_PCMID = 0;
+   const int climb_PCMID_2 = 1; //the rest of the pistons
 
-  //frc::I2C *I2CBus;
-  S01_PI_Sensors *sensors;
+   const int grabber_piston_channel_fwd = 2;
+   const int grabber_piston_channel_rev = 3;
+   const int grabber_PCMID = 0;
+   const int grabber_reed_extended = 8;
+   const int grabber_reed_retracted = 9;
+   const int grabber_servo_pin = 0;
 
-  //manual:
-  M00_PI_Manual *manual;
+   const int climb_piston_FR_channel_fwd = 0;
+   const int climb_piston_FR_channel_rev = 1;
+   const int climb_piston_FR_reed_extended = 0;
+   const int climb_piston_FR_reed_retracted = 1;
 
-  //camera
-  C03_PI_Camera* camera;
+   const int climb_piston_FL_channel_fwd = 0;
+   const int climb_piston_FL_channel_rev = 1;
+   const int climb_piston_FL_reed_extended = 2;
+   const int climb_piston_FL_reed_retracted = 3;
 
-  S00_PI_Network* NetworkTable;
+   const int climb_piston_BR_channel_fwd = 4;
+   const int climb_piston_BR_channel_rev = 5;
+   const int climb_piston_BR_reed_extended = 4;
+   const int climb_piston_BR_reed_retracted = 5;
 
-  //input:
-  S02_PI_Input *input;
+   const int climb_piston_BL_channel_fwd = 6;
+   const int climb_piston_BL_channel_rev = 7;
+   const int climb_piston_BL_reed_extended = 6;
+   const int climb_piston_BL_reed_retracted = 7;
 
-  //lift:
+   const int climb_victor_CANID = 8;
+
+   //drivetrain:
+   //motors:
+   C00_PI_Talon *talonL;
+   C00_PI_Talon *talonR;
+   C01_PI_Victor *victorL1;
+   C01_PI_Victor *victorL2;
+   C01_PI_Victor *victorR1;
+   C01_PI_Victor *victorR2;
+
+   S04_PI_Drivetrain *drivetrain;
+
+   //frc::I2C *I2CBus;
+   S01_PI_Sensors *sensors;
+
+   //manual:
+   M00_PI_Manual *manual;
+
+   //camera
+   C03_PI_Camera *camera;
+
+   S00_PI_Network *NetworkTable;
+
+   //input:
+   S02_PI_Input *input;
+
+   //lift:
    S05_PI_Lift *lift;
 
+   //climb system
+   PI_Pneumatics *frontL;
+   PI_Pneumatics *frontR;
+   PI_Pneumatics *backL;
+   PI_Pneumatics *backR;
+
+   PI_Climb *climbSystem;
+   C01_PI_Victor *climbMotor;
+
+   //grabber:
+   S06_PI_Grabber *grabber;
 };

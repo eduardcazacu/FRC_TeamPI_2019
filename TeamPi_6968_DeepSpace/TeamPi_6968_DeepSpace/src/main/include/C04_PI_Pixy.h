@@ -11,6 +11,7 @@
 #define PIXY_WIDTH 78
 
 #define AMOUNTOFVECTORS 10
+
 class C04_PI_Pixy{
 
     private:
