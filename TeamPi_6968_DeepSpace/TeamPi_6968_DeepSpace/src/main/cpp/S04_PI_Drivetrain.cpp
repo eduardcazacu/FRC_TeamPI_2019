@@ -58,8 +58,10 @@ void S04_PI_Drivetrain::drive(double speed, double rotation)
     _diffDrive->ArcadeDrive(speed, rotation);
 }
 
-bool S04_PI_Drivetrain::rotateTo(PiVector3 target)
+bool S04_PI_Drivetrain::Rotate(double target)
 {
+    //chaning needed!!!!!!!!!!!!!!!!!!!!
+    /**
     if(!usingPositioning){
         std::cout<<"ERROR: Cannot auto rotate. Drive train has not been initialized with a positioning object \n";
         return false;
@@ -73,7 +75,7 @@ bool S04_PI_Drivetrain::rotateTo(PiVector3 target)
     int dirVector = dir ? 1 : -1;
 
 
-
+*/
 
     return false;
 }

@@ -66,7 +66,7 @@ C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication
     this->tmr = new frc::Timer();
     tmr->Start();
 }
-void C00_PI_Talon::SetFPID(double _kP, double _kI, double kD, double _kF, double kPIDLoopIdx = 0, double kSlotIdx = 0){
+void C00_PI_Talon::SetFPID(double _kP, double _kI, double _kD, double _kF, double kPIDLoopIdx, double kSlotIdx){
     /* set the peak and nominal outputs, 1.0 means full */
     this->PiTalon->ConfigNominalOutputForward(0, kTimeoutMs);
     this->PiTalon->ConfigNominalOutputReverse(0, kTimeoutMs);
@@ -78,7 +78,7 @@ void C00_PI_Talon::SetFPID(double _kP, double _kI, double kD, double _kF, double
     this->PiTalon->Config_kP(kPIDLoopIdx, _kP, kTimeoutMs);
     this->PiTalon->Config_kI(kPIDLoopIdx, _kI, kTimeoutMs);
     this->PiTalon->Config_kD(kPIDLoopIdx, _kD, kTimeoutMs);
-    this->PiTalon->config_IntegralZone(0, 100, kTimeoutMs);
+    //this->PiTalon->config_IntegralZone(0, 100, kTimeoutMs);
 }
 
 void C00_PI_Talon::closedLoopControl(double encoderRevs)
@@ -216,4 +216,4 @@ int selectedSensorPos = talon.GetSelectedSensorPosition(0); /* sensor selected f
 //int closedLoopErr = talon.GetClosedLoopError(0); /* sensor selected for PID Loop 0 */
 //double closedLoopAccum = talon.GetIntegralAccumulator(0); /* sensor selected for PID Loop 0 */
 //double derivErr = talon.GetErrorDerivative(0); /* sensor selected for PID Loop 0 */
-*/
+

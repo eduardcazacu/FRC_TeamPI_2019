@@ -70,23 +70,30 @@ bool S07_PI_AutoClimb::climb()
 
 bool S07_PI_AutoClimb::NextOption()
 {
+    
     switch (index)
     {
     case 0:
+        //do nothing
         return false;
     case 1:
-        return (front->PneuOut() && back->PneuOut());
+        //turn 180 degree
+        return drivetrain.Rotate();
     case 2:
-        front->Drive(speed);
-        return (back->Drive(speed));
+        //use ultrasonic to get straight in front of wall
+        return false;
     case 3:
-        return (back->PneuIn());
+        return (front->PneuOut() && back->PneuOut());
     case 4:
-        //move drivetrain here
         return (front->Drive(speed));
     case 5:
-        return (front->PneuIn());
+        return (back->PneuIn());
     case 6:
+        //move drivetrain here
+        return (front->Drive(speed));
+    case 7:
+        return (front->PneuIn());
+    case 8:
         //drive forward
         return false;
     }
