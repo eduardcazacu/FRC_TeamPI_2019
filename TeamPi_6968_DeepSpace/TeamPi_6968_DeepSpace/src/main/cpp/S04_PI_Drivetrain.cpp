@@ -58,11 +58,7 @@ void S04_PI_Drivetrain::drive(double speed, double rotation)
     _diffDrive->ArcadeDrive(speed, rotation);
 }
 
-<<<<<<< HEAD
 bool S04_PI_Drivetrain::Rotate(double target)
-=======
-bool S04_PI_Drivetrain::rotateTo(double angle)
->>>>>>> 94db83807c2b83bee2b768eca62fbbf93c68784e
 {
     //chaning needed!!!!!!!!!!!!!!!!!!!!
     /**
@@ -77,8 +73,6 @@ bool S04_PI_Drivetrain::rotateTo(double angle)
     /*double diff = (angle - robotPos->Get()->rotation->z);
     bool dir = ((diff > 0 && diff > 180) || (diff < 0 && diff < 180));
     int dirVector = dir ? 1 : -1;
-*/
-
 */
 
     return false;
