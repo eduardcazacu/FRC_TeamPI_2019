@@ -120,8 +120,8 @@ void Robot::TeleopPeriodic()
     //execute code in here roughly once a second.
 
     //test the Ultrasound sensors:
-    std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
-    std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
+    //std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
+    //std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
   }
   count = (count + 1) % 100;
 }
