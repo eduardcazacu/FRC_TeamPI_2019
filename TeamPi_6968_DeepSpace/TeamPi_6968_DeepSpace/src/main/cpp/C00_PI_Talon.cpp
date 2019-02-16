@@ -78,11 +78,7 @@ void C00_PI_Talon::SetFPID(double _kP, double _kI, double _kD, double _kF, doubl
     this->PiTalon->Config_kP(kPIDLoopIdx, _kP, kTimeoutMs);
     this->PiTalon->Config_kI(kPIDLoopIdx, _kI, kTimeoutMs);
     this->PiTalon->Config_kD(kPIDLoopIdx, _kD, kTimeoutMs);
-<<<<<<< HEAD
-    //this->PiTalon->config_IntegralZone(0, 100, kTimeoutMs);
-=======
     this->PiTalon->Config_IntegralZone(0, 100, kTimeoutMs);
->>>>>>> 94db83807c2b83bee2b768eca62fbbf93c68784e
 }
 
 void C00_PI_Talon::closedLoopControl(double encoderRevs)
