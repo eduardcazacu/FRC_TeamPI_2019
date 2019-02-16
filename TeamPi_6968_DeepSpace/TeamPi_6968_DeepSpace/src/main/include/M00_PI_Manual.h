@@ -16,6 +16,9 @@ Team PI 6968
 #include "C01_PI_Victor.h"
 #include "S04_PI_Drivetrain.h"
 #include "S02_PI_Input.h"
+#include "PI_Climb.h"
+#include "S06_PI_Grabber.h"
+
 
 class M00_PI_Manual
 {
@@ -23,25 +26,24 @@ class M00_PI_Manual
     /*
         Description:    Constructor.
     */
-    M00_PI_Manual(S02_PI_Input *input,S05_PI_Lift *lift, bool verbose = 0);
+    M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input,S05_PI_Lift *lift, PI_Climb *climbSystem, S06_PI_Grabber *grabber, bool verbose = 0);
 
     void driving();
     void functions();
 
   private:
-    //motors:
-    C00_PI_Talon *talonL;
-    C00_PI_Talon *talonR;
-    C01_PI_Victor *victorL1;
-    C01_PI_Victor *victorL2;
-    C01_PI_Victor *victorR1;
-    C01_PI_Victor *victorR2;
 
-    S04_PI_Drivetrain *drivetrain;
+    S04_PI_Drivetrain *_drivetrain;
 
     //input:
     S02_PI_Input *_input;
 
     //special functions:
     S05_PI_Lift *_lift;
+
+    //climb system:
+    PI_Climb *_climbSystem;
+
+    //gripping system
+    S06_PI_Grabber *_grabber;
 };

@@ -52,7 +52,7 @@ class S04_PI_Drivetrain
                         Use Z axis for orientation.
         output:         [bool] target reached? falese for no , true for got there.
     */
-    bool rotateTo(PiVector3 target);
+    bool rotateTo(double angle);
 
   private:
     //the differential drive used:

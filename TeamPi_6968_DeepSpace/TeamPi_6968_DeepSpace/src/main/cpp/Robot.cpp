@@ -25,6 +25,18 @@ void Robot::RobotInit()
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
+  //drivetrain:
+  //initialize drivers:
+  talonR = new C00_PI_Talon(1, 76.2, 1);
+  victorR1 = new C01_PI_Victor(2);
+  victorR2 = new C01_PI_Victor(3);
+  talonL = new C00_PI_Talon(4, 76.2, 1);
+  victorL1 = new C01_PI_Victor(5);
+  victorL2 = new C01_PI_Victor(6);
+
+  //setup the drivetrain:
+  drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2);
+
   //sensors:
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
 
@@ -34,8 +46,19 @@ void Robot::RobotInit()
   //NetworkTable = new S00_PI_Network();
   lift = new S05_PI_Lift(7); //create a lift using the talon on CAN 7
 
+  //climb system:
+  frontL = new PI_Pneumatics(climb_PCMID, climb_piston_FL_channel_fwd, climb_piston_FL_channel_rev, climb_piston_FL_reed_retracted, climb_piston_FL_reed_extended);
+  frontR = new PI_Pneumatics(climb_PCMID_2, climb_piston_FR_channel_fwd, climb_piston_FR_channel_rev, climb_piston_FR_reed_retracted, climb_piston_FR_reed_extended);
+  backL = new PI_Pneumatics(climb_PCMID, climb_piston_BL_channel_fwd, climb_piston_BL_channel_rev, climb_piston_BL_reed_retracted, climb_piston_BL_reed_extended);
+  backR = new PI_Pneumatics(climb_PCMID, climb_piston_BR_channel_fwd, climb_piston_BR_channel_rev, climb_piston_BR_reed_retracted, climb_piston_BR_reed_extended);
+
+  climbMotor = new C01_PI_Victor(climb_victor_CANID);
+  climbSystem = new PI_Climb(frontL, frontR, backL, backR, climbMotor);
+
+  //grabbing system:
+  grabber = new S06_PI_Grabber(grabber_PCMID, grabber_piston_channel_fwd, grabber_piston_channel_rev, grabber_reed_retracted, grabber_reed_extended, grabber_servo_pin);
   //manual:
-  manual = new M00_PI_Manual(input, lift);
+  manual = new M00_PI_Manual(drivetrain,input, lift, climbSystem, grabber);
 }
 
 /**
@@ -108,7 +131,6 @@ void Robot::TeleopPeriodic()
     //test the Ultrasound sensors:
     std::cout << "Current: " << sensors->USLeft->getCurrent() << '\n';
     std::cout << "Distance: " << sensors->USLeft->getDist() << '\n';
-
   }
   count = (count + 1) % 100;
 }

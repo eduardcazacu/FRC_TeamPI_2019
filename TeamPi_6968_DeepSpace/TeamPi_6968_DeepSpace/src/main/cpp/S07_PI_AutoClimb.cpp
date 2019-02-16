@@ -1,49 +1,14 @@
 
 #include "S07_PI_AutoClimb.h"
 
-//////////Sub Climb
-PI_Sub_Climb::PI_Sub_Climb(PI_Pneumatics _leftPnue, PI_Pneumatics _rightPnue,
-                           C01_PI_Victor _leftMotor, C01_PI_Victor _rightMotor,
-                           PI_IR _infrared)
+
+S07_PI_AutoClimb::S07_PI_AutoClimb(PI_Climb *climbSystem, S04_PI_Drivetrain *drivetrain)
 {
-    leftPnue = &_leftPnue;
-    rightPnue = &_rightPnue;
-
-    leftMotor = &_leftMotor;
-    rightMotor = &_rightMotor;
-
-    infrared = &_infrared;
+    _climbSystem = climbSystem;
+    _drivetrain = drivetrain;
 }
 
-bool PI_Sub_Climb::Drive(double speed)
-{
-    leftMotor->GetVictorObject()->Set(speed);
-    rightMotor->GetVictorObject()->Set(speed);
-    return infrared->objectInRange();
-}
-
-bool PI_Sub_Climb::PneuOut()
-{
-    leftPnue->OpenPiston();
-    rightPnue->OpenPiston();
-    return (leftPnue->PistonStatus() && rightPnue->PistonStatus());///Fix me!!!!!
-}
-
-bool PI_Sub_Climb::PneuIn()
-{
-    leftPnue->ClosePiston();
-    rightPnue->ClosePiston();
-    return (!leftPnue->PistonStatus() && !rightPnue->PistonStatus());///Fix me!!!!!
-}
-
-/////////////////////////////////////////////////////////////
-
-S07_PI_AutoClimb::S07_PI_AutoClimb()
-{
-    //back = new PI_Sub_Climb(.............);
-    //front = new PI_Sub_Climb(............)
-}
-
+/*
 bool S07_PI_AutoClimb::climb()
 {
 
@@ -68,6 +33,7 @@ bool S07_PI_AutoClimb::climb()
     return false;
 }
 
+//No breaks? :
 bool S07_PI_AutoClimb::NextOption()
 {
     switch (index)
@@ -75,7 +41,7 @@ bool S07_PI_AutoClimb::NextOption()
     case 0:
         return false;
     case 1:
-        return (front->PneuOut() && back->PneuOut());
+        return (_climbSystem->extendAll());
     case 2:
         front->Drive(speed);
         return (back->Drive(speed));
@@ -92,3 +58,5 @@ bool S07_PI_AutoClimb::NextOption()
     }
 
 }
+
+*/

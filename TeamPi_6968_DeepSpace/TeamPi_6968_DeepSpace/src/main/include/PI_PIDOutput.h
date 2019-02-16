@@ -7,7 +7,7 @@ Team I 6968
 
 #pragma once
 
-#include "PIDOutput.h"
+#include "frc/PIDOutput.h"
 
 class PI_PIDOutput : public frc::PIDOutput
 {

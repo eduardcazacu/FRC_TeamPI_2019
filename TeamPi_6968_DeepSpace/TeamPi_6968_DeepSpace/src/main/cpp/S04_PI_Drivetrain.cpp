@@ -58,20 +58,20 @@ void S04_PI_Drivetrain::drive(double speed, double rotation)
     _diffDrive->ArcadeDrive(speed, rotation);
 }
 
-bool S04_PI_Drivetrain::rotateTo(PiVector3 target)
+bool S04_PI_Drivetrain::rotateTo(double angle)
 {
     if(!usingPositioning){
         std::cout<<"ERROR: Cannot auto rotate. Drive train has not been initialized with a positioning object \n";
         return false;
     }
     //normalize the target to [0,360]
-    target.z = (int)(target.z + 360) % 360;
+    //angle = (int)(angle + 360) % 360;
 
     //determine the best direction to rotate in (1 = CW, 0 = CCW):
-    double diff = (target.z - robotPos->Get()->rotation->z);
+    /*double diff = (angle - robotPos->Get()->rotation->z);
     bool dir = ((diff > 0 && diff > 180) || (diff < 0 && diff < 180));
     int dirVector = dir ? 1 : -1;
-
+*/
 
 
 

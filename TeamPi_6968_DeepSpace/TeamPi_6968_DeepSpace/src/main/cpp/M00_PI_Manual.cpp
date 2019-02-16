@@ -1,26 +1,21 @@
 #include "M00_PI_Manual.h"
 
-M00_PI_Manual::M00_PI_Manual(S02_PI_Input *input, S05_PI_Lift *lift, bool verbose)
+M00_PI_Manual::M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input, S05_PI_Lift *lift, PI_Climb *climbSystem,S06_PI_Grabber *grabber, bool verbose)
 {
-    //initialize drivers:
-    talonR = new C00_PI_Talon(1, 76.2, 1);
-    victorR1 = new C01_PI_Victor(2);
-    victorR2 = new C01_PI_Victor(3);
-    talonL = new C00_PI_Talon(4, 76.2, 1);
-    victorL1 = new C01_PI_Victor(5);
-    victorL2 = new C01_PI_Victor(6);
 
-    //setup the drivetrain:
-    drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2);
-
+    _drivetrain = drivetrain;
     this->_lift = lift;
     this->_input = input;
+
+    _climbSystem = climbSystem;
+
+    _grabber = grabber;
 }
 
 void M00_PI_Manual::driving()
 {
     //drive:
-    drivetrain->drive(_input->driver->m_stick->GetY(), _input->driver->m_stick->GetX());
+    _drivetrain->drive(_input->driver->m_stick->GetY(), _input->driver->m_stick->GetX());
 }
 
 void M00_PI_Manual::functions()
@@ -33,4 +28,31 @@ void M00_PI_Manual::functions()
         _lift->goToLvl(1);
     else if (_input->driver->lvl2Btn->Get())
         _lift->goToLvl(2);
+
+    //climb system:
+    //manual climb:
+    if (_input->driver->climbUpBtn->Get())
+    {
+        _climbSystem->extendAll();
+    }
+    else if (_input->driver->climbFrontDownBtn->Get())
+    {
+        _climbSystem->retractFront();
+    }
+    else if (_input->driver->climbBackDownBtn->Get())
+    {
+        _climbSystem->retractBack();
+    }
+
+    //grabber:
+    if (_input->driver->gripperExtendBtn->Get())
+    {
+        //extend gripper arm:
+        _grabber->extendGripper();
+    }
+    else if (_input->driver->gripperRetractBtn->Get())
+    {
+        //extend gripper arm:
+        _grabber->retractGripper();
+    }
 }
