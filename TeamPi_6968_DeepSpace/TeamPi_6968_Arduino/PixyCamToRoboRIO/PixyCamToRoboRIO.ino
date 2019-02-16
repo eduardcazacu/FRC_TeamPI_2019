@@ -25,11 +25,14 @@ uint8_t y0;
 uint8_t x1;
 uint8_t y1;
 
+int ss = 10;
+
 void setup()
 {
   Serial.begin(115200);
   Serial.print("Starting...\n");
-
+  pinMode(ss,OUTPUT);
+  digitalWrite(ss,LOW);
 
   // change to the line_tracking program.  Note, changeProg can use partial strings, so for example,
   // you can change to the line_tracking program by calling changeProg("line") instead of the whole
@@ -42,7 +45,7 @@ void setup()
   pixy.setLamp(1, 1);
   //int8_t setLamp(uint8_t upper, uint8_t lower)
 
-
+  
   //setup of the connection
   Wire.begin(8);                // join i2c bus with address #8
   Wire.onRequest(requestEvent); // register event
