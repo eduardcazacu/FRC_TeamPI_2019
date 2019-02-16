@@ -42,8 +42,8 @@ int selectedID = 0;
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.print("Starting...\n");
+  //Serial.begin(115200);
+  //Serial.print("Starting...\n");
 
   // change to the line_tracking program.  Note, changeProg can use partial strings, so for example,
   // you can change to the line_tracking program by calling changeProg("line") instead of the whole
@@ -55,13 +55,18 @@ void setup()
   pinMode(ssUp,OUTPUT);
   pinMode(ssDown,OUTPUT);
   digitalWrite(ssUp,HIGH);
-  digitalWrite(ssDown,HIGH);
+  digitalWrite(ssDown,LOW);
   // Change to line tracking program
   pixyDown.changeProg(LINE_MODE_WHITE_LINE);
-  pixyUp.changeProg(LINE_MODE_WHITE_LINE);
-  pixyDown.changeProg(LINE_MODE_WHITE_LINE);
-  pixyUp.setLamp(1, 1);
   pixyDown.setLamp(1, 1);
+
+  
+  digitalWrite(ssUp,LOW);
+  digitalWrite(ssDown,HIGH);
+  pixyUp.changeProg(LINE_MODE_WHITE_LINE);
+  pixyUp.setLamp(1, 1);
+  digitalWrite(ssUp,HIGH);
+
 
   
   //setup of the connection
@@ -79,7 +84,7 @@ void loop()
   /*if (pixyUp.line.numVectors)
     Serial.println(pixyUp.line.vectors->m_x0);*/
     
-  Serial.println(pixyUp.line.vectors->m_index);
+  //Serial.println(pixyUp.line.vectors->m_index);
   pixyUp_index = pixyUp.line.vectors->m_index;
   pixyUp_x0 = pixyUp.line.vectors->m_x0;
   pixyUp_y0 = pixyUp.line.vectors->m_y0;
