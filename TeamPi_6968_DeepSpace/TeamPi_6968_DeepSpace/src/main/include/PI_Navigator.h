@@ -8,29 +8,27 @@ Team pi 6968
 
 
 #include "PI_TargetNames.h"
-#include <XboxController.h>
+#include <frc/XboxController.h>
 #include <frc/buttons/Button.h>
+#include "frc/buttons/POVButton.h"
 
 
 
 class PI_Navigator
 {   
     public:
-        PI_Navigator(uint8_t controllerID);
+        PI_Navigator(int controllerID);
         frc::XboxController *ManualController;
         frc::POVButton *gamePadPOV0;
         frc::POVButton *gamePadPOV1;
         frc::POVButton *gamePadPOV2;
-
-        //manual climbing 
-        bool climbUpBtn();
-        bool climbFrontDownBtn();
-        bool climbBackDownBtn();
         
         // manual gripper
-        bool lastGripperExtendBtn();
-        bool gripperRetractBtn();
-        bool gripBtn();
+        double manualGrip();
+        bool extendGrabber();
+        bool retractGrabber();
+        bool grip();
+        bool release();
         //lift 
         double  ManualLift();
         bool lvl0Btn();

@@ -16,6 +16,8 @@ Team Pi 6968
 class S02_PI_Input
 {
   private:
+    const int navigatorControllerID =1;
+
   public:
     S02_PI_Input();
 

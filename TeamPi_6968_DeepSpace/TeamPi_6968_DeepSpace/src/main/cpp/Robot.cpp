@@ -13,7 +13,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "frc/DigitalInput.h"
 
-
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
 
@@ -23,6 +22,8 @@ int LiftLevel = 0;
 
 int networkTest = 0;
 int networkTestID;
+
+bool rotationDone = false;
 
 void Robot::RobotInit()
 {
@@ -54,7 +55,7 @@ void Robot::RobotInit()
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
 
   //NetworkTable = new S00_PI_Network();
-  lift = new S05_PI_Lift(7,liftLimitSwitchId); //create a lift using the talon on CAN 7
+  lift = new S05_PI_Lift(7, liftLimitSwitchId); //create a lift using the talon on CAN 7
 
   //climb system:
   frontPneu = new PI_Pneumatics(PCMID, climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
@@ -68,14 +69,13 @@ void Robot::RobotInit()
   //manual:
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 
-  autoFunctions = new M01_PI_Auto(grabber,lift);
+  autoFunctions = new M01_PI_Auto(grabber, lift);
 
   //network test:
   networkTestID = network->GetEntryId("/test");
 
- 
   ledArduino = new ArduinoI2C(frc::I2C::Port::kOnboard, 10); //using address 10
-  ledArduino->write(ledData,1); //default design
+  ledArduino->write(ledData, 1);                             //default design
 }
 
 /**
@@ -91,9 +91,18 @@ void Robot::RobotPeriodic()
 }
 void Robot::AutonomousInit()
 {
+  std::cout << "Auto test initialized \n";
 }
 void Robot::AutonomousPeriodic()
 {
+  if (!rotationDone)
+  {
+    if (drivetrain->Rotate(90))
+    {
+      std::cout << "Rotation done \n";
+      rotationDone = true;
+    }
+  }
 }
 void Robot::TeleopInit()
 {
@@ -148,8 +157,8 @@ void Robot::TeleopPeriodic()
     //execute code in here roughly once a second.
 
     //test the Ultrasound sensors:
-    //std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
-    //std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
+    std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
+    std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
 
     std::cout << "current coordinates: x:" << positioning->Get()->position->x << " y:" << positioning->Get()->position->y << '\n';
     std::cout << "current orientation: " << positioning->Get()->rotation->z << '\n';

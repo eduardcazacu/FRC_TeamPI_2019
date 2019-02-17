@@ -99,13 +99,23 @@ bool S04_PI_Drivetrain::Rotate(double angle)
         //start the pid loop:
         pidRotation->SetSetpoint(targetAngle);
         pidRotation->Enable();
+
+        std::cout << "PID rotaion initiated. current angle is: " << _robotPos->Get()->rotation->z << '\n';
+        std::cout << "target angle is: " << targetAngle << "\n";
+        std::cout << "To get there the robot should turn ";
+        if (turnDirection == -1)
+            std::cout << "left \n";
+        else if (turnDirection == 1)
+        {
+            std::cout << "right \n";
+        }
     }
 
     //calculate the angle error:
     input->Set(_robotPos->Get()->rotation->z);
-
+    
     //write the output of the pid loop to the drivetrain:
-    drive(0, abs(pidRotation->Get())*turnDirection);
+    drive(0, abs(pidRotation->Get()) * turnDirection);
 
     //chek if it got there
     if (pidRotation->OnTarget())

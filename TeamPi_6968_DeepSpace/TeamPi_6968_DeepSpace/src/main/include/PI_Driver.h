@@ -20,29 +20,12 @@ public:
   PI_Driver(uint8_t joystickID = DEFAULT_JOYSTICK_ID);
 
   frc::Joystick *m_stick;      //main joystick for driving;
-  frc::JoystickButton *aimBtn; //button for aiming
-  //lift buttons:
-  frc::JoystickButton *lvl0Btn;
-  frc::JoystickButton *lvl1Btn;
-  frc::JoystickButton *lvl2Btn;
 
   //manual climb buttons:
   frc::JoystickButton *climbUpBtn;        //extend pistons
   frc::JoystickButton *climbFrontDownBtn; //retract front pistons
   frc::JoystickButton *climbBackDownBtn;  //retract back pistons
 
-  frc::JoystickButton *gripperExtendBtn;
-  frc::JoystickButton *gripperRetractBtn;
 
-  //auto:
-  frc::JoystickButton *autoPlaceBtn;
-  frc::JoystickButton *autoGrabBtn;
-  frc::JoystickButton *gripBtn;
-
-  //keep track of the last button state:
-  bool lastGripperExtendBtn;
-  bool lastGripperRetractBtn;
-
-  bool lastGripBtn;
 private:
 };

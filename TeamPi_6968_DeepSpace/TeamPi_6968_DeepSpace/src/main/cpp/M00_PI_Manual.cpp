@@ -22,12 +22,22 @@ void M00_PI_Manual::functions()
 {
     //lift:
     //read buttons. set lift target to that:
-    if (_input->driver->lvl0Btn->Get())
+    if (_input->navigator->lvl0Btn())
+    {
+        std::cout << "Go to level 0 button pressed \n";
         _lift->goToLvl(0);
-    else if (_input->driver->lvl1Btn->Get())
+    }
+    else if (_input->navigator->lvl1Btn())
+    {
+        std::cout << "Go to level 1 button pressed \n";
         _lift->goToLvl(1);
-    else if (_input->driver->lvl2Btn->Get())
+    }
+
+    else if (_input->navigator->lvl2Btn())
+    {
+        std::cout << "Go to level 2 button pressed \n";
         _lift->goToLvl(2);
+    }
 
     //climb system:
     //manual climb:
@@ -46,64 +56,50 @@ void M00_PI_Manual::functions()
     }
 
     //grabber:
-    if (_input->driver->gripperExtendBtn->Get())
+    if (_input->navigator->extendGrabber())
     {
-        if (!_input->driver->lastGripperExtendBtn)
-        {
-            std::cout << "Extend gripper \n";
-            _input->driver->lastGripperExtendBtn = 1;
-            //extend gripper arm:
-            _grabber->extendGripper();
-        }
-    }
-    else
-    {
-        _input->driver->lastGripperExtendBtn = 0;
+        std::cout << "Extend gripper btn pressed \n";
+        //extend gripper arm:
+        _grabber->extendGripper();
     }
 
-    if (_input->driver->gripperRetractBtn->Get())
+    if (_input->navigator->retractGrabber())
     {
-        if (!_input->driver->lastGripperRetractBtn)
-        {
-            std::cout << "Retract gripper \n";
-            //retract gripper arm:
-            _grabber->retractGripper();
-            _input->driver->lastGripperRetractBtn = 1;
-        }
-    }
-    else
-    {
-        _input->driver->lastGripperRetractBtn = 0;
+        std::cout << "Retract gripper btn pressed\n";
+        //retract gripper arm:
+        _grabber->retractGripper();
     }
 
-    if (_input->driver->gripBtn->Get())
+    if (_input->navigator->grip())
     {
-        if (!_input->driver->lastGripBtn)
-        {
-            std::cout << "gripper actuated \n";
+        std::cout << "Gripping initiated by navigator\n";
+        _grabber->grip();
+    }
+    if (_input->navigator->release())
+    {
+        std::cout << "grip released by navigator\n";
+        _grabber->release();
+    }
 
-            if (_grabber->getGripper() == -1)
-            {
-                //not gripping. grip:
-                _grabber->grip();
-            }
-            else
-            {
-                _grabber->release();
-            }
-            _input->driver->lastGripBtn = 1;
-        }
-    }
-    else
+    //gradual gripper control:
+    if (_input->navigator->manualGrip()>0.01)
     {
-        _input->driver->lastGripBtn = 0;
+        std::cout<<"Grip a ratio of: "<<_input->navigator->manualGrip()<<" \n";
+        _grabber->grip(_input->navigator->manualGrip());
     }
-    
-    if(_grabber->getArm()==-1){
-        std::cout<<"Gripper arm is retracted \n";
+
+    if (_grabber->getArm() == -1)
+    {
+        std::cout << "Gripper arm is fully retracted \n";
     }
-    if(_grabber->getArm() ==1){
-        std::cout<<"Gripper arm is extended \n";
+    if (_grabber->getArm() == 1)
+    {
+        std::cout << "Gripper arm is fully extended \n";
     }
-    
+
+    if((_input->navigator->ManualLift()>0.02)||(_input->navigator->ManualLift()<(-0.02))){
+        //when not zero, so moved:
+        std::cout<<"Adjusting lift pos by: "<<_input->navigator->ManualLift()<<"\n";
+        _lift->adjustPos(_input->navigator->ManualLift());
+    }
 }
