@@ -3,6 +3,8 @@ This class defines all the automatic operations that can be done by the robot
 Create all objects in the constructor.
 For pins and constants use the #define's found bellow the #include's.
 
+
+
 Created by Eduard Cazacu on 15 February 2019
 Team Pi 6968
 
@@ -13,6 +15,8 @@ Team Pi 6968
 //libraries:
 #include "S06_PI_Grabber.h"
 #include <ctre/Phoenix.h>
+#include "S07_PI_AutoClimb.h"
+#include "S05_PI_Lift.h"
 
 #define GRABBER_SERVO_PIN 0
 #define START_GRAB_RATIO 0.5
@@ -40,6 +44,12 @@ typedef enum PlaceState
     place_done = 5
 } PlaceState;
 
+typedef enum PlaceOnLvlState
+{
+    POL_idle = 0
+    
+} PlaceOnLvlState;
+
 class M01_PI_Auto
 {
   public:
@@ -48,7 +58,7 @@ class M01_PI_Auto
         Input:          None;
         Output:         none;
     */
-    M01_PI_Auto(S06_PI_Grabber *grabber);
+    M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift);
 
     /*
         Description:    Call this periodically. It handles the auto operations when 
@@ -90,6 +100,13 @@ class M01_PI_Auto
     */
     void placeHatchReset();
 
+    /*
+        Description:    Complete sequence to place a hatch on a certain level:
+        Input:          [int] level. Bottom level is 0
+        Output:         none'
+    */
+    void placeHatchOnLevel(int lvl);
+
   private:
     //hatch grabbing:
     S06_PI_Grabber *grabber;
@@ -119,4 +136,15 @@ class M01_PI_Auto
         */
     bool placeHatch();
     bool placeHatch(bool *error);
+
+    /*
+        Description:    The routine being periodically called waiting to be activated
+        Input:          int target level.
+        Output:         [bool] done
+    */
+    bool placeHatchOnLevelRoutine(int lvl);
+
+    //lift:
+    bool liftResetDone = false;
+    S05_PI_Lift *_lift;
 };

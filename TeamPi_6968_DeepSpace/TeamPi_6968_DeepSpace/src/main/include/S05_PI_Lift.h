@@ -18,56 +18,75 @@ Team Pi 6968
 #pragma once
 
 //the heights (in rotations) of all the levels from the bottom:
-#define LVL0 5
-#define LVL1 10
-#define LVL2 15
 
 #include "C00_PI_Talon.h"
+#include "frc/DigitalInput.h"
 
-#define WINCH_RADIUS 10
-
-#define KP  0.125
-#define KF  0 
-#define KI  0.0125
-#define KD  6.5
+#define WINCH_RADIUS 10 //in mm
 
 #define RAMP_T 0.5
 
-class S05_PI_Lift{
-    public:
-        /*
+class S05_PI_Lift
+{
+  public:
+    /*
             Description:    Constructor. Create a new lift object
             Input:          [uint8_t] talon driver CAN bus address
+                            [uint8_t] the digital pin id of the limit switch
             Output:         none          
         */
-       S05_PI_Lift(uint8_t talonCAN);
+    S05_PI_Lift(uint8_t talonCAN, uint8_t limitSwitchID);
 
-        /*
+    /*
             Description:    Go to a certain position using PID
             Input:          [double] position in absolute rotations in relation to the bottom.
             Output:         none;
         */
-       void goTo(double pos);
+    void goTo(double pos);
 
-        /*
+    /*
             Description:    Go to a certain rocket level.
             Input:          [uint8_t] level index (0,1,2) where 0 is ground level
             output:         none
 
         */
-       void goToLvl(uint8_t index);
+    void goToLvl(uint8_t index);
 
-        /*
-            Description:    go down until the limit switch confirms and reset the current position to 0
+    /*
+            Description:    go down until the limit switch confirms and reset the current position to 0.
+                            Needs to be called until it confirms the reset too be done;
             Input:          none;
-            Output:         none;
+            Output:         [bool] reset done
         */
-       void reset();
+    bool reset();
 
-    private:
+    /*
+            Description:    Change the current position of the lift gradually based on the input. It will not 
+                            allow the lift to go out of bounds.
+            Input:          [double] (-1,1) the rate at which to change the lift position.
+            Output:         none
+        */
+    void adjustPos(double value);
+
+  private:
+    bool verbose = true;
+
+    const double kp = 0.125; // p gain ~0.10*halfrotation/900
+    const double kf = 0;     // based on system 
+    const double ki = 0.00125; // ki ~ kp/100
+    const double kd = 1.25; //kd ~kp * 10 or *100
+
+    const double LVL0 = 5;
+    const double LVL1 = 10;
+    const double LVL2 = 15;
+
+    const double liftMax = 120;
+    const double liftMin = 0;
+
+    const double resetIncrement = 2;
 
     //the speed controller + encoder for the winch.
     C00_PI_Talon *winch;
-    double *_pos;   //the current position of the robot.
-
+    double *_pos; //the current position of the robot.
+    frc::DigitalInput *limitSwitch;
 };

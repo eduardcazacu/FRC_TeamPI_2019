@@ -13,11 +13,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "frc/DigitalInput.h"
 
-///test
-#include "frc/PIDController.h"
-#include "PI_PIDOutput.h"
-#include "PI_PIDSource.h"
-#include "C00_PI_Talon.h"
 
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
@@ -26,7 +21,7 @@ int count = 0;
 
 int LiftLevel = 0;
 
-double networkTest = 0;
+int networkTest = 0;
 int networkTestID;
 
 void Robot::RobotInit()
@@ -59,7 +54,7 @@ void Robot::RobotInit()
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
 
   //NetworkTable = new S00_PI_Network();
-  lift = new S05_PI_Lift(7); //create a lift using the talon on CAN 7
+  lift = new S05_PI_Lift(7,liftLimitSwitchId); //create a lift using the talon on CAN 7
 
   //climb system:
   frontPneu = new PI_Pneumatics(PCMID, climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
@@ -73,10 +68,14 @@ void Robot::RobotInit()
   //manual:
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 
-  autoFunctions = new M01_PI_Auto(grabber);
+  autoFunctions = new M01_PI_Auto(grabber,lift);
 
   //network test:
   networkTestID = network->GetEntryId("/test");
+
+ 
+  ledArduino = new ArduinoI2C(frc::I2C::Port::kOnboard, 10); //using address 10
+  ledArduino->write(ledData,1); //default design
 }
 
 /**
@@ -98,6 +97,9 @@ void Robot::AutonomousPeriodic()
 }
 void Robot::TeleopInit()
 {
+  //let the led arduino know teleop is starting:
+  *ledData = 3;
+  ledArduino->ArduinoI2C::write(ledData, 1); //default design
 }
 
 void Robot::TeleopPeriodic()
@@ -121,7 +123,7 @@ void Robot::TeleopPeriodic()
   {
     //take care of auto function here if needed:
     //the auto functions here will be activated only by calling their corresponding enable/disable commands
-    autoFunctions->functions();
+    //autoFunctions->functions();
   }
   else
   {
