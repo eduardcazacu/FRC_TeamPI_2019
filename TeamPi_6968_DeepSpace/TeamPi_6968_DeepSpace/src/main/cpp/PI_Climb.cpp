@@ -62,3 +62,7 @@ int PI_Climb::getFront()
 {
     return _front->PistonStatus();
 }
+
+void PI_Climb::drive(double speed){
+    _motorDriver->GetVictorObject()->Set(speed);
+}

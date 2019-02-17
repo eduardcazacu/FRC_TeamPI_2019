@@ -21,3 +21,10 @@ void S01_PI_Sensors::refresh(){
     PixyDown->Update();
     PixyUp->Update();
 }
+
+double S01_PI_Sensors::GetUltrasonicAngle(){
+    //10 degrees is to much
+    double ultraDifference = USRight->getDist() - USLeft->getDist();
+    double angle =  atan(ultraDifference/ULTRASONICWIDTH);
+    return (angle > 10 || angle < -10) ? angle : -1;
+}

@@ -2,17 +2,15 @@
 #include "S07_PI_AutoClimb.h"
 
 
-S07_PI_AutoClimb::S07_PI_AutoClimb(PI_Climb *_climbSystem, S04_PI_Drivetrain *_drivetrain)
+S07_PI_AutoClimb::S07_PI_AutoClimb(PI_Climb *_climbSystem, S04_PI_Drivetrain *_drivetrain, S01_PI_Sensors *_sensors)
 {
     climbSystem = _climbSystem;
     drivetrain = _drivetrain;
+    sensors = _sensors;
 }
-/*
 
 bool S07_PI_AutoClimb::climb()
 {
-
-    
 
     if (NextOption())
     {
@@ -26,7 +24,7 @@ bool S07_PI_AutoClimb::climb()
     return false;
 }
 
-//No breaks? :
+//No breaks? : Breaking takes time
 bool S07_PI_AutoClimb::NextOption()
 {
     
@@ -35,25 +33,32 @@ bool S07_PI_AutoClimb::NextOption()
     case 0:
         //do nothing
         return false;
+    case 1:
+        extraTurnAngle = sensors->GetUltrasonicAngle();
+        return true;
     case 2:
-        r
+        //get straight in front 
+        return drivetrain->Rotate(180+extraTurnAngle);
     case 3:
-        return (climbSystem->extendAll());
+        climbSystem->extendAll();
+        return (climbSystem->getAll()==1);
     case 4:
-        return (front->PneuOut() && back->PneuOut());
+        climbSystem->drive(speed);
+        return (sensors->IRBack->objectInRange());
     case 5:
-        return (front->Drive(speed));
+        climbSystem->drive(0);
+        climbSystem->retractBack();
+        return (climbSystem->getBack()==-1);
     case 6:
-        return (back->PneuIn());
+        drivetrain->drive(speed,0);
+        return (sensors->IRFront->objectInRange());
     case 7:
-        //move drivetrain here
-        return (front->Drive(speed));
+        drivetrain->drive(0,0);
+        climbSystem->retractFront();
+        return (climbSystem->getFront()==-1);
     case 8:
-        return (front->PneuIn());
-    case 9:
-        //drive forward
-        return false;
+        return drivetrain->driveDist(60);
     }
 
-}*/
+}
 
