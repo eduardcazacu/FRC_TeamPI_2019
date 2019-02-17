@@ -66,7 +66,4 @@ void S03_PI_Positioning::reset()
     _pos->position->x = 0;
     _pos->position->y = 0;
     _pos->position->z = 0;
-    _pos->rotation->x = 0;
-    _pos->rotation->y = 0;
-    _pos->rotation->z = 0;
 }
