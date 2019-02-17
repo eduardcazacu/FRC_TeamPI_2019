@@ -1,41 +1,97 @@
 #include "S09_PI_Aim.h"
 
-S09_PI_Aim::S09_PI_Aim(double _maxSpeed, double _kPcorn, double _kIcorn, double _kDcorn, double _kFcorn,double _kPdis, double _kIdis, double _kDdis, double _kFdis)
-{
-    this->PIDCorner = new frc::PIDBase(_kPcorn,_kIcorn,_kDcorn, *CornerSource, *CornerOutput);
-    this->PIDDistance = new frc::PIDBase(_kPdis,_kIdis,_kDdis, *DistanceSource, *DistanceOutput);
-}
-
-bool S09_PI_Aim::Aim(double _Setangle, double _SetDistance, double _setErrorMargenCorner, double _setErrorMargenDistance)
-{
-    this->PIDCorner->SetSetpoint(_Setangle);
-    this->PIDDistance->SetSetpoint(_SetDistance);
-
-    this->PIDCorner->SetPercentTolerance(_setErrorMargenCorner);
-    this->PIDDistance->SetPercentTolerance(_setErrorMargenDistance);
-
-
-
-    //PIDCorner->Calculate();
-    //this->PIDDistance->Calculate();
-
-    this->errorAngle  = this->PIDCorner->Get();
-    this->errorDistance = this->PIDDistance->Get();
-}
-bool S09_PI_Aim::UpdateAim(){
-    // read new values:
-    this->CornerSource->Set(this->PixyCorner);
-    this->DistanceSource->Set(this->PixyDistance);
-
-    //this->PIDCorner->Calculate();
-    //this->PIDDistance->Calculate();
-}
-
-double S09_PI_Aim::DrivtrainConverter(/*change in angle*/)
+S09_PI_Aim::S09_PI_Aim(double _maxSpeedPercentage, S04_PI_Drivetrain *drivetrain)
 {
 
+    this->drivetrain = drivetrain;
+    this->PIDAngle = new frc::PIDController(kPAngle, kIAngle, KDAngle, *AngleSource, *AngleOutput);
+    this->PIDDistance = new frc::PIDController(kPDist, kIDist, kDDist, *DistanceSource, *DistanceOutput);
+    this->PIDDistanceAngle = new frc::PIDController(kPDriveAngle, kIDriveAngle, KDDriveAngle, *DistanceAngleSource, *DistanceAngleOutput);
+    PIDStarted = false;
+
+    //disable until needed
+    PIDAngle->Disable();
+    PIDDistance->Disable();
+    PIDDistanceAngle->Disable();
 }
 
+bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
+{
+
+    /*
+    The angle PID will fight to get the angle parallel and the distance PID will fight to get the angle and speed so that
+    it can get on top of the target point.
+
+
+    This is done by calculating the distance between the target point and the intersection point of the robot vector and
+    the line vector.
+
+    */
+
+    //check if this is the first time it is called and setup the pid loop:
+    if (!PIDStarted)
+    {
+        //we want to be parallel and exactly on the line:
+        this->PIDAngle->SetSetpoint(0);
+        this->PIDDistance->SetSetpoint(0);
+        //the target error between the intersection point and the target point
+        this->PIDDistanceAngle->SetSetpoint(0);
+
+        this->PIDAngle->SetPercentTolerance(tolerance);
+        this->PIDDistance->SetPercentTolerance(tolerance);
+        this->PIDDistanceAngle->SetPercentTolerance(tolerance);
+
+        PIDAngle->Enable();
+        PIDDistance->Enable();
+        PIDDistanceAngle->Enable();
+
+        PIDStarted = true;
+        if (verbose)
+            std::cout << "Aiming PID started \n";
+    }
+
+    //update the errors:
+    AngleSource->Set(angle);
+
+    //calculate the intersection point error relative to the target point;
+    intersectionError = targetX / sin(angle);
+    DistanceAngleSource->Set(intersectionError); //don't forget to multiply the output with -1 for correct turn direction
+
+    //calculate the distance error:
+    distanceError = sqrt(pow(targetX, 2) + pow(targetY, 2));
+    DistanceSource->Set(distanceError);
+
+    //set the current inputs:
+    driveSpeed = PIDDistance->Get();
+    driveAngle = PIDAngle->Get() - PIDDistanceAngle->Get();
+    drivetrain->drive(driveSpeed, driveAngle);
+
+    if (verbose)
+    {
+        std::cout << "alignment error: " << angle << " ,distance error: " << distanceError << " ,intersection error: " << intersectionError << "\n";
+        std::cout << "Aiming drive values: speed = " << driveSpeed << " ,angle = " << driveAngle << '\n';
+    }
+
+    //check if made it:
+    if (PIDAngle->OnTarget() && PIDDistance->OnTarget() && PIDDistanceAngle->OnTarget())
+    {
+        if (verbose)
+            std::cout << "Aiming PID done \n";
+
+        //reset the pid for next use:
+        PIDAngle->Reset();
+        PIDDistance->Reset();
+        PIDDistanceAngle->Reset();
+        PIDStarted = false;
+
+        return true;
+    }
+
+    return false;
+}
+void S09_PI_Aim::changePID()
+{
+}
 /*
 old functions Jorn want sto keep for a bit dont look if you are not interessed
 

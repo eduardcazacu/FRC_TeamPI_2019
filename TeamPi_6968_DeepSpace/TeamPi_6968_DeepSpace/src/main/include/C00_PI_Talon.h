@@ -51,8 +51,8 @@ class C00_PI_Talon
     C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double radius, double _kP, double _kI, double kD, double _kF, double kPIDLoopIdx = 0, double kSlotIdx = 0);
 
     /*
-            Description:     This method sets the amount of encoder steps to take by the talon it self
-            parameters:     Setpoint amount of encoder steps to take 1 full rotation = 4096
+            Description:    The RPM of the motor
+            parameters:     none
             Return:         RPM
 
         */

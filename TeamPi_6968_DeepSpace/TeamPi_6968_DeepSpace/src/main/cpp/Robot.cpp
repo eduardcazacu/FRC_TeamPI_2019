@@ -13,6 +13,12 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "frc/DigitalInput.h"
 
+///test
+#include "frc/PIDController.h"
+#include "PI_PIDOutput.h"
+#include "PI_PIDSource.h"
+#include "C00_PI_Talon.h"
+
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
 
@@ -20,13 +26,16 @@ int count = 0;
 
 int LiftLevel = 0;
 
+double networkTest = 0;
+int networkTestID;
+
 void Robot::RobotInit()
 {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-  network =  new S00_PI_Network();
+  network = new S00_PI_Network();
 
   //input:
   input = new S02_PI_Input();
@@ -41,7 +50,7 @@ void Robot::RobotInit()
   victorL2 = new C01_PI_Victor(6);
 
   //positioning:
-  positioning = new S03_PI_Positioning(network,talonL, talonR);
+  positioning = new S03_PI_Positioning(network, talonL, talonR);
 
   //setup the drivetrain:
   drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2, positioning);
@@ -55,7 +64,7 @@ void Robot::RobotInit()
   //climb system:
   frontPneu = new PI_Pneumatics(PCMID, climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
   backPneu = new PI_Pneumatics(PCMID, climb_piston_B_channel_fwd, climb_piston_B_channel_rev, climb_piston_B_reed_retracted, climb_piston_B_reed_extended);
-  
+
   climbMotor = new C01_PI_Victor(climb_victor_CANID);
   climbSystem = new PI_Climb(frontPneu, backPneu, climbMotor);
 
@@ -65,6 +74,9 @@ void Robot::RobotInit()
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 
   autoFunctions = new M01_PI_Auto(grabber);
+
+  //network test:
+  networkTestID = network->GetEntryId("/test");
 }
 
 /**
@@ -90,6 +102,7 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic()
 {
+
   //handle user input here:
   //go to the function bellow for more info.
   readUserInput();
@@ -123,27 +136,29 @@ void Robot::TeleopPeriodic()
   if (count == 50)
   {
 
-    if(autoFunctions->on){
-      std::cout<<"Auto action happening now \n";
+    if (autoFunctions->on)
+    {
+      std::cout << "Auto action happening now \n";
     }
+
+    network->changeValue(networkTestID, networkTest);
+    networkTest++;
     //execute code in here roughly once a second.
 
     //test the Ultrasound sensors:
     //std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
     //std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
 
-    std::cout<<"current coordinates: x:"<<positioning->Get()->position->x<<" y:"<<positioning->Get()->position->y<<'\n';
-    std::cout<<"current orientation: "<<positioning->Get()->rotation->z<<'\n';
-
+    std::cout << "current coordinates: x:" << positioning->Get()->position->x << " y:" << positioning->Get()->position->y << '\n';
+    std::cout << "current orientation: " << positioning->Get()->rotation->z << '\n';
   }
   count = (count + 1) % 100;
 }
 
 void Robot::readUserInput()
 {
-  
+
   //handle all the button presses and function calls here:
- 
 }
 
 void Robot::TestPeriodic()

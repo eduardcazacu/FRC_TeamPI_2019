@@ -55,8 +55,8 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     output = new PI_PIDOutput();
 
     pidRotation = new frc::PIDController(KP_R, KI_R, KD_R, input, output);
-    pidRotation->Disable();//don;t run it until needed.
-    
+    pidRotation->SetOutputRange(-0.5, 0.5);
+    pidRotation->Disable(); //don;t run it until needed.
 }
 
 void S04_PI_Drivetrain::drive(double speed, double rotation)
@@ -97,18 +97,18 @@ bool S04_PI_Drivetrain::Rotate(double angle)
         }
 
         //start the pid loop:
+        pidRotation->SetSetpoint(targetAngle);
         pidRotation->Enable();
     }
 
-    targetAngle = (int)(targetAngle + 360) % 360;
     //calculate the angle error:
-    input->Set(abs(targetAngle - _robotPos->Get()->rotation->z));
+    input->Set(_robotPos->Get()->rotation->z);
 
     //write the output of the pid loop to the drivetrain:
-    drive(output->Get(), turnDirection);
+    drive(0, abs(pidRotation->Get())*turnDirection);
 
     //chek if it got there
-    if (abs(targetAngle - _robotPos->Get()->rotation->z) < errorTolerance)
+    if (pidRotation->OnTarget())
     {
         //disable the loop and let the caller know that we got there
         pidRotation->Reset();
