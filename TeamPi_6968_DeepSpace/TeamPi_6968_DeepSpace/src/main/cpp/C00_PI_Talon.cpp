@@ -53,14 +53,14 @@ C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication
     /*Setting the current values for the PIDF max and minimum values*/
     this->PiTalon->ConfigNominalOutputForward(0, kTimeoutMs);
     this->PiTalon->ConfigNominalOutputReverse(0, kTimeoutMs);
-    this->PiTalon->ConfigPeakOutputForward(1, kTimeoutMs);
-    this->PiTalon->ConfigPeakOutputReverse(-1, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputForward(0.5, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputReverse(-0.5, kTimeoutMs);
 
     /*Set closed loop Gains so the Kf, Kp, Ki, Kd*/
-    this->PiTalon->Config_kF(kPIDLoopIdx, 0.0, kTimeoutMs);
-    this->PiTalon->Config_kP(kPIDLoopIdx, 0.1, kTimeoutMs);
-    this->PiTalon->Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
-    this->PiTalon->Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
+    this->PiTalon->Config_kF(kPIDLoopIdx, _kF, kTimeoutMs);
+    this->PiTalon->Config_kP(kPIDLoopIdx, _kP, kTimeoutMs);
+    this->PiTalon->Config_kI(kPIDLoopIdx, _kI, kTimeoutMs);
+    this->PiTalon->Config_kD(kPIDLoopIdx, kD, kTimeoutMs);
 
     //timer:
     this->tmr = new frc::Timer();

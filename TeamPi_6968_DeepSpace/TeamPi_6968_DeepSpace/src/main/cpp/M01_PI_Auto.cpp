@@ -1,24 +1,44 @@
 #include "M01_PI_Auto.h"
 
-M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber)
+M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift)
 {
     //grabbing:
     this->grabber = grabber;
     grabState = GrabState::grab_idle;
-    on=false;
+
+    //lift:
+    liftResetDone = false;
+    _lift = lift;
+    on = false;
 }
 
 void M01_PI_Auto::functions()
 {
-    grabHatch();
-    placeHatch();
+    //reset the lift at he beggining of the game:
+    /*if (!liftResetDone)
+    {
+        if(_lift->reset()){
+            liftResetDone = true;
+        }
+    }
+    */
+
+    //all the methods called periodically should return true when they are done or not doing anything
+    //and false when they are doing something.
+
+    if(grabHatch()||placeHatch()){
+        on = false;
+    }
+    else{
+        on = true;
+    }
 }
 
 void M01_PI_Auto::reset()
 {
     grabHatchReset();
     placeHatchReset();
-    on=false;
+    on = false;
 }
 
 void M01_PI_Auto::grabHatchEnable()
@@ -63,8 +83,6 @@ bool M01_PI_Auto::grabHatch(bool *error)
         break;
 
     case GrabState::grab_extend:
-        //notify that auto is happening:
-        on = true;
         //extending the arm:
         grabber->extendGripper();
         //check if fully extended.
@@ -74,11 +92,9 @@ bool M01_PI_Auto::grabHatch(bool *error)
             //setup the grab ratio for next step:
             grabRatio = START_GRAB_RATIO;
         }
-
+        return false;
         break;
     case GrabState::grab_grab:
-        //notify that auto is happening:
-        on = true;
         //grab the thing:
         //gradually increase the grab rate until the sensor has detected the hatch, or reached the maximum
         grabber->grip(grabRatio);
@@ -90,16 +106,14 @@ bool M01_PI_Auto::grabHatch(bool *error)
             //done:
             grabState = GrabState::grab_secured;
         }
+        return false;
         break;
     case GrabState::grab_secured:
-        //notify that auto is happening:
-        on = true;
         //step 5 - ??????
         grabState = GrabState::grab_retract;
+        return false;
         break;
     case GrabState::grab_retract:
-        //notify that auto is happening:
-        on = true;
         //step 6 - profit
         grabber->retractGripper();
 
@@ -108,20 +122,17 @@ bool M01_PI_Auto::grabHatch(bool *error)
             //done retracting. go next
             grabState = GrabState::grab_done;
         }
+        return false;
         break;
     case GrabState::grab_done:
         grabState = GrabState::grab_idle;
-        on = false;
-        return true;
         break;
     default:
         grabState = GrabState::grab_idle;
         *error = true; //shit hit the fan
-                       //notify that auto is happening:
-        on = false;
     }
 
-    return false;
+    return true;
 }
 bool M01_PI_Auto::grabHatch()
 {
@@ -156,7 +167,7 @@ bool M01_PI_Auto::placeHatch(bool *error)
         {
             placeState = PlaceState::place_place;
         }
-
+        return false;
         break;
     case PlaceState::place_place:
         //notify that auto is happening:
@@ -169,12 +180,14 @@ bool M01_PI_Auto::placeHatch(bool *error)
             //done:
             placeState = PlaceState::place_cleared;
         }
+        return false;
         break;
     case PlaceState::place_cleared:
         //notify that auto is happening:
         on = true;
         //step 5 - ??????
         placeState = PlaceState::place_retract;
+        return false;
         break;
     case PlaceState::place_retract:
         //notify that auto is happening:
@@ -187,12 +200,12 @@ bool M01_PI_Auto::placeHatch(bool *error)
             //done retracting. go next
             placeState = PlaceState::place_done;
         }
+        return false;
         break;
     case PlaceState::place_done:
         //notify that auto is happening:
         on = false;
         placeState = PlaceState::place_idle;
-        return true;
         break;
     default:
         //notify that auto is happening:
@@ -201,7 +214,7 @@ bool M01_PI_Auto::placeHatch(bool *error)
         *error = true; //shit hit the fan
     }
 
-    return false;
+    return true;
 }
 bool M01_PI_Auto::placeHatch()
 {
@@ -214,4 +227,8 @@ bool M01_PI_Auto::placeHatch()
         return true;
     }
     return false;
+}
+
+bool placeHatchOnLevelRoutine(int lvl){
+
 }

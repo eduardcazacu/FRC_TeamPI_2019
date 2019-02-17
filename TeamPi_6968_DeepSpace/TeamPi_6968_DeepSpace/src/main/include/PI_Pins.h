@@ -23,6 +23,8 @@ const int climb_piston_B_reed_retracted = 5;
 
 const int climb_victor_CANID = 8;
 
+
+const int liftLimitSwitchId = 9;
 //--------------------------------DIO Pins----------------------------
 #define END_SWITCH_PNEUMATICS_EX 0
 #define END_SWITCH_PNEUMATICS_RE 1
