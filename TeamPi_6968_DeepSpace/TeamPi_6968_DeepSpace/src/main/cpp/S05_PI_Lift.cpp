@@ -14,6 +14,12 @@ S05_PI_Lift::S05_PI_Lift(uint8_t talonCAN, uint8_t limitSwitchID)
     winch->GetTalonObject()->SetSelectedSensorPosition(0, 0, 0);
     oldValue = new double();
     *oldValue = limitSwitch->Get();
+
+    //set current limit to prevent burning (again)
+    winch->GetTalonObject()->ConfigPeakCurrentLimit(25, 10);       
+    winch->GetTalonObject()->ConfigPeakCurrentDuration(200, 10);   
+    winch->GetTalonObject()->ConfigContinuousCurrentLimit(18, 10);
+    winch->GetTalonObject()->EnableCurrentLimit(true);            
 }
 
 void S05_PI_Lift::goTo(double pos)
@@ -104,13 +110,9 @@ C00_PI_Talon *S05_PI_Lift::GetTalonObject()
 }
 
 bool S05_PI_Lift::TurnOff()
-{/*
-    //set position down
-    goto(0);
-    if(---target reached){
-        //shut off motors
-        return true
-    }
-    return false;*/
+{
+    //disable the PID control and let the lift drop to gravity.
+    winch->GetTalonObject()->Set(ControlMode::PercentOutput, 0);
+
     return false;
 }

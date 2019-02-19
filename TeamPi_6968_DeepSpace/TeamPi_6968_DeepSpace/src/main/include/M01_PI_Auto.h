@@ -26,6 +26,7 @@ Team Pi 6968
 #define GRAB_RATIO_INCREMENT 0.1
 #define GRAB_RATIO_LIMIT 1
 
+#define GRABBER_TIMEOUT 3   //how long before proceeding to the next state in case of sensor failure
 //grab sequence states
 typedef enum GrabState
 {
@@ -127,6 +128,9 @@ class M01_PI_Auto
    void ultrasoundDriveCargo();
 
   private:
+    //timeoutTimer
+    frc::Timer *timeOutTmr;
+
     //hatch grabbing:
     S06_PI_Grabber *grabber;
     bool grabbingInProgress;

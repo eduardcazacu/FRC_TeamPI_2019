@@ -22,7 +22,7 @@ void M00_PI_Manual::driving()
 {
     //drive:
     _drivetrain->drive(-_input->driver->m_stick->GetY(), _input->driver->m_stick->GetZ()*turnSpeedMultiplier);
-    double throttle = _input->driver->m_stick->GetAxis(frc::Joystick::AxisType::kThrottleAxis);
+    double throttle = _input->driver->m_stick->GetThrottle();
     throttle = map(throttle,1,-1,minimumAcceleration,maxAcceleration);
     
     _drivetrain->rampTimeOpenLoop = throttle;
@@ -33,12 +33,12 @@ void M00_PI_Manual::driving()
 void M00_PI_Manual::functions()
 {
 
-    if(!*calibrated){
+    /*if(!*calibrated){
         std::cout<<"calibrated is false \n";
         *calibrated = _lift->reset();
         return;
     }
-
+*/
     //lift:
     //read buttons. set lift target to that:
     // /if(_input->navigator->)
@@ -58,6 +58,12 @@ void M00_PI_Manual::functions()
         std::cout << "Go to level 2 button pressed \n";
         _lift->goToLvl(2);
     }
+
+    if(_input->navigator->liftOff()){
+        //turn off the lift motor:
+        _lift->TurnOff();
+    }
+
 
     //climb system:
     //manual climb:

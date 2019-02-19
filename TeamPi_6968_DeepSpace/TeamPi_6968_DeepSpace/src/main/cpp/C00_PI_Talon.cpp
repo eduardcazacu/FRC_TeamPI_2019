@@ -100,6 +100,8 @@ void C00_PI_Talon::closedLoopControl(double encoderRevs)
     PiTalon->Set(ControlMode::Position, encoderSteps); /* 10 rotations in either direction */
 }
 
+
+
 bool C00_PI_Talon::Arrived()
 {
     if (this->encoderPrev + this->setpointEncoder <= this->PiTalon->GetSelectedSensorPosition())

@@ -17,8 +17,8 @@
 #include "frc/Servo.h"
 #include <frc/DigitalInput.h>
 
-#define SERVO_FULL_GRIP 1
-#define SERVO_FULL_RELEASE 0
+#define SERVO_FULL_GRIP 0.85
+#define SERVO_FULL_RELEASE 0.1
 
 
 //bellow which value do we condider the hatch in a safe position. (12 bit values)

@@ -18,8 +18,10 @@ M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Driv
     _aiming = aiming;
     autoAimDone = true;
 
-    ultrasoundDriveDone=true;
+    ultrasoundDriveDone = true;
 
+    timeOutTmr = new frc::Timer();
+    timeOutTmr->Start();
 }
 
 void M01_PI_Auto::functions()
@@ -62,6 +64,9 @@ void M01_PI_Auto::grabHatchEnable()
     if (grabState == GrabState::grab_idle && placeState == PlaceState::place_idle)
     {
         grabState = GrabState::grab_extend; //progress to the next state;
+
+        //start the watchdog timer:
+        timeOutTmr->Reset();
     }
 }
 
@@ -71,6 +76,9 @@ void M01_PI_Auto::placeHatchEnable()
     if (placeState == PlaceState::place_idle && grabState == GrabState::grab_idle)
     {
         placeState = PlaceState::place_extend; //progress to the next state;
+
+        //start the watchdog timer:
+        timeOutTmr->Reset();
     }
 }
 
@@ -101,11 +109,13 @@ bool M01_PI_Auto::grabHatch(bool *error)
         //extending the arm:
         grabber->extendGripper();
         //check if fully extended.
-        if (grabber->getArm() == 1)
+        if (grabber->getArm() == 1 || timeOutTmr->Get() > GRABBER_TIMEOUT)
         {
             grabState = GrabState::grab_grab;
             //setup the grab ratio for next step:
             grabRatio = START_GRAB_RATIO;
+
+            timeOutTmr->Reset();
         }
         return false;
         break;
@@ -120,22 +130,25 @@ bool M01_PI_Auto::grabHatch(bool *error)
         {
             //done:
             grabState = GrabState::grab_secured;
+            timeOutTmr->Reset();
         }
         return false;
         break;
     case GrabState::grab_secured:
         //step 5 - ??????
         grabState = GrabState::grab_retract;
+        timeOutTmr->Reset();
         return false;
         break;
     case GrabState::grab_retract:
         //step 6 - profit
         grabber->retractGripper();
 
-        if (grabber->getArm() == -1)
+        if (grabber->getArm() == -1 || timeOutTmr->Get() > GRABBER_TIMEOUT)
         {
             //done retracting. go next
             grabState = GrabState::grab_done;
+            timeOutTmr->Reset();
         }
         return false;
         break;
@@ -178,9 +191,10 @@ bool M01_PI_Auto::placeHatch(bool *error)
         //extending the arm:
         grabber->extendGripper();
         //check if fully extended.
-        if (grabber->getArm() == 1)
+        if (grabber->getArm() == 1 ||timeOutTmr->Get() > GRABBER_TIMEOUT)
         {
             placeState = PlaceState::place_place;
+            timeOutTmr->Reset();
         }
         return false;
         break;
@@ -190,10 +204,11 @@ bool M01_PI_Auto::placeHatch(bool *error)
         //place the thing:
         grabber->grip(0);
         //check if grab done:
-        if (grabber->getGripper() == -1)
+        if (grabber->getGripper() == -1 || timeOutTmr->Get() > GRABBER_TIMEOUT)
         {
             //done:
             placeState = PlaceState::place_cleared;
+            timeOutTmr->Reset();
         }
         return false;
         break;
@@ -202,6 +217,7 @@ bool M01_PI_Auto::placeHatch(bool *error)
         on = true;
         //step 5 - ??????
         placeState = PlaceState::place_retract;
+        timeOutTmr->Reset();
         return false;
         break;
     case PlaceState::place_retract:
@@ -210,10 +226,11 @@ bool M01_PI_Auto::placeHatch(bool *error)
         //step 6 - profit
         grabber->retractGripper();
 
-        if (grabber->getArm() == -1)
+        if (grabber->getArm() == -1 || timeOutTmr->Get() > GRABBER_TIMEOUT)
         {
             //done retracting. go next
             placeState = PlaceState::place_done;
+            timeOutTmr->Reset();
         }
         return false;
         break;
@@ -246,6 +263,8 @@ bool M01_PI_Auto::placeHatch()
 
 bool M01_PI_Auto::placeHatchOnLevelRoutine(int lvl)
 {
+
+    
 }
 
 void M01_PI_Auto::rotateDegreesEnable(double angle)
@@ -309,11 +328,13 @@ bool M01_PI_Auto::ultrasoundDrive()
     return true;
 }
 
-void M01_PI_Auto::ultrasoundDriveRocket(){
+void M01_PI_Auto::ultrasoundDriveRocket()
+{
     targetUltrasoundDist = distToRocket;
-    ultrasoundDriveDone=false;
+    ultrasoundDriveDone = false;
 }
-void M01_PI_Auto::ultrasoundDriveCargo(){
+void M01_PI_Auto::ultrasoundDriveCargo()
+{
     targetUltrasoundDist = distToCargo;
-    ultrasoundDriveDone=false;
+    ultrasoundDriveDone = false;
 }
