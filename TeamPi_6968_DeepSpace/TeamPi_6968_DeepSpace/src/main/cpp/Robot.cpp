@@ -175,6 +175,15 @@ void Robot::readUserInput()
     std::cout << "trigger pressed \n";
     autoFunctions->autoAimStart();
   }
+
+  if(input->driver->rocketDistance->Get()){
+      std::cout<<"Drive to rocket with ultrasound requested \n";
+      autoFunctions->ultrasoundDriveRocket();
+  }
+    if(input->driver->cargoDistance->Get()){
+      std::cout<<"Drive to cargo with ultrasound requested \n";
+      autoFunctions->ultrasoundDriveCargo();
+  }
 }
 
 void Robot::TestPeriodic()

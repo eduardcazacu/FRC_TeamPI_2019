@@ -59,6 +59,14 @@ class S04_PI_Drivetrain
 
     bool AimToWall();
 
+    /*
+        Descritpion:    Drive forward/backward until the robot is at a certain distance from an obstacle
+                        will assume that the robot is perfectly aligned with the object.
+        Input:          [double] Distance from object in mm;
+        output:         [bool] got there?
+    */
+    bool driveToUltrasoundDistance(bool dist);
+
     //Ramp rate variabels
     int rampTimeOpenLoop= 0.8;
     int rampTimeClosedloop =0.8;
@@ -107,4 +115,16 @@ class S04_PI_Drivetrain
 
     bool AimIndex = true;
     double AimAngle = 0;
+
+    //drive with ultrasound:
+    bool drivingWithUltrasound;
+
+    const double kPUS = 0.1;
+    const double kIUS = 0.001;
+    const double kDUS = 1;
+    const double kFUS = 0; 
+
+    frc::PIDController *ultrasoundDrivePID;
+    PI_PIDSource *ultrasoundDistInput;
+    PI_PIDOutput *ultrasoundDistOutput;
 };

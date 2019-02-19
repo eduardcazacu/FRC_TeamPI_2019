@@ -17,6 +17,9 @@ M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Driv
     _pixy = pixy;
     _aiming = aiming;
     autoAimDone = true;
+
+    ultrasoundDriveDone=true;
+
 }
 
 void M01_PI_Auto::functions()
@@ -33,7 +36,7 @@ void M01_PI_Auto::functions()
     //all the methods called periodically should return true when they are done or not doing anything
     //and false when they are doing something.
 
-    if (grabHatch() && placeHatch() && rotateDegrees()&& autoAim())
+    if (grabHatch() && placeHatch() && rotateDegrees() && autoAim() && ultrasoundDrive())
     {
         //if all functions are done:
         on = false;
@@ -280,12 +283,37 @@ bool M01_PI_Auto::autoAim()
 {
     if (!autoAimDone)
     {
-        if(_aiming->Aim(_pixy->LatestVector().Angle(), _pixy->LatestVector().NearestX(),_pixy->LatestVector().NearestY())){
+        if (_aiming->Aim(_pixy->LatestVector().Angle(), _pixy->LatestVector().NearestX(), _pixy->LatestVector().NearestY()))
+        {
             //done
-            autoAimDone=true;
+            autoAimDone = true;
             return true;
         }
         return false;
     }
     return true;
+}
+
+bool M01_PI_Auto::ultrasoundDrive()
+{
+    if (!ultrasoundDriveDone)
+    {
+        if (_drivetrain->driveToUltrasoundDistance(targetUltrasoundDist))
+        {
+            ultrasoundDriveDone = true;
+            return true;
+        }
+
+        return false;
+    }
+    return true;
+}
+
+void M01_PI_Auto::ultrasoundDriveRocket(){
+    targetUltrasoundDist = distToRocket;
+    ultrasoundDriveDone=false;
+}
+void M01_PI_Auto::ultrasoundDriveCargo(){
+    targetUltrasoundDist = distToCargo;
+    ultrasoundDriveDone=false;
 }

@@ -123,6 +123,8 @@ void M00_PI_Manual::functions()
         _lift->adjustPos(_input->navigator->ManualLift());
     }
 
+
+
 }
 
 double M00_PI_Manual::map(double x, double xMin, double xMax, double yMin, double yMax){

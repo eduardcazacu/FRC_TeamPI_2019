@@ -57,4 +57,6 @@ private:
 
   bool *calibrated;
   double map(double x, double xMin, double xMax, double yMin, double yMax);
+
+
 };

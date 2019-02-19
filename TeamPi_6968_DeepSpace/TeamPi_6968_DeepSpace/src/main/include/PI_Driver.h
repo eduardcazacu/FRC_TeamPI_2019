@@ -25,7 +25,8 @@ public:
   frc::JoystickButton *climbUpBtn;        //extend pistons
   frc::JoystickButton *climbFrontDownBtn; //retract front pistons
   frc::JoystickButton *climbBackDownBtn;  //retract back pistons
-
+  frc::JoystickButton *rocketDistance;
+  frc::JoystickButton *cargoDistance;
 
 private:
 };

@@ -50,7 +50,7 @@ typedef enum PlaceState
 typedef enum PlaceOnLvlState
 {
     POL_idle = 0
-    
+
 } PlaceOnLvlState;
 
 class M01_PI_Auto
@@ -75,7 +75,7 @@ class M01_PI_Auto
         Input:          none;
         OutputL         none;
     */
-   void reset();
+    void reset();
 
     //is there an auto action happening?
     bool on;
@@ -91,7 +91,7 @@ class M01_PI_Auto
     */
     void grabHatchReset();
 
-        /*
+    /*
         Description:    call this method to enable the placeHatch sequence;
         Input:          None;
         Output:         None;
@@ -117,6 +117,14 @@ class M01_PI_Auto
     */
     void autoAimStart();
     void rotateDegreesEnable(double angle);
+
+    /*
+        Description:    Drive the robot to the correct distance from the game piece:
+        Input:          none
+        Output:         none;
+    */
+   void ultrasoundDriveRocket();
+   void ultrasoundDriveCargo();
 
   private:
     //hatch grabbing:
@@ -155,12 +163,11 @@ class M01_PI_Auto
     */
     bool placeHatchOnLevelRoutine(int lvl);
 
-
     //drivetrain
     S04_PI_Drivetrain *_drivetrain;
     bool rotateDegrees();
 
-    bool _rotationDone=true;
+    bool _rotationDone = true;
     double _rotationAngle;
 
     //lift:
@@ -172,4 +179,17 @@ class M01_PI_Auto
     S09_PI_Aim *_aiming;
     bool autoAimDone = true;
     bool autoAim();
+
+    //allign with ultrasound:
+    const double distToCargo = 335;
+    const double distToRocket = 200;
+    /*
+        Description:    drive with ultrasound to a certain distance
+        Input:          the target distance from the object
+        Output:         done?
+
+    */
+    bool ultrasoundDrive();
+    double targetUltrasoundDist;
+    bool ultrasoundDriveDone = false;
 };

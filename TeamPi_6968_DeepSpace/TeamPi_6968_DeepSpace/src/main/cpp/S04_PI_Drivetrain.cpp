@@ -28,7 +28,7 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     this->_victorR2->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
 
     //set open loop ramp rates
-    this->_talonL->GetTalonObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS );
+    this->_talonL->GetTalonObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
     this->_victorL1->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
     this->_victorL2->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
 
@@ -39,6 +39,15 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     this->_diffDrive = new frc::DifferentialDrive(*(_talonL->GetTalonObject()), *(_talonR->GetTalonObject()));
 
     usingPositioning = false;
+
+    //setup the PID for ultrasound:
+
+    ultrasoundDistInput = new PI_PIDSource();
+    ultrasoundDistOutput = new PI_PIDOutput();
+
+    ultrasoundDrivePID = new frc::PIDController(kPUS, kIUS, kDUS, ultrasoundDistInput, ultrasoundDistOutput);
+    ultrasoundDrivePID->SetOutputRange(-0.5, 0.5);
+    ultrasoundDrivePID->Disable(); //don;t run it until needed.
 }
 
 S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S01_PI_Sensors *_sensors, S03_PI_Positioning *robotPos)
@@ -51,15 +60,16 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     _victorL2 = victorL2;
     _victorR1 = victorR1;
     _victorR2 = victorR2;
+     sensors = _sensors;
 
     //set the followers:
     this->_victorL1->GetVictorObject()->Follow(*(_talonL->GetTalonObject()));
     this->_victorL2->GetVictorObject()->Follow(*(_talonL->GetTalonObject()));
     this->_victorR1->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
     this->_victorR2->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
-    
+
     //set open loop ramp rates
-    this->_talonL->GetTalonObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS );
+    this->_talonL->GetTalonObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
     this->_victorL1->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
     this->_victorL2->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
 
@@ -106,7 +116,7 @@ bool S04_PI_Drivetrain::Rotate(double angle)
         targetAngle = normalizeAngle(targetAngle);
 
         //determine which way should the robot turn to get there the quickest:
-        if (sqrt(pow((targetAngle - _robotPos->Get()->rotation->z),2)) < 180)
+        if (sqrt(pow((targetAngle - _robotPos->Get()->rotation->z), 2)) < 180)
         {
             //turn counter clockwise
             turnDirection = -1;
@@ -132,13 +142,13 @@ bool S04_PI_Drivetrain::Rotate(double angle)
             std::cout << "right \n";
         }
     }
-    std::cout<<"Current robot rotation: "<<_robotPos->Get()->rotation->z<<"\n";
+    std::cout << "Current robot rotation: " << _robotPos->Get()->rotation->z << "\n";
 
     //calculate the angle error:
     input->Set(_robotPos->Get()->rotation->z);
-    
+
     //write the output of the pid loop to the drivetrain:
-    drive(0, sqrt(pow(pidRotation->Get(),2)) * turnDirection);
+    drive(0, sqrt(pow(pidRotation->Get(), 2)) * turnDirection);
 
     //check if it got there
     if (pidRotation->OnTarget())
@@ -161,11 +171,13 @@ bool S04_PI_Drivetrain::Rotate(double angle)
 //normalizes the angle to (0,359);
 double S04_PI_Drivetrain::normalizeAngle(double angle)
 {
-    while(angle<0){
-        angle+=360;
+    while (angle < 0)
+    {
+        angle += 360;
     }
-    while(angle>360){
-        angle-=360;
+    while (angle > 360)
+    {
+        angle -= 360;
     }
     return angle;
 }
@@ -191,15 +203,51 @@ bool S04_PI_Drivetrain::driveDist(double distance)
     return false;
 }
 
-bool  S04_PI_Drivetrain::AimToWall(){
-    if(AimIndex){
+bool S04_PI_Drivetrain::AimToWall()
+{
+    if (AimIndex)
+    {
         AimAngle = sensors->GetUltrasonicAngle();
         AimIndex = false;
-    }else{
-        if(Rotate(AimAngle)){
+    }
+    else
+    {
+        if (Rotate(AimAngle))
+        {
             AimIndex = true;
             return true;
         }
+    }
+    return false;
+}
+
+double USDistance;
+
+bool S04_PI_Drivetrain::driveToUltrasoundDistance(bool dist){
+    if(autoDriveStarted){
+        //already driving. stop.
+        std::cout<<"Already an auto driving sequence running \n";
+        return true;
+    }
+    if(!drivingWithUltrasound){
+        //first run
+        //setup the PID.
+        USDistance = sensors->USLeft->getDist();
+        std::cout<<"Ultrasound drive requested. Target distance: "<<dist<<". Current distance: "<<USDistance<<"\n";
+        ultrasoundDistInput->Set(USDistance);
+        ultrasoundDrivePID->SetSetpoint(dist);
+        ultrasoundDrivePID->Enable();
+
+    }
+    else{
+        ultrasoundDistInput->Set(USDistance);
+        drive(-ultrasoundDrivePID->Get(),0);
+    }
+
+    if(ultrasoundDrivePID->OnTarget()){
+        std::cout<<"got to target with ultrasound PID \n";
+        ultrasoundDrivePID->Reset();
+        return true;
     }
     return false;
 }
