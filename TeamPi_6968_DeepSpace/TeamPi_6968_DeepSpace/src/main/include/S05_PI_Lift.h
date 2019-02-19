@@ -85,7 +85,7 @@ class S05_PI_Lift
 
     const double resetIncrement = 2;
 
-    double oldValue;
+    double *oldValue;
 
     //the speed controller + encoder for the winch.
     C00_PI_Talon *winch;

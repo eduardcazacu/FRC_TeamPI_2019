@@ -10,7 +10,7 @@ S05_PI_Lift::S05_PI_Lift(uint8_t talonCAN, uint8_t limitSwitchID)
     limitSwitch = new frc::DigitalInput(limitSwitchID);
 
     _pos = new double(0);
-    oldValue = limitSwitch->Get();
+    *oldValue = limitSwitch->Get();
 }
 
 void S05_PI_Lift::goTo(double pos)
@@ -46,7 +46,7 @@ bool S05_PI_Lift::reset()
 {
     double currentValue = limitSwitch->Get();
 
-    if (oldValue != currentValue)
+    if (*oldValue != currentValue)
     {
         //reached zero point
         winch->GetTalonObject()->SetSelectedSensorPosition(0, 0, 0);
@@ -68,7 +68,7 @@ bool S05_PI_Lift::reset()
         return false;
     }
 
-    oldValue = currentValue;
+    *oldValue = currentValue;
     /*
     if (!limitSwitch->Get())
     {
