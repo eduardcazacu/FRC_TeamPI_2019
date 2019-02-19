@@ -22,6 +22,12 @@ void M00_PI_Manual::driving()
 {
     //drive:
     _drivetrain->drive(-_input->driver->m_stick->GetY(), _input->driver->m_stick->GetZ()*turnSpeedMultiplier);
+    double throttle = _input->driver->m_stick->GetAxis(frc::Joystick::AxisType::kThrottleAxis);
+    
+    
+    _drivetrain->rampTimeOpenLoop = throttle;
+    _drivetrain->rampTimeClosedloop =throttle;
+    
 }
 
 void M00_PI_Manual::functions()

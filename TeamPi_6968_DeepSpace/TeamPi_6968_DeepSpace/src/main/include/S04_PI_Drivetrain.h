@@ -19,7 +19,7 @@
 #include "PI_PIDOutput.h"
 #include "S03_PI_Positioning.h"
 
-#define TimeOutMS 10
+#define timeOutMS 10
 
 class S04_PI_Drivetrain
 {
@@ -56,10 +56,12 @@ class S04_PI_Drivetrain
     */
     bool driveDist(double distance);
 
-  private:
+    
     //Ramp rate variabels
-    int rampTimeOpenLoop 2;
-    int rampTimeClosedloop 2;
+    int rampTimeOpenLoop= 0.8;
+    int rampTimeClosedloop =0.8;
+
+  private:
 
     //pid constants:
     const double KP_R = 0.005;

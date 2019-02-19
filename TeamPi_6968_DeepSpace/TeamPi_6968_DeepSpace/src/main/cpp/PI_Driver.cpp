@@ -8,5 +8,4 @@ PI_Driver::PI_Driver(uint8_t joystickID)
     climbUpBtn = new frc::JoystickButton(m_stick, 8);
     climbFrontDownBtn = new frc::JoystickButton(m_stick, 10);
     climbBackDownBtn = new frc::JoystickButton(m_stick, 12);
-
 }
