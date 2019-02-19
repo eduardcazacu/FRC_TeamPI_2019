@@ -1,6 +1,6 @@
 #include "M01_PI_Auto.h"
 
-M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift)
+M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Drivetrain *drivetrain)
 {
     //grabbing:
     this->grabber = grabber;
@@ -10,6 +10,9 @@ M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift)
     liftResetDone = false;
     _lift = lift;
     on = false;
+
+    _drivetrain = drivetrain;
+    _rotationDone = true;
 }
 
 void M01_PI_Auto::functions()
@@ -26,10 +29,14 @@ void M01_PI_Auto::functions()
     //all the methods called periodically should return true when they are done or not doing anything
     //and false when they are doing something.
 
-    if(grabHatch()||placeHatch()){
+    if (grabHatch() && placeHatch() && rotateDegrees())
+    {
+        //if all functions are done:
         on = false;
     }
-    else{
+    else
+    {
+        //if at least one function is on:
         on = true;
     }
 }
@@ -229,6 +236,29 @@ bool M01_PI_Auto::placeHatch()
     return false;
 }
 
-bool placeHatchOnLevelRoutine(int lvl){
+bool M01_PI_Auto::placeHatchOnLevelRoutine(int lvl)
+{
+}
 
+void M01_PI_Auto::rotateDegreesEnable(double angle)
+{
+    _rotationDone=false;
+    _rotationAngle = angle;
+}
+
+bool M01_PI_Auto::rotateDegrees()
+{
+    if (!_rotationDone)
+    {
+        if (_drivetrain->Rotate(_rotationAngle))
+        {
+            std::cout << "Rotation done \n";
+            _rotationDone = true;
+
+            return true;
+        }
+
+        return false;
+    }
+    return true;
 }
