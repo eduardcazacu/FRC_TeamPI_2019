@@ -27,13 +27,13 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     this->_victorR2->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
 
     //set open loop ramp rates
-    this->TalonL->getTalonObject->configOpenloopRamp(rampTimeOpenLoop, timeOutMS );
-    this->VictorL1->GetVictorObject->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
-    this->VictorL2->GetVictorObject->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->_talonL->GetTalonObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS );
+    this->_victorL1->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->_victorL2->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
 
-    this->TalonR->getTalonObject->configOpenloopRamp(rampTimeOpenLoop, timeOutMS);
-    this->VictorR1->GetVictorObject->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
-    this->VictorR2->GetVictorObject->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->_talonR->GetTalonObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->_victorR1->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->_victorR2->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
 
     this->_diffDrive = new frc::DifferentialDrive(*(_talonL->GetTalonObject()), *(_talonR->GetTalonObject()));
 
@@ -56,6 +56,15 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     this->_victorL2->GetVictorObject()->Follow(*(_talonL->GetTalonObject()));
     this->_victorR1->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
     this->_victorR2->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
+    
+    //set open loop ramp rates
+    this->_talonL->GetTalonObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS );
+    this->_victorL1->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->_victorL2->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+
+    this->_talonR->GetTalonObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->_victorR1->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->_victorR2->GetVictorObject()->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
 
     this->_diffDrive = new frc::DifferentialDrive(*(_talonL->GetTalonObject()), *(_talonR->GetTalonObject()));
 
