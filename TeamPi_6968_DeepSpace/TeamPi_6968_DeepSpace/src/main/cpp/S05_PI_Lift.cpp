@@ -12,6 +12,7 @@ S05_PI_Lift::S05_PI_Lift(uint8_t talonCAN, uint8_t limitSwitchID)
     _pos = new double(0);
 
     winch->GetTalonObject()->SetSelectedSensorPosition(0, 0, 0);
+    oldValue = new double();
     *oldValue = limitSwitch->Get();
 }
 

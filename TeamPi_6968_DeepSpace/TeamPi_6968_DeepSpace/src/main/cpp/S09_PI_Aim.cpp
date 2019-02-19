@@ -18,7 +18,7 @@ S09_PI_Aim::S09_PI_Aim(double _maxSpeedPercentage, S04_PI_Drivetrain *drivetrain
 
 bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
 {
-    angle = _angle-90; // convert the  the pixy angle in the angle usefull for the aiming class 
+    _angle = _angle-90; // convert the  the pixy angle in the angle usefull for the aiming class 
     /*
     The angle PID will fight to get the angle parallel and the distance PID will fight to get the angle and speed so that
     it can get on top of the target point.
@@ -38,7 +38,7 @@ bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
         //the target error between the intersection point and the target point
         this->PIDDistanceAngle->SetSetpoint(0);
 
-        std::cout<<"SetPoint checks: PIDAngle"<<'/n';
+        std::cout<<"SetPoint checks: PIDAngle"<<'\n';
 
         this->PIDAngle->SetPercentTolerance(tolerance);
         this->PIDDistance->SetPercentTolerance(tolerance);
@@ -54,10 +54,10 @@ bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
     }
 
     //update the errors:
-    AngleSource->Set(angle);
+    AngleSource->Set(_angle);
 
     //calculate the intersection point error relative to the target point;
-    intersectionError = ( targetX-PIXY_WIDTH )/ sin(angle);
+    intersectionError = ( targetX-PIXY_WIDTH )/ sin(_angle);
     DistanceAngleSource->Set(intersectionError); //don't forget to multiply the output with -1 for correct turn direction
 
     //calculate the distance error:
@@ -72,7 +72,7 @@ bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
 
     if (verbose)
     {
-        std::cout << "alignment error: " << angle << " ,distance error: " << distanceError << " ,intersection error: " << intersectionError << "\n";
+        std::cout << "alignment error: " << _angle << " ,distance error: " << distanceError << " ,intersection error: " << intersectionError << "\n";
         std::cout << "Aiming drive values: speed = " << driveSpeed << " ,angle = " << driveAngle << '\n';
     }
 
