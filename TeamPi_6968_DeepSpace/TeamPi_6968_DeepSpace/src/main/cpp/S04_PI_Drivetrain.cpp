@@ -1,7 +1,9 @@
 #include "S04_PI_Drivetrain.h"
 #include <iostream>
 #include "cmath"
-/* to add to drive train this is the open loop or closed loop command for ramping the talons (smooth acceleration) 
+
+/*  TODO    
+    to add to drive train this is the open loop or closed loop command for ramping the talons (smooth acceleration) 
     if using it make sure you only use it for the master and give the followers ther own ramp up and put it in th open or clossed loop of the drive train system 
     TalonR->getTalonObject->configOpenloopRamp([Time to ramp up], [amount of follwors]); // {time to ramp up in seconds, this is the time it takes to go to the set speed in this case 2s } 
                                                                             // [amount of followers is the amount of followers for the tallon(master)]
@@ -23,6 +25,15 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     this->_victorL2->GetVictorObject()->Follow(*(_talonL->GetTalonObject()));
     this->_victorR1->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
     this->_victorR2->GetVictorObject()->Follow(*(_talonR->GetTalonObject()));
+
+    //set open loop ramp rates
+    this->TalonL->getTalonObject->configOpenloopRamp(rampTimeOpenLoop, timeOutMS );
+    this->VictorL1->GetVictorObject->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->VictorL2->GetVictorObject->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+
+    this->TalonR->getTalonObject->configOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->VictorR1->GetVictorObject->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
+    this->VictorR2->GetVictorObject->ConfigOpenloopRamp(rampTimeOpenLoop, timeOutMS);
 
     this->_diffDrive = new frc::DifferentialDrive(*(_talonL->GetTalonObject()), *(_talonR->GetTalonObject()));
 
@@ -119,7 +130,7 @@ bool S04_PI_Drivetrain::Rotate(double angle)
     //write the output of the pid loop to the drivetrain:
     drive(0, sqrt(pow(pidRotation->Get(),2)) * turnDirection);
 
-    //chek if it got there
+    //check if it got there
     if (pidRotation->OnTarget())
     {
         //disable the loop and let the caller know that we got there
@@ -169,3 +180,16 @@ bool S04_PI_Drivetrain::driveDist(double distance)
     }
     return false;
 }
+
+//_talon.openloopRamp = 1.023000;
+//_talon.closedloopRamp = 1.705000;
+// //set open loop ramp rates
+/*
+    this->TalonL->getTalonObject->configClosedloopRamp(rampTimeClosedloop, timeOutMS );
+    this->VictorL1->GetVictorObject->configClosedloopRamp(rampTimeClosedloop, timeOutMS);
+    this->VictorL2->GetVictorObject->configClosedloopRamp(rampTimeClosedloop, timeOutMS);
+
+    this->TalonR->getTalonObject->configClosedloopRamp(rampTimeClosedloop, timeOutMS);
+    this->VictorR1->GetVictorObject->configClosedloopRamp(rampTimeClosedloop, timeOutMS);
+    this->VictorR2->GetVictorObject->configClosedloopRamp(rampTimeClosedloop, timeOutMS);
+    */
