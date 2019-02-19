@@ -11,6 +11,7 @@
 #define PIXY_WIDTH 78
 
 #define AMOUNTOFVECTORS 10
+#define LIFETIMETRESHHOLD 25
 
 class C04_PI_Pixy{
 
@@ -35,6 +36,8 @@ class C04_PI_Pixy{
     void Update();
     PI_Vector LatestVector();
     PI_Vector BestVector();
+
+    bool AimReady();
 
     
 };
