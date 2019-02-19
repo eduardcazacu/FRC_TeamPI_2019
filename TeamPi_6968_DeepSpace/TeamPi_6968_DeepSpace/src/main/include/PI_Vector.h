@@ -34,6 +34,7 @@ class PI_Vector{
     double Angle(); //angle in radians between -PI/2 and PI/2
     double Length(); //pixel length
 
+    double NearestX();
     double NearestY();
 
     //parallel gives -1 back

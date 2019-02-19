@@ -38,6 +38,8 @@ public:
 
 private:
   double turnSpeedMultiplier = 0.7;
+  double minimumAcceleration = 0.2;
+  double maxAcceleration = 2;
 
   S04_PI_Drivetrain *_drivetrain;
 
@@ -54,4 +56,5 @@ private:
   S06_PI_Grabber *_grabber;
 
   bool *calibrated;
+  double map(double x, double xMin, double xMax, double yMin, double yMax);
 };

@@ -74,6 +74,11 @@ double PI_Vector::NearestY(){
     return y0;
     return y1;
 }
+double PI_Vector::NearestY(){
+    if(y0>y1)
+    return x0;
+    return x1;
+}
 
 void PI_Vector::Print(){
 
