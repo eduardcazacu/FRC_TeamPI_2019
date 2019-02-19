@@ -48,7 +48,7 @@ void S05_PI_Lift::goToLvl(uint8_t index)
 bool S05_PI_Lift::reset()
 {
     double currentValue = limitSwitch->Get();
-
+    std::cout << currentValue << "\n";
     if (*oldValue != currentValue)
     {
         //reached zero point
@@ -62,11 +62,11 @@ bool S05_PI_Lift::reset()
     {
         if (currentValue)
         {
-            goTo(*_pos + resetIncrement);
+            goTo(*_pos - resetIncrement);
         }
         else
         {
-            goTo(*_pos - resetIncrement);
+            goTo(*_pos + resetIncrement);
         }
         return false;
     }
@@ -95,10 +95,22 @@ bool S05_PI_Lift::reset()
 void S05_PI_Lift::adjustPos(double value)
 {
     if ((*_pos + value >= liftMin) && (*_pos + value) <= liftMax)
-        goTo(*_pos + value*10);
+        goTo(*_pos + value * 10);
 }
 
 C00_PI_Talon *S05_PI_Lift::GetTalonObject()
 {
     return winch;
+}
+
+bool S05_PI_Lift::TurnOff()
+{/*
+    //set position down
+    goto(0);
+    if(---target reached){
+        //shut off motors
+        return true
+    }
+    return false;*/
+    return false;
 }

@@ -19,9 +19,10 @@ class PI_Navigator
     public:
         PI_Navigator(int controllerID);
         frc::XboxController *ManualController;
-        frc::POVButton *gamePadPOV0;
-        frc::POVButton *gamePadPOV1;
-        frc::POVButton *gamePadPOV2;
+        frc::POVButton *gamePadPOVLeft;
+        frc::POVButton *gamePadPOVDown;
+        frc::POVButton *gamePadPOVRight;
+        frc::POVButton *gamePadPOVUp;
         
         // manual gripper
         double manualGrip();
@@ -31,6 +32,7 @@ class PI_Navigator
         bool release();
         //lift 
         double  ManualLift();
+        bool liftOff();
         bool lvl0Btn();
         bool lvl1Btn();
         bool lvl2Btn();
