@@ -280,7 +280,7 @@ bool M01_PI_Auto::autoAim()
 {
     if (!autoAimDone)
     {
-        if(_aiming->Aim(_pixy->Angle(), NearestX(),NearestY()){
+        if(_aiming->Aim(_pixy->BestVector().Angle(), _pixy->BestVector().NearestX(),_pixy->BestVector().NearestY())){
             //done
             autoAimDone=true;
             return true;

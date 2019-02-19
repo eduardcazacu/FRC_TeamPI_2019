@@ -31,29 +31,29 @@ class S09_PI_Aim
     const double tolerance = 0.2;
 
     //for getting the robot parallel with the line
-    const double kPAngle = 0.2;
-    const double kIAngle = 0.1;
-    const double KDAngle = 1.2;
+    const double kPAngle = 0.01;
+    const double kIAngle = 0.0;
+    const double KDAngle = 0.0;
     //the min max that it can write to the motors:
     const double angleMax = 0.2;
     const double angleMin = -0.2;
 
     //for getting the robot on top of the target point
-    const double kPDist = 0.2;
-    const double kIDist = 0.5;
-    const double kDDist = 1;
+    const double kPDist = 0.01;
+    const double kIDist = 0.0;
+    const double kDDist = 0;
     //the min max that it can write to the motors:
-    const double distMax = 0.6;
-    const double distMin = -0.6;
+    const double distMax = 0.3;
+    const double distMin = -0.3;
 
     //drive angle for getting the robot on top of the target point
     //this should be bigger so that it can overcome the alignment PID in the beginning.
-    const double kPDriveAngle = 0.6;  
-    const double kIDriveAngle = 0.9;
-    const double KDDriveAngle = 0.2;
+    const double kPDriveAngle = 0.1;  
+    const double kIDriveAngle = 0.0;
+    const double KDDriveAngle = 0.0;
     //the min max that it can write to the motors:
-    const double driveAngleMax = 0.6;
-    const double driveAngleMin = -0.6;
+    const double driveAngleMax = 0.4;
+    const double driveAngleMin = -0.4;
 
     /*FPID values */
     frc::PIDController *PIDAngle;

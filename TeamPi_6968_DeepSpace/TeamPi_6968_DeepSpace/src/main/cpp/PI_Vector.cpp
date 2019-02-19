@@ -74,8 +74,8 @@ double PI_Vector::NearestY(){
     return y0;
     return y1;
 }
-double PI_Vector::NearestY(){
-    if(y0>y1)
+double PI_Vector::NearestX(){
+    if(x0>x1)
     return x0;
     return x1;
 }
