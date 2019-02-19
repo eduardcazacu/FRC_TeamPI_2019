@@ -43,8 +43,8 @@ void S03_PI_Positioning::refresh()
 
     //update the network:
     _network->changeValue(networkX,_pos->position->x);
-    _network->changeValue(networkX,_pos->position->y);
-    _network->changeValue(networkX,_pos->rotation->z);
+    _network->changeValue(networkY,_pos->position->y);
+    _network->changeValue(networkR,_pos->rotation->z);
 
 }
 
