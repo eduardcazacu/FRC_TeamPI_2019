@@ -100,6 +100,8 @@ void Robot::TeleopInit()
   //let the led arduino know teleop is starting:
   *ledData = 3;
   ledArduino->ArduinoI2C::write(ledData, 1); //default design
+
+  manual->init();
 }
 
 void Robot::TeleopPeriodic()

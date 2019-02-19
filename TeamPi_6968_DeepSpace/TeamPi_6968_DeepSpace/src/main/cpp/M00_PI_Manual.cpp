@@ -10,6 +10,12 @@ M00_PI_Manual::M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input,
     _climbSystem = climbSystem;
 
     _grabber = grabber;
+    calibrated = new bool();
+    *calibrated = false;
+}
+
+void M00_PI_Manual::init(){
+    *calibrated = false;
 }
 
 void M00_PI_Manual::driving()
@@ -20,8 +26,16 @@ void M00_PI_Manual::driving()
 
 void M00_PI_Manual::functions()
 {
+
+    if(!*calibrated){
+        std::cout<<"calibrated is false \n";
+        *calibrated = _lift->reset();
+        return;
+    }
+
     //lift:
     //read buttons. set lift target to that:
+    // /if(_input->navigator->)
     if (_input->navigator->lvl0Btn())
     {
         std::cout << "Go to level 0 button pressed \n";

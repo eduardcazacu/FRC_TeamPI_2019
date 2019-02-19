@@ -68,6 +68,10 @@ class S05_PI_Lift
         */
     void adjustPos(double value);
 
+    //function to see if we have reached the target
+
+    bool TurnOff();//in progress
+
     C00_PI_Talon *GetTalonObject();
 
   private:
@@ -85,7 +89,7 @@ class S05_PI_Lift
     const double liftMax = 30000;
     const double liftMin = 0;
 
-    const double resetIncrement = 2;
+    const double resetIncrement = 5;
 
     double *oldValue;
 

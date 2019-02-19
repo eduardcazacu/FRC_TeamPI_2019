@@ -3,12 +3,14 @@
 PI_Navigator::PI_Navigator(int ManualControllerID)
 {
     this->ManualController = new frc::XboxController(ManualControllerID);
-    this->gamePadPOV0 = new frc::POVButton(*ManualController, 180);
-    this->gamePadPOV1 = new frc::POVButton(*ManualController, 90);
-    this->gamePadPOV2 = new frc::POVButton(*ManualController, 0);
+    this->gamePadPOVLeft = new frc::POVButton(*ManualController, 270);
+    this->gamePadPOVDown = new frc::POVButton(*ManualController, 180);
+    this->gamePadPOVRight = new frc::POVButton(*ManualController, 90);
+    this->gamePadPOVUp = new frc::POVButton(*ManualController, 0);
 }
 
-double PI_Navigator::manualGrip(){
+double PI_Navigator::manualGrip()
+{
     return ManualController->GetTriggerAxis(frc::GenericHID::kRightHand);
 }
 
@@ -34,16 +36,20 @@ double PI_Navigator::ManualLift()
 {
     return -this->ManualController->GetY(frc::GenericHID::kRightHand);
 }
+bool PI_Navigator::liftOff()
+{
+    return this->gamePadPOVLeft->Get();
+}
 bool PI_Navigator::lvl0Btn()
 {
-    return this->gamePadPOV0->Get();
+    return this->gamePadPOVDown->Get();
 }
 
-bool PI_Navigator::lvl1Btn(){
-    return this->gamePadPOV1->Get();
-
+bool PI_Navigator::lvl1Btn()
+{
+    return this->gamePadPOVRight->Get();
 }
-bool PI_Navigator::lvl2Btn(){
-    return this->gamePadPOV2->Get();
-
+bool PI_Navigator::lvl2Btn()
+{
+    return this->gamePadPOVUp->Get();
 }
