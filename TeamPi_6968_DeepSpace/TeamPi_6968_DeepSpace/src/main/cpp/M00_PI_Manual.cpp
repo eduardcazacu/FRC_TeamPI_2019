@@ -27,7 +27,7 @@ void M00_PI_Manual::driving()
     
     _drivetrain->rampTimeOpenLoop = throttle;
     _drivetrain->rampTimeClosedloop =throttle;
-    std::cout<<"throttle "<<throttle<<"\n";
+    //std::cout<<"throttle "<<throttle<<"\n";
 }
 
 void M00_PI_Manual::functions()

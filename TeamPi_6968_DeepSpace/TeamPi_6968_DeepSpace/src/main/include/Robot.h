@@ -87,8 +87,6 @@ private:
   //auto functions:
   M01_PI_Auto *autoFunctions;
 
-  C04_PI_Pixy *pixyDown;
-
   S09_PI_Aim *aiming;
   //status using leds:
   /*

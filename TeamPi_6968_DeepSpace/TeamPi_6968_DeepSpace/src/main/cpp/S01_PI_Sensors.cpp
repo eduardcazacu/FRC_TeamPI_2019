@@ -10,7 +10,7 @@ S01_PI_Sensors::S01_PI_Sensors(){
     IRBack =  new PI_IR(IR_BACK,IR_DIST_THRESHOLD);
 
     PixyDown = new C04_PI_Pixy(frc::I2C::Port::kOnboard, 8, 0);
-    PixyUp = new C04_PI_Pixy(frc::I2C::Port::kOnboard, 8, 1);
+    //PixyUp = new C04_PI_Pixy(frc::I2C::Port::kOnboard, 8, 1);
 
     camera = new C03_PI_Camera();
 }   
@@ -19,7 +19,7 @@ void S01_PI_Sensors::refresh(){
     //encoder stuff here probably:
 
     PixyDown->Update();
-    PixyUp->Update();
+    //PixyUp->Update();
 }
 
 double S01_PI_Sensors::GetUltrasonicAngle(){

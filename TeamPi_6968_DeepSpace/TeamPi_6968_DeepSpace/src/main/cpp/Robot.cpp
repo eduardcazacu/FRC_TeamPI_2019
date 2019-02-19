@@ -18,7 +18,7 @@
 int networkTest = 0;
 int networkTestID;
 
-int count =0;
+int count = 0;
 
 void Robot::RobotInit()
 {
@@ -64,12 +64,9 @@ void Robot::RobotInit()
   //manual:
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 
-  pixyDown = new C04_PI_Pixy(frc::I2C::Port::kOnboard, PIXY_ARDUINO_I2C,0);
-  aiming = new S09_PI_Aim(1,drivetrain);
+  aiming = new S09_PI_Aim(1, drivetrain);
 
-
-
-  autoFunctions = new M01_PI_Auto(grabber, lift,drivetrain,aiming, pixyDown);
+  autoFunctions = new M01_PI_Auto(grabber, lift, drivetrain, aiming, sensors->PixyDown);
 
   //network test:
   networkTestID = network->GetEntryId("/test");
@@ -107,14 +104,17 @@ void Robot::TeleopInit()
 void Robot::TeleopPeriodic()
 {
 
+  sensors->refresh();
+  //std::cout << "\nPIXY: " << sensors->PixyDown->BestVector().NearestY() << "\n \n";
+  //std::cout<<"winch pos: "<<lift->GetTalonObject()->GetTalonObject()->GetSelectedSensorPosition()<<'\n';
+  
+  
   //handle user input here:
   //go to the function bellow for more info.
   readUserInput();
-
-  sensors->refresh();
-  //std::cout<<"winch pos: "<<lift->GetTalonObject()->GetTalonObject()->GetSelectedSensorPosition()<<'\n';
-
   //manual stuff:
+ 
+ 
   if (!autoFunctions->on || manual->manualOverride)
   {
     //if no auto operations happening or override is on
@@ -151,11 +151,11 @@ void Robot::TeleopPeriodic()
     //execute code in here roughly once a second.
 
     //test the Ultrasound sensors:
-    std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
-    std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
+    //std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
+    //std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
 
-    std::cout << "current coordinates: x:" << positioning->Get()->position->x << " y:" << positioning->Get()->position->y << '\n';
-    std::cout << "current orientation: " << positioning->Get()->rotation->z << '\n';
+    //std::cout << "current coordinates: x:" << positioning->Get()->position->x << " y:" << positioning->Get()->position->y << '\n';
+    //std::cout << "current orientation: " << positioning->Get()->rotation->z << '\n';
   }
   count = (count + 1) % 100;
 }
@@ -169,6 +169,7 @@ void Robot::readUserInput()
   if (input->driver->m_stick->GetTriggerPressed())
   {
     //trigger the rotation:
+    std::cout << "trigger pressed \n";
     autoFunctions->autoAimStart();
   }
 }
