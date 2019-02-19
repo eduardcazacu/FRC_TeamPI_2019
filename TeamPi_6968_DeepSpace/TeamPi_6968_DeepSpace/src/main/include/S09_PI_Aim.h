@@ -19,6 +19,7 @@ Team PI 6968
 #include <cmath>
 #include "S01_PI_Sensors.h"
 #include "S04_PI_Drivetrain.h"
+#include "S04_PI_Pixy.h"
 
 class S09_PI_Aim
 {

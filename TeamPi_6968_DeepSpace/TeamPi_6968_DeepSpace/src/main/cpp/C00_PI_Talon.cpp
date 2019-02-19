@@ -217,3 +217,5 @@ int selectedSensorPos = talon.GetSelectedSensorPosition(0); /* sensor selected f
 //double closedLoopAccum = talon.GetIntegralAccumulator(0); /* sensor selected for PID Loop 0 */
 //double derivErr = talon.GetErrorDerivative(0); /* sensor selected for PID Loop 0 */
 
+//this->PiTalon->set(controlMode::Velocity,value)
+
