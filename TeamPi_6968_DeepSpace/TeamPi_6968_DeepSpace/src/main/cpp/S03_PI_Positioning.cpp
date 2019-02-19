@@ -20,8 +20,8 @@ S03_PI_Positioning::S03_PI_Positioning(S00_PI_Network *network, C00_PI_Talon *le
 
 void S03_PI_Positioning::refresh()
 {
-    double rDist = _rEnc->deltaDistance(); //one of the sides needs to be reversed
-    double lDist = -_lEnc->deltaDistance();
+    double rDist = -_rEnc->deltaDistance(); //one of the sides needs to be reversed
+    double lDist = _lEnc->deltaDistance();
 
     //find the distance
     double distance = (rDist - lDist) / 2 + lDist;
