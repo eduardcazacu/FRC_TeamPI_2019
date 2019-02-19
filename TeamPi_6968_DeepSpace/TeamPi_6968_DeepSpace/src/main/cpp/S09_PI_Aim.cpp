@@ -15,9 +15,9 @@ S09_PI_Aim::S09_PI_Aim(double _maxSpeedPercentage, S04_PI_Drivetrain *drivetrain
     PIDDistanceAngle->Disable();
 }
 
-bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
+bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
 {
-
+    angle = _angle-90; // convert the  the pixy angle in the angle usefull for the aiming class 
     /*
     The angle PID will fight to get the angle parallel and the distance PID will fight to get the angle and speed so that
     it can get on top of the target point.
@@ -36,6 +36,8 @@ bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
         this->PIDDistance->SetSetpoint(0);
         //the target error between the intersection point and the target point
         this->PIDDistanceAngle->SetSetpoint(0);
+
+        std::cout<<"SetPoint checks: PIDAngle"<<'/n';
 
         this->PIDAngle->SetPercentTolerance(tolerance);
         this->PIDDistance->SetPercentTolerance(tolerance);
@@ -65,6 +67,7 @@ bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
     driveSpeed = PIDDistance->Get();
     driveAngle = PIDAngle->Get() - PIDDistanceAngle->Get();
     drivetrain->drive(driveSpeed, driveAngle);
+    //value voor PID check make sure that the drive class gets censable values
 
     if (verbose)
     {
@@ -75,8 +78,9 @@ bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
     //check if made it:
     if (PIDAngle->OnTarget() && PIDDistance->OnTarget() && PIDDistanceAngle->OnTarget())
     {
-        if (verbose)
+        if (verbose){
             std::cout << "Aiming PID done \n";
+        }
 
         //reset the pid for next use:
         PIDAngle->Reset();
