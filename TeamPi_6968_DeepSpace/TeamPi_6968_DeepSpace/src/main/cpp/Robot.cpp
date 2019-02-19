@@ -43,11 +43,12 @@ void Robot::RobotInit()
   //positioning:
   positioning = new S03_PI_Positioning(network, talonL, talonR);
 
-  //setup the drivetrain:
-  drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2, positioning);
-
+  
   //sensors:
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
+
+  //setup the drivetrain:
+  drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2, sensors, positioning);
 
   //NetworkTable = new S00_PI_Network();
   lift = new S05_PI_Lift(7, liftLimitSwitchId); //create a lift using the talon on CAN 7
@@ -140,6 +141,8 @@ void Robot::TeleopPeriodic()
   //for testing:
   if (count == 50)
   {
+    std::cout<<"Pixy X: "<<sensors->PixyDown->LatestVector().NearestX()<<"\n";
+    std::cout<<"Pixy Y: "<<sensors->PixyDown->LatestVector().NearestY()<<"\n \n";
 
     if (autoFunctions->on)
     {

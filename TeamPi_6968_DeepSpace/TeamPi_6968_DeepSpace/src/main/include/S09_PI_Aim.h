@@ -31,7 +31,7 @@ class S09_PI_Aim
     const double tolerance = 0.2;
 
     //for getting the robot parallel with the line
-    const double kPAngle = 0.01;
+    const double kPAngle = 1;
     const double kIAngle = 0.0;
     const double KDAngle = 0.0;
     //the min max that it can write to the motors:
@@ -39,9 +39,9 @@ class S09_PI_Aim
     const double angleMin = -0.3;
 
     //for getting the robot on top of the target point
-    const double kPDist = 0.05;
+    const double kPDist = 10;  
     const double kIDist = 0.0;
-    const double kDDist = 0;
+    const double kDDist = 1;
     //the min max that it can write to the motors:
     const double distMax = 0.5;
     const double distMin = -0.5;

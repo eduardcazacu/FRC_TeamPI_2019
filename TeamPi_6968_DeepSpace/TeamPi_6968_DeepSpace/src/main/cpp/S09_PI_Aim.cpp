@@ -81,7 +81,7 @@ bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
     }
 
     //check if made it:
-    if (PIDAngle->OnTarget() && PIDDistance->OnTarget() && PIDDistanceAngle->OnTarget())
+    if (/*PIDAngle->OnTarget() &&*/ PIDDistance->OnTarget() /*&& PIDDistanceAngle->OnTarget()*/)
     {
         if (verbose)
         {

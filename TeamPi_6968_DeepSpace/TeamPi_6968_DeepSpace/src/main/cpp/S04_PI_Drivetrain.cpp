@@ -10,7 +10,7 @@
     TalonL->getTalonObject->configOpenloopRamp([Time to ramp up], [amount of follwors]); 
     */
 
-S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2)
+S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S01_PI_Sensors *_sensors)
 {
     //assign the drivers:
     _talonL = talonL;
@@ -19,6 +19,7 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     _victorL2 = victorL2;
     _victorR1 = victorR1;
     _victorR2 = victorR2;
+    sensors = _sensors;
 
     //set the followers:
     this->_victorL1->GetVictorObject()->Follow(*(_talonL->GetTalonObject()));
@@ -40,7 +41,7 @@ S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victor
     usingPositioning = false;
 }
 
-S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S03_PI_Positioning *robotPos)
+S04_PI_Drivetrain::S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S01_PI_Sensors *_sensors, S03_PI_Positioning *robotPos)
 {
 
     //assign the drivers:
@@ -186,6 +187,19 @@ bool S04_PI_Drivetrain::driveDist(double distance)
     {
         autoDriveStarted = false;
         return true;
+    }
+    return false;
+}
+
+bool  S04_PI_Drivetrain::AimToWall(){
+    if(AimIndex){
+        AimAngle = sensors->GetUltrasonicAngle();
+        AimIndex = false;
+    }else{
+        if(Rotate(AimAngle)){
+            AimIndex = true;
+            return true;
+        }
     }
     return false;
 }

@@ -13,12 +13,13 @@ class PI_Vector{
     double Dir();
     double Height();
 
+    
+
+    public:
     uint8_t x0;
     uint8_t x1;
     uint8_t y0;
     uint8_t y1;
-
-    public:
 
     uint8_t index;
     unsigned int lifeTime = 0;

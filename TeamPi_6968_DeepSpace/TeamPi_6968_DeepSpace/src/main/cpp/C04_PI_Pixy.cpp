@@ -28,29 +28,37 @@ void C04_PI_Pixy::Update()
 
 void C04_PI_Pixy::AddVector(PI_Vector vector)
 {
-  if (vectorList.empty())
+  if (vector.NearestX() != 255 || ((vector.y0-vector.y1)<PIXY_HEIGHT/10 && (vector.y0-vector.y1)>0) || ((vector.y1-vector.y0)<PIXY_HEIGHT/10 && (vector.y1-vector.y0)>0))
   {
-    vectorList.push_back(vector);
-  }
-  else
-  {
-    bool found = false;
-    for (int i = 0; i < vectorList.size(); i++)
+
+    if (vectorList.empty())
     {
-      if (vectorList.at(i).index == vector.index)
-      {
-        //the vector already exist
-        vector.lifeTime = vectorList.at(i).lifeTime + 1;
-        vectorList.erase(vectorList.begin() + i);
-      }
+      vectorList.push_back(vector);
     }
-    vectorList.insert(vectorList.begin(), vector);
+    else
+    {
+      for (int i = 0; i < vectorList.size(); i++)
+      {
+        if (vectorList.at(i).index == vector.index)
+        {
+          //the vector already exist
+          vector.lifeTime = vectorList.at(i).lifeTime + 1;
+          vectorList.erase(vectorList.begin() + i);
+        }
+      }
+      vectorList.insert(vectorList.begin(), vector);
+    }
   }
 }
 
 PI_Vector C04_PI_Pixy::LatestVector()
 {
+  if(!vectorList.empty())
   return vectorList.front();
+  else{
+    uint8_t test[5] = {0,0,0,0,0};
+    return PI_Vector(test);
+  }
 }
 
 PI_Vector C04_PI_Pixy::BestVector()
@@ -64,6 +72,7 @@ PI_Vector C04_PI_Pixy::BestVector()
   return bestVector;
 }
 
-bool C04_PI_Pixy::AimReady(){
-  return (BestVector().lifeTime > LIFETIMETRESHHOLD);
+bool C04_PI_Pixy::AimReady()
+{
+  return (LatestVector().lifeTime > LIFETIMETRESHHOLD);
 }

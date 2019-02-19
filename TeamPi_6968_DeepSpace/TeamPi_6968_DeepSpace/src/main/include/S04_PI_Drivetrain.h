@@ -18,6 +18,7 @@
 #include "PI_PIDSource.h"
 #include "PI_PIDOutput.h"
 #include "S03_PI_Positioning.h"
+#include "S01_PI_Sensors.h"
 
 #define timeOutMS 10
 
@@ -30,8 +31,8 @@ class S04_PI_Drivetrain
             Input:          TalonL, TalonR, Victor L1, Victor L2, Victor L3, Victor R1, Victor R2, Victor R3
             output:         none
         */
-    S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2);
-    S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S03_PI_Positioning *robotPos);
+    S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S01_PI_Sensors *_sensors);
+    S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S01_PI_Sensors *_sensors, S03_PI_Positioning *robotPos);
     /*
             Description:    Differential drive.
             Input:          Y [double][-1,1] - speed
@@ -56,7 +57,8 @@ class S04_PI_Drivetrain
     */
     bool driveDist(double distance);
 
-    
+    bool AimToWall();
+
     //Ramp rate variabels
     int rampTimeOpenLoop= 0.8;
     int rampTimeClosedloop =0.8;
@@ -80,6 +82,8 @@ class S04_PI_Drivetrain
     C01_PI_Victor *_victorR1;
     C01_PI_Victor *_victorR2;
 
+    S01_PI_Sensors *sensors;
+
     //auto rotation:
     bool usingPositioning;
     bool pidRotationStarted = false;
@@ -100,4 +104,7 @@ class S04_PI_Drivetrain
     bool autoDriveStarted = false;
 
     const double autoDriveSpeed = 0.2;
+
+    bool AimIndex = true;
+    double AimAngle = 0;
 };

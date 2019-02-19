@@ -19,14 +19,15 @@ PI_Vector::PI_Vector(uint8_t info[5])
     y1 = _y1;
 }*/
 
-double PI_Vector::IntersectY(PI_Vector vector2){
+double PI_Vector::IntersectY(PI_Vector vector2)
+{
     if (Dir() == vector2.Dir())
     {
         //The lines are parralel
         return -1;
     }
 
-    return (IntersectX(vector2)*Dir()+Height());
+    return (IntersectX(vector2) * Dir() + Height());
 }
 
 double PI_Vector::IntersectX(PI_Vector vector2)
@@ -52,41 +53,48 @@ double PI_Vector::Height()
     return ((-Dir() * x0) / y0);
 }
 
-double PI_Vector::CenterX(){
-    return ((x1-x0)/2);
+double PI_Vector::CenterX()
+{
+    return ((x1 - x0) / 2);
 }
 
-double PI_Vector::CenterY(){
-    return ((y1-y0)/2);
+double PI_Vector::CenterY()
+{
+    return ((y1 - y0) / 2);
 }
 
-double PI_Vector::Angle(){
+double PI_Vector::Angle()
+{
     return atan(Dir()); //only works between -PI/2 and PI/2
     //return atan2(y1-y0,x1-x0);
 }
 
-double PI_Vector::Length(){
-    return sqrt(pow(x1-x0,2)+pow(y1-y0,2));
+double PI_Vector::Length()
+{
+    return sqrt(pow(x1 - x0, 2) + pow(y1 - y0, 2));
 }
 
-double PI_Vector::NearestY(){
-    if(y0>y1)
-    return y0;
+double PI_Vector::NearestY()
+{
+    if (y0 > y1)
+        return y0;
     return y1;
 }
-double PI_Vector::NearestX(){
-    if(x0>x1)
-    return x0;
+double PI_Vector::NearestX()
+{
+    if (y0 > y1)
+        return x0;
     return x1;
 }
 
-void PI_Vector::Print(){
+void PI_Vector::Print()
+{
 
-    std::cout<<"\n";
-    std::cout<<"Vector:\n";
-    std::cout<<"index: "<<(int)index<<"\n";
-    std::cout<<"x0: "<<(int)x0<<"\n";
-    std::cout<<"y0: "<<(int)y0<<"\n";
-    std::cout<<"x1: "<<(int)x1<<"\n";
-    std::cout<<"y1: "<<(int)y1<<"\n";
+    std::cout << "\n";
+    std::cout << "Vector:\n";
+    std::cout << "index: " << (int)index << "\n";
+    std::cout << "x0: " << (int)x0 << "\n";
+    std::cout << "y0: " << (int)y0 << "\n";
+    std::cout << "x1: " << (int)x1 << "\n";
+    std::cout << "y1: " << (int)y1 << "\n";
 }
