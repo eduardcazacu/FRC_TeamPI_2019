@@ -23,11 +23,11 @@ void M00_PI_Manual::driving()
     //drive:
     _drivetrain->drive(-_input->driver->m_stick->GetY(), _input->driver->m_stick->GetZ()*turnSpeedMultiplier);
     double throttle = _input->driver->m_stick->GetAxis(frc::Joystick::AxisType::kThrottleAxis);
-    
+    throttle = map(throttle,1,-1,minimumAcceleration,maxAcceleration);
     
     _drivetrain->rampTimeOpenLoop = throttle;
     _drivetrain->rampTimeClosedloop =throttle;
-    
+    std::cout<<"throttle "<<throttle<<"\n";
 }
 
 void M00_PI_Manual::functions()
@@ -123,4 +123,8 @@ void M00_PI_Manual::functions()
         _lift->adjustPos(_input->navigator->ManualLift());
     }
 
+}
+
+double M00_PI_Manual::map(double x, double xMin, double xMax, double yMin, double yMax){
+    return (yMin + (x - xMin) * (yMax - yMin) / (xMax - xMin));
 }
