@@ -17,6 +17,7 @@ Team Pi 6968
 #include <ctre/Phoenix.h>
 #include "S07_PI_AutoClimb.h"
 #include "S05_PI_Lift.h"
+#include "S04_PI_Drivetrain.h"
 
 #define GRABBER_SERVO_PIN 0
 #define START_GRAB_RATIO 0.5
@@ -58,7 +59,7 @@ class M01_PI_Auto
         Input:          None;
         Output:         none;
     */
-    M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift);
+    M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Drivetrain *drivetrain);
 
     /*
         Description:    Call this periodically. It handles the auto operations when 
@@ -146,7 +147,13 @@ class M01_PI_Auto
     */
     bool placeHatchOnLevelRoutine(int lvl);
 
-    bool rotateDegrees(double angle);
+
+    //drivetrain
+    S04_PI_Drivetrain *_drivetrain;
+    bool rotateDegrees();
+
+    bool _rotationDone=true;
+    double _rotationAngle;
 
     //lift:
     bool liftResetDone = false;
