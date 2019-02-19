@@ -107,6 +107,8 @@ class M01_PI_Auto
     */
     void placeHatchOnLevel(int lvl);
 
+    void rotateDegreesEnable(double angle);
+
   private:
     //hatch grabbing:
     S06_PI_Grabber *grabber;
@@ -143,6 +145,8 @@ class M01_PI_Auto
         Output:         [bool] done
     */
     bool placeHatchOnLevelRoutine(int lvl);
+
+    bool rotateDegrees(double angle);
 
     //lift:
     bool liftResetDone = false;

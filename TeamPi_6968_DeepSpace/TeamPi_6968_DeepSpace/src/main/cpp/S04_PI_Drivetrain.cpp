@@ -73,7 +73,7 @@ bool S04_PI_Drivetrain::Rotate(double angle)
     }
     if (angle < -360 || angle > 360)
     {
-        std::cout << "ERROR: Angle out of bounds. range is (0,360) \n";
+        std::cout << "ERROR: Angle out of bounds. range is (-360,360) \n";
         return false;
     }
     //if first call:
@@ -85,7 +85,7 @@ bool S04_PI_Drivetrain::Rotate(double angle)
         targetAngle = normalizeAngle(targetAngle);
 
         //determine which way should the robot turn to get there the quickest:
-        if (abs(targetAngle - _robotPos->Get()->rotation->z) < 180)
+        if (sqrt(pow((targetAngle - _robotPos->Get()->rotation->z),2)) < 180)
         {
             //turn counter clockwise
             turnDirection = -1;
@@ -97,6 +97,7 @@ bool S04_PI_Drivetrain::Rotate(double angle)
         }
 
         //start the pid loop:
+        input->Set(_robotPos->Get()->rotation->z);
         pidRotation->SetSetpoint(targetAngle);
         pidRotation->Enable();
 
@@ -110,12 +111,13 @@ bool S04_PI_Drivetrain::Rotate(double angle)
             std::cout << "right \n";
         }
     }
+    std::cout<<"Current robot rotation: "<<_robotPos->Get()->rotation->z<<"\n";
 
     //calculate the angle error:
     input->Set(_robotPos->Get()->rotation->z);
     
     //write the output of the pid loop to the drivetrain:
-    drive(0, abs(pidRotation->Get()) * turnDirection);
+    drive(0, sqrt(pow(pidRotation->Get(),2)) * turnDirection);
 
     //chek if it got there
     if (pidRotation->OnTarget())
@@ -138,7 +140,12 @@ bool S04_PI_Drivetrain::Rotate(double angle)
 //normalizes the angle to (0,359);
 double S04_PI_Drivetrain::normalizeAngle(double angle)
 {
-    angle = (int)(angle + 360) % 360;
+    while(angle<0){
+        angle+=360;
+    }
+    while(angle>360){
+        angle-=360;
+    }
     return angle;
 }
 

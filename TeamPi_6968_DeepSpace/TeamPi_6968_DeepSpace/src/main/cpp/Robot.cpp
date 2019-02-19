@@ -23,7 +23,7 @@ int LiftLevel = 0;
 int networkTest = 0;
 int networkTestID;
 
-bool rotationDone = false;
+bool rotationDone = true;
 
 void Robot::RobotInit()
 {
@@ -91,24 +91,16 @@ void Robot::RobotPeriodic()
 }
 void Robot::AutonomousInit()
 {
-  std::cout << "Auto test initialized \n";
 }
 void Robot::AutonomousPeriodic()
 {
-  if (!rotationDone)
-  {
-    if (drivetrain->Rotate(90))
-    {
-      std::cout << "Rotation done \n";
-      rotationDone = true;
-    }
-  }
 }
 void Robot::TeleopInit()
 {
   //let the led arduino know teleop is starting:
   *ledData = 3;
   ledArduino->ArduinoI2C::write(ledData, 1); //default design
+  rotationDone = true;
 }
 
 void Robot::TeleopPeriodic()
@@ -119,6 +111,13 @@ void Robot::TeleopPeriodic()
   readUserInput();
 
   sensors->refresh();
+
+  //auto rotate 90 degrees:
+  if (input->driver->m_stick->GetTriggerPressed())
+  {
+    //trigger the rotation:
+    rotationDone=false;
+  }
 
   //manual stuff:
   if (!autoFunctions->on || manual->manualOverride)
@@ -133,6 +132,17 @@ void Robot::TeleopPeriodic()
     //take care of auto function here if needed:
     //the auto functions here will be activated only by calling their corresponding enable/disable commands
     //autoFunctions->functions();
+
+    /*
+    if (!rotationDone)
+    {
+      if (drivetrain->Rotate(90))
+      {
+        std::cout << "Rotation done \n";
+        rotationDone = true;
+      }
+    }
+    */
   }
   else
   {

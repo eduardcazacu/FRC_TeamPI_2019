@@ -26,10 +26,14 @@ void M01_PI_Auto::functions()
     //all the methods called periodically should return true when they are done or not doing anything
     //and false when they are doing something.
 
-    if(grabHatch()||placeHatch()){
+    if (grabHatch() && placeHatch())
+    {
+        //if all functions are done:
         on = false;
     }
-    else{
+    else
+    {
+        //if at least one function is on:
         on = true;
     }
 }
@@ -229,6 +233,6 @@ bool M01_PI_Auto::placeHatch()
     return false;
 }
 
-bool placeHatchOnLevelRoutine(int lvl){
-
+bool placeHatchOnLevelRoutine(int lvl)
+{
 }

@@ -102,4 +102,5 @@ void M00_PI_Manual::functions()
         std::cout<<"Adjusting lift pos by: "<<_input->navigator->ManualLift()<<"\n";
         _lift->adjustPos(_input->navigator->ManualLift());
     }
+
 }
