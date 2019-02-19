@@ -1,5 +1,6 @@
 #include "S09_PI_Aim.h"
 
+
 S09_PI_Aim::S09_PI_Aim(double _maxSpeedPercentage, S04_PI_Drivetrain *drivetrain)
 {
 
@@ -15,9 +16,9 @@ S09_PI_Aim::S09_PI_Aim(double _maxSpeedPercentage, S04_PI_Drivetrain *drivetrain
     PIDDistanceAngle->Disable();
 }
 
-bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
+bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
 {
-
+    angle = _angle-90; // convert the  the pixy angle in the angle usefull for the aiming class 
     /*
     The angle PID will fight to get the angle parallel and the distance PID will fight to get the angle and speed so that
     it can get on top of the target point.
@@ -37,6 +38,8 @@ bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
         //the target error between the intersection point and the target point
         this->PIDDistanceAngle->SetSetpoint(0);
 
+        std::cout<<"SetPoint checks: PIDAngle"<<'/n';
+
         this->PIDAngle->SetPercentTolerance(tolerance);
         this->PIDDistance->SetPercentTolerance(tolerance);
         this->PIDDistanceAngle->SetPercentTolerance(tolerance);
@@ -54,17 +57,18 @@ bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
     AngleSource->Set(angle);
 
     //calculate the intersection point error relative to the target point;
-    intersectionError = targetX / sin(angle);
+    intersectionError = ( targetX-PIXY_WIDTH )/ sin(angle);
     DistanceAngleSource->Set(intersectionError); //don't forget to multiply the output with -1 for correct turn direction
 
     //calculate the distance error:
-    distanceError = sqrt(pow(targetX, 2) + pow(targetY, 2));
+    distanceError = sqrt(pow(targetX-PIXY_WIDTH/2, 2) + pow(PIXY_HEIGHT-targetY, 2));
     DistanceSource->Set(distanceError);
 
     //set the current inputs:
     driveSpeed = PIDDistance->Get();
     driveAngle = PIDAngle->Get() - PIDDistanceAngle->Get();
     drivetrain->drive(driveSpeed, driveAngle);
+    //value voor PID check make sure that the drive class gets censable values
 
     if (verbose)
     {
@@ -75,8 +79,9 @@ bool S09_PI_Aim::Aim(double angle, double targetX, double targetY)
     //check if made it:
     if (PIDAngle->OnTarget() && PIDDistance->OnTarget() && PIDDistanceAngle->OnTarget())
     {
-        if (verbose)
+        if (verbose){
             std::cout << "Aiming PID done \n";
+        }
 
         //reset the pid for next use:
         PIDAngle->Reset();

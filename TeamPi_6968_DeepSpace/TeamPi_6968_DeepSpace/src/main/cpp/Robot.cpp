@@ -69,7 +69,7 @@ void Robot::RobotInit()
   //manual:
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 
-  autoFunctions = new M01_PI_Auto(grabber, lift);
+  autoFunctions = new M01_PI_Auto(grabber, lift,drivetrain);
 
   //network test:
   networkTestID = network->GetEntryId("/test");
@@ -112,13 +112,6 @@ void Robot::TeleopPeriodic()
 
   sensors->refresh();
 
-  //auto rotate 90 degrees:
-  if (input->driver->m_stick->GetTriggerPressed())
-  {
-    //trigger the rotation:
-    rotationDone=false;
-  }
-
   //manual stuff:
   if (!autoFunctions->on || manual->manualOverride)
   {
@@ -131,18 +124,7 @@ void Robot::TeleopPeriodic()
   {
     //take care of auto function here if needed:
     //the auto functions here will be activated only by calling their corresponding enable/disable commands
-    //autoFunctions->functions();
-
-    /*
-    if (!rotationDone)
-    {
-      if (drivetrain->Rotate(90))
-      {
-        std::cout << "Rotation done \n";
-        rotationDone = true;
-      }
-    }
-    */
+    autoFunctions->functions();
   }
   else
   {
@@ -180,6 +162,13 @@ void Robot::readUserInput()
 {
 
   //handle all the button presses and function calls here:
+
+  //auto rotate 90 degrees:
+  if (input->driver->m_stick->GetTriggerPressed())
+  {
+    //trigger the rotation:
+    autoFunctions->rotateDegreesEnable(90);
+  }
 }
 
 void Robot::TestPeriodic()
