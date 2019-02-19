@@ -63,3 +63,7 @@ PI_Vector C04_PI_Pixy::BestVector()
   }
   return bestVector;
 }
+
+bool C04_PI_Pixy::AimReady(){
+  return (BestVector().lifeTime > LIFETIMETRESHHOLD);
+}
