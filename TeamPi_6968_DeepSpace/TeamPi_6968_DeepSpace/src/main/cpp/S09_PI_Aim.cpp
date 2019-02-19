@@ -1,5 +1,6 @@
 #include "S09_PI_Aim.h"
 
+
 S09_PI_Aim::S09_PI_Aim(double _maxSpeedPercentage, S04_PI_Drivetrain *drivetrain)
 {
 
@@ -56,11 +57,11 @@ bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
     AngleSource->Set(angle);
 
     //calculate the intersection point error relative to the target point;
-    intersectionError = targetX / sin(angle);
+    intersectionError = ( targetX-PIXY_WIDTH )/ sin(angle);
     DistanceAngleSource->Set(intersectionError); //don't forget to multiply the output with -1 for correct turn direction
 
     //calculate the distance error:
-    distanceError = sqrt(pow(targetX, 2) + pow(targetY, 2));
+    distanceError = sqrt(pow(targetX-PIXY_WIDTH/2, 2) + pow(PIXY_HEIGHT-targetY, 2));
     DistanceSource->Set(distanceError);
 
     //set the current inputs:
