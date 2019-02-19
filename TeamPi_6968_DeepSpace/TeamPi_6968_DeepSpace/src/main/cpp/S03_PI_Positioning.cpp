@@ -27,25 +27,28 @@ void S03_PI_Positioning::refresh()
     double distance = (rDist - lDist) / 2 + lDist;
     double tempAngle = atan((rDist - lDist) / this->_drivetrainWidth);
 
+    //reset angles
+    if (_pos->rotation->z >= 360)
+        _pos->rotation->z -= 360;
+    else if (_pos->rotation->z <= -360)
+       _pos->rotation->z += 360;
+
     tempAngle = tempAngle * (180.0 / M_PI);
     //add the angle
     this->_pos->rotation->z += tempAngle;
 
-    //normalize the angle to 0,359
-    this->_pos->rotation->z = (int)(this->_pos->rotation->z + 360) % 360;
 
     //x-y position:
-    this->_pos->position->y += cos((this->_pos->rotation->z * M_PI / 180)) * distance;
-    this->_pos->position->x += sin((this->_pos->rotation->z * M_PI / 180)) * distance;
+    this->_pos->position->y += cos((_pos->rotation->z * M_PI / 180)) * distance;
+    this->_pos->position->x += sin((_pos->rotation->z * M_PI / 180)) * distance;
 
     //add the distance to the total distance:
     totalDistance += distance;
 
     //update the network:
-    _network->changeValue(networkX,_pos->position->x);
-    _network->changeValue(networkY,_pos->position->y);
-    _network->changeValue(networkR,_pos->rotation->z);
-
+    _network->changeValue(networkX, _pos->position->x);
+    _network->changeValue(networkY, _pos->position->y);
+    _network->changeValue(networkR, _pos->rotation->z);
 }
 
 PiTransform *S03_PI_Positioning::Get()
@@ -53,7 +56,8 @@ PiTransform *S03_PI_Positioning::Get()
     return this->_pos;
 }
 
-double S03_PI_Positioning::getDistance(){
+double S03_PI_Positioning::getDistance()
+{
     totalDistance;
 }
 void S03_PI_Positioning::reset(PiTransform newPos)

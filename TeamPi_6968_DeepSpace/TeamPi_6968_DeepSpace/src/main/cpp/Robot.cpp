@@ -169,7 +169,7 @@ void Robot::readUserInput()
   if (input->driver->m_stick->GetTriggerPressed())
   {
     //trigger the rotation:
-    autoFunctions->rotateDegreesEnable(90);
+    autoFunctions->autoAimStart();
   }
 }
 

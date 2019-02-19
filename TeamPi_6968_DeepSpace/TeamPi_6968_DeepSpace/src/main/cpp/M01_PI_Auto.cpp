@@ -16,6 +16,7 @@ M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Driv
 
     _pixy = pixy;
     _aiming = aiming;
+    autoAimDone = true;
 }
 
 void M01_PI_Auto::functions()
@@ -32,7 +33,7 @@ void M01_PI_Auto::functions()
     //all the methods called periodically should return true when they are done or not doing anything
     //and false when they are doing something.
 
-    if (grabHatch() && placeHatch() && rotateDegrees())
+    if (grabHatch() && placeHatch() && rotateDegrees()&& autoAim())
     {
         //if all functions are done:
         on = false;
@@ -269,8 +270,8 @@ bool M01_PI_Auto::rotateDegrees()
 
 void M01_PI_Auto::autoAimStart()
 {
-    if (/*_pixy->AimReady()*/ true)
-        autoAimDone = true;
+    if (_pixy->AimReady())
+        autoAimDone = false;
     else
         std::cout << "Pixy can't detect a usable line \n";
 }
@@ -279,13 +280,12 @@ bool M01_PI_Auto::autoAim()
 {
     if (!autoAimDone)
     {
-        /* if(_aiming->Aim()){
+        if(_aiming->Aim(_pixy->Angle(), NearestX(),NearestY()){
             //done
             autoAimDone=true;
             return true;
         }
         return false;
-        */
     }
     return true;
 }
