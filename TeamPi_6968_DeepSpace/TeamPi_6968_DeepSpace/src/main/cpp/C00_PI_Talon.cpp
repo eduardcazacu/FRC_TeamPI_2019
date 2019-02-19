@@ -53,8 +53,8 @@ C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication
     /*Setting the current values for the PIDF max and minimum values*/
     this->PiTalon->ConfigNominalOutputForward(0, kTimeoutMs);
     this->PiTalon->ConfigNominalOutputReverse(0, kTimeoutMs);
-    this->PiTalon->ConfigPeakOutputForward(0.2, kTimeoutMs);
-    this->PiTalon->ConfigPeakOutputReverse(-0.2, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputForward(0.8, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputReverse(-0.5, kTimeoutMs);
 
     /*Set closed loop Gains so the Kf, Kp, Ki, Kd*/
     this->PiTalon->Config_kF(kPIDLoopIdx, _kF, kTimeoutMs);
@@ -83,7 +83,7 @@ void C00_PI_Talon::SetFPID(double _kP, double _kI, double _kD, double _kF, doubl
 
 void C00_PI_Talon::closedLoopControl(double encoderRevs)
 {
-    int encoderSteps =  encoderRevs * 4096;
+    int encoderSteps =  encoderRevs;
 
     if (this->setpointEncoder != encoderSteps)
     {

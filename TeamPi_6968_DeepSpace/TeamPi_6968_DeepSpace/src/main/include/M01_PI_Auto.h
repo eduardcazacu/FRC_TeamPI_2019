@@ -18,6 +18,8 @@ Team Pi 6968
 #include "S07_PI_AutoClimb.h"
 #include "S05_PI_Lift.h"
 #include "S04_PI_Drivetrain.h"
+#include "C04_PI_Pixy.h"
+#include "S09_PI_Aim.h"
 
 #define GRABBER_SERVO_PIN 0
 #define START_GRAB_RATIO 0.5
@@ -59,7 +61,7 @@ class M01_PI_Auto
         Input:          None;
         Output:         none;
     */
-    M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Drivetrain *drivetrain);
+    M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Drivetrain *drivetrain, S09_PI_Aim *aiming, C04_PI_Pixy *pixy);
 
     /*
         Description:    Call this periodically. It handles the auto operations when 
@@ -108,6 +110,12 @@ class M01_PI_Auto
     */
     void placeHatchOnLevel(int lvl);
 
+    /*
+        Description:    Start the auto aiming sequence;
+        Input:          none;
+        Output:         none;
+    */
+    void autoAimStart();
     void rotateDegreesEnable(double angle);
 
   private:
@@ -158,4 +166,10 @@ class M01_PI_Auto
     //lift:
     bool liftResetDone = false;
     S05_PI_Lift *_lift;
+
+    //auto aim:
+    C04_PI_Pixy *_pixy;
+    S09_PI_Aim *_aiming;
+    bool autoAimDone = true;
+    bool autoAim();
 };

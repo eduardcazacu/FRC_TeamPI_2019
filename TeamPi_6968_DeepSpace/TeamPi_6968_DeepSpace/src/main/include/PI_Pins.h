@@ -47,5 +47,4 @@ const int liftLimitSwitchId = 9;
 #define ARDUINO_PIXY 8
 
 //--------------------------------SPI SS pin---------------------------
-#define PIXYSPI 0
 #define PIXY_ARDUINO_I2C 0x8

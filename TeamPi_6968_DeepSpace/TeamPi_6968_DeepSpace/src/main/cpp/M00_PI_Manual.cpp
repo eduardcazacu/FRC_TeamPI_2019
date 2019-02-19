@@ -15,7 +15,7 @@ M00_PI_Manual::M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input,
 void M00_PI_Manual::driving()
 {
     //drive:
-    _drivetrain->drive(-_input->driver->m_stick->GetY(), _input->driver->m_stick->GetZ());
+    _drivetrain->drive(-_input->driver->m_stick->GetY(), _input->driver->m_stick->GetZ()*turnSpeedMultiplier);
 }
 
 void M00_PI_Manual::functions()

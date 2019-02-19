@@ -36,6 +36,8 @@ public:
   void functions();
 
 private:
+  double turnSpeedMultiplier = 0.7;
+
   S04_PI_Drivetrain *_drivetrain;
 
   //input:

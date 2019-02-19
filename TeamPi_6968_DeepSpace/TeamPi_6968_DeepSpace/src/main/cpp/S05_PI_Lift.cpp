@@ -10,6 +10,8 @@ S05_PI_Lift::S05_PI_Lift(uint8_t talonCAN, uint8_t limitSwitchID)
     limitSwitch = new frc::DigitalInput(limitSwitchID);
 
     _pos = new double(0);
+
+    winch->GetTalonObject()->SetSelectedSensorPosition(0, 0, 0);
 }
 
 void S05_PI_Lift::goTo(double pos)
@@ -22,9 +24,8 @@ void S05_PI_Lift::goTo(double pos)
     if (verbose)
     {
         std::cout << "Lift target position: " << pos << "\n";
-        std::cout << "current lift encoder position: " << std::dec << winch->GetTalonObject()->GetSelectedSensorPosition() / 4096 << "\n";
+        std::cout << "current lift encoder position: " << std::dec << winch->GetTalonObject()->GetSelectedSensorPosition() << "\n";
     }
-    
 }
 
 void S05_PI_Lift::goToLvl(uint8_t index)
@@ -48,12 +49,13 @@ bool S05_PI_Lift::reset()
     {
         //if limit switch is hit:
         //reset
-        winch->GetTalonObject()->SetSelectedSensorPosition(0, 0, 0);
+        //winch->GetTalonObject()->SetSelectedSensorPosition(0, 0, 0);
         //stay there:
         *_pos = 0;
         goTo(0);
-        if(verbose){
-            std::cout<<"lift reset done! \n";
+        if (verbose)
+        {
+            std::cout << "lift reset done! \n";
         }
         return true;
     }
@@ -65,5 +67,10 @@ bool S05_PI_Lift::reset()
 void S05_PI_Lift::adjustPos(double value)
 {
     if ((*_pos + value >= liftMin) && (*_pos + value) <= liftMax)
-        goTo(*_pos + value);
+        goTo(*_pos + value*10);
+}
+
+C00_PI_Talon *S05_PI_Lift::GetTalonObject()
+{
+    return winch;
 }

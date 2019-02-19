@@ -68,19 +68,21 @@ class S05_PI_Lift
         */
     void adjustPos(double value);
 
+    C00_PI_Talon *GetTalonObject();
+
   private:
     bool verbose = true;
 
-    const double kp = 0.125; // p gain ~0.10*halfrotation/900
+    const double kp = 2; // p gain ~0.10*halfrotation/900
     const double kf = 0;     // based on system 
-    const double ki = 0.00125; // ki ~ kp/100
-    const double kd = 1.25; //kd ~kp * 10 or *100
+    const double ki = 0.0001; // ki ~ kp/100
+    const double kd = 8000.00; //kd ~kp * 10 or *100
 
-    const double LVL0 = 5;
-    const double LVL1 = 10;
-    const double LVL2 = 15;
+    const double LVL0 = 2996;
+    const double LVL1 = 15276;
+    const double LVL2 = 27984;
 
-    const double liftMax = 120;
+    const double liftMax = 30000;
     const double liftMin = 0;
 
     const double resetIncrement = 2;

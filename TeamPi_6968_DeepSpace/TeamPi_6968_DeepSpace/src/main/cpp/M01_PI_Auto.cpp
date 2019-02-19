@@ -1,6 +1,6 @@
 #include "M01_PI_Auto.h"
 
-M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Drivetrain *drivetrain)
+M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Drivetrain *drivetrain, S09_PI_Aim *aiming, C04_PI_Pixy *pixy)
 {
     //grabbing:
     this->grabber = grabber;
@@ -13,6 +13,9 @@ M01_PI_Auto::M01_PI_Auto(S06_PI_Grabber *grabber, S05_PI_Lift *lift, S04_PI_Driv
 
     _drivetrain = drivetrain;
     _rotationDone = true;
+
+    _pixy = pixy;
+    _aiming = aiming;
 }
 
 void M01_PI_Auto::functions()
@@ -45,6 +48,7 @@ void M01_PI_Auto::reset()
 {
     grabHatchReset();
     placeHatchReset();
+    _rotationDone = true;
     on = false;
 }
 
@@ -242,7 +246,7 @@ bool M01_PI_Auto::placeHatchOnLevelRoutine(int lvl)
 
 void M01_PI_Auto::rotateDegreesEnable(double angle)
 {
-    _rotationDone=false;
+    _rotationDone = false;
     _rotationAngle = angle;
 }
 
@@ -259,6 +263,29 @@ bool M01_PI_Auto::rotateDegrees()
         }
 
         return false;
+    }
+    return true;
+}
+
+void M01_PI_Auto::autoAimStart()
+{
+    if (/*_pixy->AimReady()*/ true)
+        autoAimDone = true;
+    else
+        std::cout << "Pixy can't detect a usable line \n";
+}
+
+bool M01_PI_Auto::autoAim()
+{
+    if (!autoAimDone)
+    {
+        /* if(_aiming->Aim()){
+            //done
+            autoAimDone=true;
+            return true;
+        }
+        return false;
+        */
     }
     return true;
 }

@@ -13,17 +13,12 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "frc/DigitalInput.h"
 
-//frc::I2C *I2CBus;
-S01_PI_Sensors *sensors;
-
-int count = 0;
-
-int LiftLevel = 0;
+//frc::I2C *I2CBus
 
 int networkTest = 0;
 int networkTestID;
 
-bool rotationDone = true;
+int count =0;
 
 void Robot::RobotInit()
 {
@@ -69,7 +64,12 @@ void Robot::RobotInit()
   //manual:
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 
-  autoFunctions = new M01_PI_Auto(grabber, lift,drivetrain);
+  pixyDown = new C04_PI_Pixy(frc::I2C::Port::kOnboard, PIXY_ARDUINO_I2C,0);
+  aiming = new S09_PI_Aim(1,drivetrain);
+
+
+
+  autoFunctions = new M01_PI_Auto(grabber, lift,drivetrain,aiming, pixyDown);
 
   //network test:
   networkTestID = network->GetEntryId("/test");
@@ -100,7 +100,6 @@ void Robot::TeleopInit()
   //let the led arduino know teleop is starting:
   *ledData = 3;
   ledArduino->ArduinoI2C::write(ledData, 1); //default design
-  rotationDone = true;
 }
 
 void Robot::TeleopPeriodic()
@@ -111,6 +110,7 @@ void Robot::TeleopPeriodic()
   readUserInput();
 
   sensors->refresh();
+  //std::cout<<"winch pos: "<<lift->GetTalonObject()->GetTalonObject()->GetSelectedSensorPosition()<<'\n';
 
   //manual stuff:
   if (!autoFunctions->on || manual->manualOverride)

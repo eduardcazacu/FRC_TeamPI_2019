@@ -57,7 +57,6 @@ private:
 
   S04_PI_Drivetrain *drivetrain;
 
-  //frc::I2C *I2CBus;
   S01_PI_Sensors *sensors;
 
   //manual:
@@ -88,6 +87,9 @@ private:
   //auto functions:
   M01_PI_Auto *autoFunctions;
 
+  C04_PI_Pixy *pixyDown;
+
+  S09_PI_Aim *aiming;
   //status using leds:
   /*
   Protocol: 
