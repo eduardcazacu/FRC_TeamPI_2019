@@ -25,7 +25,7 @@ public:
   /*Input:        4 pneumatic objects for each piston, one PI_Victor      */
   /*              for the motors.                                         */
   /*Output:       None.                                                   */
-  PI_Climb(PI_Pneumatics *front, PI_Pneumatics *back, C01_PI_Victor *motorDriver);
+  PI_Climb(PI_Pneumatics *LFront, PI_Pneumatics *_RFront, PI_Pneumatics *LBack, PI_Pneumatics *RBack, C01_PI_Victor *motorDriver);
 
   /*
     Description:    Extend all pistons to lift the whole robot up at the same time.
@@ -80,8 +80,10 @@ public:
   void drive(double speed);
 
 private:
-  PI_Pneumatics *_front;
-  PI_Pneumatics *_back;
+  PI_Pneumatics *_LFront;
+  PI_Pneumatics *_RFront;
+  PI_Pneumatics *_LBack;
+  PI_Pneumatics *_RBack;
 
   C01_PI_Victor *_motorDriver;
 };

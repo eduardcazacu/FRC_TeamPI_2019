@@ -54,14 +54,17 @@ void Robot::RobotInit()
   lift = new S05_PI_Lift(7, liftLimitSwitchId); //create a lift using the talon on CAN 7
 
   //climb system:
-  frontPneu = new PI_Pneumatics(PCMID, climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
-  backPneu = new PI_Pneumatics(PCMID, climb_piston_B_channel_fwd, climb_piston_B_channel_rev, climb_piston_B_reed_retracted, climb_piston_B_reed_extended);
+  lFrontPneu = new PI_Pneumatics(PCMID, climb_piston_FL_channel_fwd, climb_piston_FL_channel_rev, climb_piston_FL_reed_retracted, climb_piston_FL_reed_extended);
+  rFrontPnue = new PI_Pneumatics(PCMID, climb_piston_FR_channel_fwd,  climb_piston_FR_channel_rev, climb_piston_FR_reed_retracted, climb_piston_FR_reed_extended);
+  lBackPneu = new PI_Pneumatics(PCMID, climb_piston_BL_channel_fwd, climb_piston_BL_channel_rev, climb_piston_BL_reed_retracted, climb_piston_BL_reed_extended);
+  rBackPnue = new PI_Pneumatics(PCMID, climb_piston_BR_channel_fwd, climb_piston_BR_channel_rev, climb_piston_BR_reed_retracted, climb_piston_BR_reed_extended);
+
 
   climbMotor = new C01_PI_Victor(climb_victor_CANID);
-  climbSystem = new PI_Climb(frontPneu, backPneu, climbMotor);
+  climbSystem = new PI_Climb(lFrontPneu, rFrontPnue, lBackPneu, rBackPnue, climbMotor);
 
   //grabbing system:
-  grabber = new S06_PI_Grabber(PCMID, grabber_piston_channel_fwd, grabber_piston_channel_rev, grabber_reed_retracted, grabber_reed_extended, grabber_servo_pin);
+  grabber = new S06_PI_Grabber(GRAB_PCMID, grabber_piston_channel_fwd, grabber_piston_channel_rev, grabber_reed_retracted, grabber_reed_extended, grabber_servo_pin);
   //manual:
   manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
 

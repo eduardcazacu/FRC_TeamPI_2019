@@ -72,8 +72,10 @@ private:
   S05_PI_Lift *lift;
 
   //climb system
-  PI_Pneumatics *frontPneu;
-  PI_Pneumatics *backPneu;
+  PI_Pneumatics *lFrontPneu;
+  PI_Pneumatics *rFrontPnue;
+  PI_Pneumatics *lBackPneu;
+  PI_Pneumatics *rBackPnue;
 
   PI_Climb *climbSystem;
   C01_PI_Victor *climbMotor;
