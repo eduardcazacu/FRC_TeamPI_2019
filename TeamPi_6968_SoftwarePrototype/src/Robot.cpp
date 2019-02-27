@@ -97,8 +97,8 @@ public:
 	void TeleopPeriodic() {
 
 		// drive with arcade style
-		piMovement->move(m_stick.GetY() * speedReductionFactor,
-				m_stick.GetZ() * 0.7);
+		//piMovement->move(m_stick.GetY() * speedReductionFactor,m_stick.GetZ() * 0.05);
+		piMovement->move(m_stick.GetY() * speedReductionFactor,m_stick.GetX() * 0);
 		//box intake:
 		intakeSystem();
 

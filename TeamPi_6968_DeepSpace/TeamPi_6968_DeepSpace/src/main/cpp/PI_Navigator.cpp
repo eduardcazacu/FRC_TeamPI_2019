@@ -53,3 +53,6 @@ bool PI_Navigator::lvl2Btn()
 {
     return this->gamePadPOVUp->Get();
 }
+double PI_Navigator::manualClimbDrive(){
+    return -this->ManualController->GetY(frc::GenericHID::kLeftHand);
+}

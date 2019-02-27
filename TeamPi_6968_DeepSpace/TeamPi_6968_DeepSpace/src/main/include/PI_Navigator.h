@@ -36,6 +36,7 @@ class PI_Navigator
         bool lvl0Btn();
         bool lvl1Btn();
         bool lvl2Btn();
+        double manualClimbDrive();
 
         AutoTarget target;
 
