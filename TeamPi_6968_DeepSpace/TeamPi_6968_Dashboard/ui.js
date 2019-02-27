@@ -6,7 +6,10 @@ var ui = {
 	//Xvalue: document.getElementById('X'),
 	//Yvalue: document.getElementById('Y'),
 	//Anglevalue: document.getElementById('Angle'),
-	
+	x0: 30,
+	y0: 30,
+	x1: 40,
+	y1: 40,
 
 	Tolerance: document.getElementById('Tolerance')
 };
@@ -32,6 +35,10 @@ for(var i = 0; i<5;i++){
 	DistAngle[i].oninput = function(){
 		NetworkTables.setValue('/data/PID/DistAngle/'+this.id, this.value);
 	}
+}
+
+Tolerance.oninput = function(){
+	NetworkTables.setValue('/data/PID/Tolerance'), this.val
 }
 
 
@@ -100,6 +107,19 @@ function onValueChanged(key, value, isNew) {
 			case '/data/position/r':
 				Anglevalue = value;
 				ui.Anglevalue.innerHTML = "Angle= " + Anglevalue;
+				break;
+
+			case '/data/pixy/x0':
+				  x0 = value;
+				  break;
+			case '/data/pixy/y0':
+				  y0 = value;
+				  break;
+			case '/data/pixy/x1':
+				x1 = value;
+				break;
+			case '/data/pixy/y1':
+				y1 = value;
 				break;
 	}
 	// In the real dashboard, there will be more code here to manage the Tuning section of the UI.

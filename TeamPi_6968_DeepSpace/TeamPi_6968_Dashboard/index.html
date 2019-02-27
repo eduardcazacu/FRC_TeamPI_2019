@@ -7,27 +7,9 @@
   <title>The Red Dwarf Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
-  <!--<script language="javascript" type="text/javascript" src="PlayingField.js"></script>-->
+  <script language="javascript" type="text/javascript" src="PlayingField.js"></script>
+  <script language="javascript" type="text/javascript" src="Pixy.js"></script>
 </head>
-
--200 tot 200
-16 sliders
-for 3 pid
-
-kpAngle
-kiAngle
-kdAngle
-max
-min
-
-angle
-distance
-distance angle
-
-
-
-
-slider tolorance
 
 
 
@@ -37,9 +19,13 @@ slider tolorance
 
   connected = <div id=connection></div>
 
+  <img src="http://roboRIO-6968-FRC.local:1181/?action=stream"/>
+  
   <div id='PlayingField'></div>
 
+  <div id='Pixy'></div>
   
+  <!--
   <div id="Angle PID">
     <h1>Angle</h1>
     <p>kpAngle:</p>
@@ -86,7 +72,7 @@ slider tolorance
     <h1>Tolerance</h1>
     <input type="range" min="-200" max="200" value="0" class="slider" id="Tolerance">
   </div>
-
+-->
 
   <script src="/networktables/networktables.js"></script>
   <script src="ui.js"></script>
