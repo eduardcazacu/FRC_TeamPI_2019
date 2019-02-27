@@ -18,6 +18,7 @@
 #include "Adafruit_INA219.h"
 #include "ArduinoI2C.h"
 #include "S02_PI_Input.h"
+#include "PI_Servo.h"
 
 //frc::I2C *I2CBus;
 S01_PI_Sensors *sensors;
@@ -50,6 +51,9 @@ void Robot::RobotInit()
   victorL2 =  new C01_PI_Victor(6);
   
   camera = new C03_PI_Camera();
+
+  Servo1 = new PI_Servo(0);
+
   //pixy = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
 
   //NetworkTable = new S00_PI_Network();
@@ -108,19 +112,28 @@ void Robot::AutonomousPeriodic()
   }
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() 
+{
+
+}
 
 void Robot::TeleopPeriodic()
 {
 
   //drive:
-  drivetrain->drive(input->driver->m_stick->GetY(),input->driver->m_stick->GetX());
+  //drivetrain->drive(input->driver->m_stick->GetY(),input->driver->m_stick->GetX());
   //talonR->GetTalonObject()->Set(ControlMode::PercentOutput, input->driver->m_stick->GetY());
   if (count == 50)
   {
+    Servo1->TurnClockwise();
+    servo1->AngleControle(0);
+    std::this_thread::sleep_for(1s);
+    Servo1->TurnCounterClockwise();
+    std::this_thread::sleep_for(1s);
+    Servo1->AngleControle(180);
     //execute code in here roughly once a second.
 
-    sensors->refresh();
+    //sensors->refresh();
     //pixy->Update();
     //std::cout << pixy->latestVector->x0;
     //test the Ultrasound sensors:
@@ -143,6 +156,10 @@ void Robot::TeleopPeriodic()
 
 void Robot::TestPeriodic()
 {
+//Servo1.TurnClockwise();
+//std::this_thread::sleep_for(1s);
+
+//std::this_thread::sleep_for(1s);
 }
 
 #ifndef RUNNING_FRC_TESTS

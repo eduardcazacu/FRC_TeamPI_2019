@@ -2,35 +2,40 @@
 
 PI_Servo::PI_Servo(int Channel)
 {
-    Pin = Channel;
+    _servo = new frc::Servo(Channel);
 }
 
 void PI_Servo::PositionControle(double Position)
 {
-    frc::Servo(Pin).Set(Position);
+    _servo->Set(Position);
 }
 
 void PI_Servo::AngleControle(double Angle)
 {
-    frc::Servo(Pin).SetAngle(Angle);
+    _servo->SetAngle(Angle);
 }
 
 void PI_Servo::TurnClockwise()
 {
-    frc::Servo(Pin).Set(1);
+    _servo->Set(1);
 }
 
 void PI_Servo::TurnCounterClockwise()
 {
-    frc::Servo(Pin).Set(0);
+    _servo->Set(0);
 }
 
 double PI_Servo::GetPosition()
 {
-    return frc::Servo(Pin).Get();
+    return _servo->Get();
 }
 
 double PI_Servo::GetAngle()
 {
-    return frc::Servo(Pin).GetAngle();
+    return _servo->GetAngle();
+}
+
+double PI_Servo::tester()
+{
+    return _servo->GetMaxAngle();
 }

@@ -15,15 +15,13 @@
 class PI_Pneumatics//make a class called PI_Pneumatics
 {
 private: 
-int _one;//pin one for controle
-int _two;//pin two for controle
-int _ex;//extendsion endswitch
-int _re;//retraction endswitch
+frc::DoubleSolenoid *_solenoid;
+frc::DigitalInput *_extended;
+frc::DigitalInput *_retrected;
 
 public:
-PI_Pneumatics(int one,int two, int re, int ex);
+PI_Pneumatics(int pin1,int pin2, int re, int ex);
 void OpenPiston();//difine function for fully opening the piston
 void ClosePiston();//difine function for fully closing the piston
 int PistonStatus(); // gives the status of the piston 0 is retrected 1 is extended 2 is neutral
 };
-

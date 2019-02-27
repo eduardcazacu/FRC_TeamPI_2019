@@ -1,27 +1,27 @@
 #include "PI_Pneumatics.h"//include the .h file of PI_Pneumatics
 
-PI_Pneumatics::PI_Pneumatics(int one,int two, int re, int ex) //constructore (controle pin one, controle pin two, pin for retraction endswitch, pin for extention endswitch)
+PI_Pneumatics::PI_Pneumatics(int pin1,int pin2, int re, int ex) //constructore (controle pin one, controle pin two, pin for retraction endswitch, pin for extention endswitch)
 {
-int _one = one;
-int _two = two;
-int _ex = ex;
-int _re = re;
+_solenoid = new frc::DoubleSolenoid(pin1,pin2);
+
+_extended = new frc::DigitalInput(ex);
+_retrected = new frc::DigitalInput(re);
 }
 
 void PI_Pneumatics::OpenPiston() //function to fully open a piston
 {
-    frc::DoubleSolenoid(_one,_two).Set(frc::DoubleSolenoid::Value::kForward);//comand open piston
+    _solenoid->Set(frc::DoubleSolenoid::Value::kForward);//comand open piston
 }
 
 void PI_Pneumatics::ClosePiston()//function to fully close a piston
 {
-    frc::DoubleSolenoid(_one,_two).Set(frc::DoubleSolenoid::Value::kReverse);//comand close piston
+    _solenoid->Set(frc::DoubleSolenoid::Value::kReverse);//comand close piston
 }
 
 int PI_Pneumatics::PistonStatus()// returns the current status of the piston
 {
-    if (frc::DigitalInput(_ex).Get()) return 1;
-    if (frc::DigitalInput(_re).Get()) return 0;
+    if (_extended->Get()) return 1;
+    if (_retrected->Get()) return 0;
     else return 2;
 }
 

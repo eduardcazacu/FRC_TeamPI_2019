@@ -13,7 +13,7 @@
 class PI_Servo
 {
     private:
-    int Pin;//difense the outout pin of the servo
+    frc::Servo *_servo;//difine an object
 
     public:
     PI_Servo(int Chanel);//constructor (output pin for controling the servo)
@@ -23,5 +23,7 @@ class PI_Servo
     void TurnCounterClockwise();//turn max counterclockwise
     double GetPosition();//Returns the position given with a number between 1 and 0
     double GetAngle();//Returns the angle of the servo 
+
+    double tester();
 
 };
