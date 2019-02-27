@@ -53,28 +53,42 @@ C00_PI_Talon::C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication
     /*Setting the current values for the PIDF max and minimum values*/
     this->PiTalon->ConfigNominalOutputForward(0, kTimeoutMs);
     this->PiTalon->ConfigNominalOutputReverse(0, kTimeoutMs);
-    this->PiTalon->ConfigPeakOutputForward(1, kTimeoutMs);
-    this->PiTalon->ConfigPeakOutputReverse(-1, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputForward(0.8, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputReverse(-0.5, kTimeoutMs);
 
     /*Set closed loop Gains so the Kf, Kp, Ki, Kd*/
-    this->PiTalon->Config_kF(kPIDLoopIdx, 0.0, kTimeoutMs);
-    this->PiTalon->Config_kP(kPIDLoopIdx, 0.1, kTimeoutMs);
-    this->PiTalon->Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
-    this->PiTalon->Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
+    this->PiTalon->Config_kF(kPIDLoopIdx, _kF, kTimeoutMs);
+    this->PiTalon->Config_kP(kPIDLoopIdx, _kP, kTimeoutMs);
+    this->PiTalon->Config_kI(kPIDLoopIdx, _kI, kTimeoutMs);
+    this->PiTalon->Config_kD(kPIDLoopIdx, kD, kTimeoutMs);
 
     //timer:
     this->tmr = new frc::Timer();
     tmr->Start();
 }
+void C00_PI_Talon::SetFPID(double _kP, double _kI, double _kD, double _kF, double kPIDLoopIdx, double kSlotIdx){
+    /* set the peak and nominal outputs, 1.0 means full */
+    this->PiTalon->ConfigNominalOutputForward(0, kTimeoutMs);
+    this->PiTalon->ConfigNominalOutputReverse(0, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputForward(1, kTimeoutMs);
+    this->PiTalon->ConfigPeakOutputReverse(-1, kTimeoutMs);
 
-void C00_PI_Talon::closedLoopControl(int encoderSteps)
+    /*Set closed loop Gains so the Kf, Kp, Ki, Kd*/
+    this->PiTalon->Config_kF(kPIDLoopIdx, _kF, kTimeoutMs);
+    this->PiTalon->Config_kP(kPIDLoopIdx, _kP, kTimeoutMs);
+    this->PiTalon->Config_kI(kPIDLoopIdx, _kI, kTimeoutMs);
+    this->PiTalon->Config_kD(kPIDLoopIdx, _kD, kTimeoutMs);
+    this->PiTalon->Config_IntegralZone(0, 100, kTimeoutMs);
+}
+
+void C00_PI_Talon::closedLoopControl(double encoderRevs)
 {
-    // 20A current max
-    //this->PiTalon->Set(ControlMode::Current, Vector * 20);
+    int encoderSteps =  encoderRevs;
+
     if (this->setpointEncoder != encoderSteps)
     {
         this->setpointEncoder = encoderSteps;
-        this->encoderPref = this->PiTalon->GetSelectedSensorPosition();
+        this->encoderPrev = this->PiTalon->GetSelectedSensorPosition();
     }
 
     /* Position mode - button just pressed */
@@ -86,9 +100,11 @@ void C00_PI_Talon::closedLoopControl(int encoderSteps)
     PiTalon->Set(ControlMode::Position, encoderSteps); /* 10 rotations in either direction */
 }
 
+
+
 bool C00_PI_Talon::Arrived()
 {
-    if (this->encoderPref + this->setpointEncoder <= this->PiTalon->GetSelectedSensorPosition())
+    if (this->encoderPrev + this->setpointEncoder <= this->PiTalon->GetSelectedSensorPosition())
     {
         return true;
     }
@@ -126,8 +142,11 @@ double C00_PI_Talon::GetAcceleration()
     this->acceleration = (this->talonRPM * 60 / (2 * 3.1415)) / this->DeltaT;
     return this->acceleration;
 }
+
 double C00_PI_Talon::deltaDistance()
 {
+
+    //TODO: fix multiple calls in one loop.
 	//get raw reading:
 	double magVel_UnitsPer100ms = this->PiTalon->GetSelectedSensorVelocity(0);
 	//find out how much of a rotation happens in 1ms:
@@ -150,6 +169,15 @@ void C00_PI_Talon::PIDFControl(double Target)
 }
 
 /*Jorns research maybe interesting: 
+
+For example, if you want your mechanism to drive 50% motor output when the error is
+4096, then the calculated Proportional Gain would be (0.50 X 1023) / 4096 = ~0.125.
+
+If the mechanism accelerates too abruptly, Derivative Gain can be used to smooth the
+motion. Typically start with 10x to 100x of your current Proportional Gain
+
+If the mechanism never quite reaches the target and increasing Integral Gain is viable,
+start with 1/100th of the Proportional Gain.
 
  Peak Current and Duration must be exceeded before current limit is activated.
 When activated, current will be limited to Continuous Current.
@@ -174,3 +202,22 @@ Set Peak Current params to 0 if desired behavior is to immediately current-limit
 //System.out.println("Sensor Pos:" + _talon.getSelectedSensorPosition());
 //System.out.println("Out %" + _talon.getMotorOutputPercent());
 //System.out.println("Out Of Phase:" + _faults.SensorOutOfPhase);
+
+
+/*
+ouble currentAmps = talon.GetOutputCurrent();
+double outputV = talon.GetMotorOutputVoltage();
+double busV = talon.GetBusVoltage();
+double outputPerc = talon.GetMotorOutputPercent();
+int quadPos = talon.GetSensorCollection().GetQuadraturePosition();
+int quadVel = talon.GetSensorCollection().GetQuadratureVelocity();
+int analogPos = talon.GetSensorCollection().GetAnalogIn();
+int analogVel = talon.GetSensorCollection().GetAnalogInVel();
+int selectedSensorPos = talon.GetSelectedSensorPosition(0); /* sensor selected for PID Loop 0 */
+//int selectedSensorVel = talon.GetSelectedSensorVelocity(0); /* sensor selected for PID Loop 0 */
+//int closedLoopErr = talon.GetClosedLoopError(0); /* sensor selected for PID Loop 0 */
+//double closedLoopAccum = talon.GetIntegralAccumulator(0); /* sensor selected for PID Loop 0 */
+//double derivErr = talon.GetErrorDerivative(0); /* sensor selected for PID Loop 0 */
+
+//this->PiTalon->set(controlMode::Velocity,value)
+

@@ -13,6 +13,14 @@
 #include "C00_PI_Talon.h"
 #include "C01_PI_Victor.h"
 #include <frc/drive/DifferentialDrive.h>
+#include "PiVector3.h"
+#include "frc/PIDController.h"
+#include "PI_PIDSource.h"
+#include "PI_PIDOutput.h"
+#include "S03_PI_Positioning.h"
+#include "S01_PI_Sensors.h"
+
+#define timeOutMS 10
 
 class S04_PI_Drivetrain
 {
@@ -23,8 +31,8 @@ class S04_PI_Drivetrain
             Input:          TalonL, TalonR, Victor L1, Victor L2, Victor L3, Victor R1, Victor R2, Victor R3
             output:         none
         */
-    S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2);
-
+    S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S01_PI_Sensors *_sensors);
+    S04_PI_Drivetrain(C00_PI_Talon *talonL, C01_PI_Victor *victorL1, C01_PI_Victor *victorL2, C00_PI_Talon *talonR, C01_PI_Victor *victorR1, C01_PI_Victor *victorR2, S01_PI_Sensors *_sensors, S03_PI_Positioning *robotPos);
     /*
             Description:    Differential drive.
             Input:          Y [double][-1,1] - speed
@@ -33,7 +41,45 @@ class S04_PI_Drivetrain
     */
     void drive(double speed, double rotation);
 
+    /*
+        Description:    Rotates the robot with PID to the target orientation. Makes use of positioning 
+        Input:          [PiVector3] target orientations in absolute values. e.g: you read the current position
+                        of the robot and you mak the target that value + 180 to turn around.
+                        Use Z axis for orientation.
+        output:         [bool] target reached? false for no , true for got there.
+    */
+    bool Rotate(double angle);
+
+    /*
+        Description:    Drive a certain distance. No fancy PID yet.
+        Input:          [double] distance in mm;
+        Output:         [bool] reached the target? false=  not yet.       
+    */
+    bool driveDist(double distance);
+
+    bool AimToWall();
+
+    /*
+        Descritpion:    Drive forward/backward until the robot is at a certain distance from an obstacle
+                        will assume that the robot is perfectly aligned with the object.
+        Input:          [double] Distance from object in mm;
+        output:         [bool] got there?
+    */
+    bool driveToUltrasoundDistance(bool dist);
+
+    //Ramp rate variabels
+    int rampTimeOpenLoop= 0.8;
+    int rampTimeClosedloop =0.8;
+
   private:
+
+    //pid constants:
+    const double KP_R = 0.005;
+    const double KD_R = 0.001;
+    const double KI_R = 0.001;
+    const double KF_R = 0;
+    const double errorTolerance = 1;
+
     //the differential drive used:
     frc::DifferentialDrive *_diffDrive;
 
@@ -43,4 +89,42 @@ class S04_PI_Drivetrain
     C01_PI_Victor *_victorL2;
     C01_PI_Victor *_victorR1;
     C01_PI_Victor *_victorR2;
+
+    S01_PI_Sensors *sensors;
+
+    //auto rotation:
+    bool usingPositioning;
+    bool pidRotationStarted = false;
+    S03_PI_Positioning *_robotPos;
+
+    frc::PIDController *pidRotation;
+    PI_PIDSource *input;
+    PI_PIDOutput *output;
+
+    double targetAngle;
+    int turnDirection; //which way should the robot turn. -1 =  counter clockwise
+
+    //normalize the angle to 0,359
+    double normalizeAngle(double angle);
+
+    //auto drive forward:
+    double targetDistance;
+    bool autoDriveStarted = false;
+
+    const double autoDriveSpeed = 0.2;
+
+    bool AimIndex = true;
+    double AimAngle = 0;
+
+    //drive with ultrasound:
+    bool drivingWithUltrasound;
+
+    const double kPUS = 0.1;
+    const double kIUS = 0.001;
+    const double kDUS = 1;
+    const double kFUS = 0; 
+
+    frc::PIDController *ultrasoundDrivePID;
+    PI_PIDSource *ultrasoundDistInput;
+    PI_PIDOutput *ultrasoundDistOutput;
 };

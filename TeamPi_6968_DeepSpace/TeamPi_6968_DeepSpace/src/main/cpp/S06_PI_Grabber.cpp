@@ -1,86 +1,152 @@
 #include "S06_PI_Grabber.h"
 
-S06_PI_Grabber::S06_PI_Grabber(/*pneumaticValveCanbusID, Servo*/)
+S06_PI_Grabber::S06_PI_Grabber(int moduleID, int fwdID, int revID, int retractedReedPin, int extendedReedPin, int servoPin)
 {
-    this->Cylinder;
-    //this->Servo;
+    _piston = new frc::DoubleSolenoid(moduleID, fwdID, revID);
+    _servo = new frc::Servo(servoPin);
+    _retractedReed = new frc::DigitalInput(retractedReedPin);
+    _extendedReed = new frc::DigitalInput(extendedReedPin);
+
+    motorType = 0;
 }
 
-//S06_PI_Grabber::S06_PI_Grabber(/*pneumaticValveCanbusID,*/ VictorCanbusID)
-/*{
-    this->Cylinder;
-    this->VictorDC = new C01_PI_Victor(VictorCanbusID);
-}
-*/
-/*
-void S06_PI_Grabber::ExtendGripper()
+S06_PI_Grabber::S06_PI_Grabber(int moduleID, int fwdID, int revID, int retractedReedPin, int extendedReedPin, int servoPin, int forceSensorPin)
 {
-    this->Cylinder;
-    this->CylinderPosition = 0;
+    S06_PI_Grabber(moduleID, fwdID, revID, retractedReedPin, extendedReedPin, servoPin);
+    _pressureSensor = new frc::AnalogInput(forceSensorPin);
+    usePressureSensor = 1;
+
+    motorType = 0;
 }
 
-void S06_PI_Grabber::RetectGripper()
+S06_PI_Grabber::S06_PI_Grabber(int moduleID, int fwdID, int revID, int retractedReedPin, int extendedReedPin, C01_PI_Victor *victor)
 {
-    this->Cylinder;
-    this->CylinderPosition = 1;
+    _piston = new frc::DoubleSolenoid(moduleID, fwdID, revID);
+    this->_victor = victor;
+    _retractedReed = new frc::DigitalInput(retractedReedPin);
+    _extendedReed = new frc::DigitalInput(extendedReedPin);
+
+    motorType = 1;
+}
+S06_PI_Grabber::S06_PI_Grabber(int moduleID, int fwdID, int revID, int retractedReedPin, int extendedReedPin, C01_PI_Victor *victor, int forceSensorPin)
+{
+    S06_PI_Grabber(moduleID, fwdID, revID, retractedReedPin, extendedReedPin, victor);
+
+    _pressureSensor = new frc::AnalogInput(forceSensorPin);
+    usePressureSensor = 1;
+
+    motorType = 1;
 }
 
-void S06_PI_Grabber::clamping(int _servoPosition)
+void S06_PI_Grabber::extendGripper()
 {
-    if (_servoPosition == -1)
+    _piston->Set(frc::DoubleSolenoid::Value::kForward);
+
+    pistonPos = 1;
+}
+
+void S06_PI_Grabber::retractGripper()
+{
+    _piston->Set(frc::DoubleSolenoid::Value::kReverse);
+
+    pistonPos = 0;
+}
+void S06_PI_Grabber::toggleArm()
+{
+    if (pistonPos)
     {
-        this->servo; // = this->ServoStandardClosed
-    }
-    else if (_servoPosition == -2)
-    {
-        this->servo; // = this->ServoStandartOpen;
+        //retract:
+        retractGripper();
     }
     else
     {
-        this->servo; //_servoPosition
+        extendGripper();
     }
-    this->ServoPosition = _servoPosition;
 }
 
-void S06_PI_Grabber::toggle()
+int S06_PI_Grabber::getArm()
 {
-    if (this->ServoPosition == -1)
+    if (!_retractedReed->Get())
     {
-        this->servo; // this->ServoStandartOpen;
-        this->ServoPosition = this->ServoStandartOpen;
+        return -1;
     }
-    else if (this->ServoPosition == -2)
+    else if (!_extendedReed->Get())
+        return 1;
+
+    return 0;
+}
+
+void S06_PI_Grabber::grip(double ratio)
+{
+    if (!motorType)
     {
-        this->servo; // this->ServoStandardClosed;
-        this->ServoPosition = this->ServoStandartClosed;
-    }
-    else
-    {
-        if (this->ServoPosition < this->ServoStandardOpen)
+        //in case of servo:
+        _servo->Set(ratio);
+
+        if (ratio > 0)
         {
-            this->servo; // this->ServoStandardClosed;
-            this->ServoPosition = this->ServoStandartClosed;
+            gripState = 1;
         }
         else
         {
-            this->servo; // this->ServoStandartOpen;
-            this->ServoPosition = this->ServoStandartOpen;
+            gripState = 0;
         }
+    }
+    else
+    {
+        //for dc motor:
+    }
+}
+void S06_PI_Grabber::grip()
+{
+    if (!motorType)
+    {
+        //in case of servo:
+        _servo->Set(SERVO_FULL_GRIP);
+        gripState = 1;
+    }
+    else
+    {
+        //for dc motor:
     }
 }
 
-bool S06_PI_Grabber::getGrippercylender()
+void S06_PI_Grabber::release()
 {
-    return this->CylinderPosition;
-}
-bool S06_PI_Grabber::getClampPosition()
-{
-    if (this->motorType = 0)
+    if (!motorType)
     {
-        return this->ServoPosition();
+        //in case of servo:
+        _servo->Set(SERVO_FULL_RELEASE);
+        gripState = 0;
     }
-    else{
-        return this->VictorStatus;
+    else
+    {
+        //for dc motor:
     }
 }
-*/
+
+int S06_PI_Grabber::getGripper()
+{
+    if (gripState)
+    {
+        //grabbing
+        if (_servo->Get() < 1)
+            return _servo->Get();
+        else
+            return -2;
+    }
+    else
+    {
+        //not grabbing
+        return -1;
+    }
+}
+
+bool S06_PI_Grabber::hatchSecured()
+{
+    //if no sensor pray to the gods that all is good
+    if (!usePressureSensor)
+        return false;
+
+    return _pressureSensor->GetValue() < GRAB_SENSOR_THRESHOLD;
+}

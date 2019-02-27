@@ -2,43 +2,77 @@
 
 #include "C04_PI_Pixy.h"
 
-C04_PI_Pixy::C04_PI_Pixy(frc::I2C::Port port, int address)
+C04_PI_Pixy::C04_PI_Pixy(frc::I2C::Port port, int address, uint8_t _id)
 {
   i2cBus = new ArduinoI2C(port, address);
+  id = _id;
 }
 
 void C04_PI_Pixy::Update()
 {
-  std::cout << "arduino value  ";
+  i2cBus->write(&id, 1);
+
+  //std::cout << "arduino value  ";
   uint8_t check[5];
   i2cBus->read(check, 5);
 
-  PI_Vector* newVector = new PI_Vector(check);
-  
+  PI_Vector *newVector = new PI_Vector(check);
+  //newVector->Print();
 
-  for (int i = 0; i < 5; i++)
-    std::cout << (int)check[i] << "\n";
-  std::cout << "\n";
+  AddVector(*newVector);
+  if (vectorList.size() > AMOUNTOFVECTORS)
+    vectorList.pop_back();
 
-  latestVector = newVector;
+  //std::cout << (int)LatestVector().index << "\n";
+}
 
+void C04_PI_Pixy::AddVector(PI_Vector vector)
+{
+  if (vector.NearestX() != 255 || ((vector.y0-vector.y1)<PIXY_HEIGHT/10 && (vector.y0-vector.y1)>0) || ((vector.y1-vector.y0)<PIXY_HEIGHT/10 && (vector.y1-vector.y0)>0))
+  {
 
-  if(vectorList->size() != 0){
-    for(int i = 0; i<vectorList->size(); i++){
-      if(newVector->index == vectorList->at(i).index){
-        AddVector(*newVector);
-        break;
-      }
-      if(i == (vectorList->size()-1))
-        AddVector(*newVector);
+    if (vectorList.empty())
+    {
+      vectorList.push_back(vector);
     }
-  }
-  else{
-    AddVector(*newVector);
+    else
+    {
+      for (int i = 0; i < vectorList.size(); i++)
+      {
+        if (vectorList.at(i).index == vector.index)
+        {
+          //the vector already exist
+          vector.lifeTime = vectorList.at(i).lifeTime + 1;
+          vectorList.erase(vectorList.begin() + i);
+        }
+      }
+      vectorList.insert(vectorList.begin(), vector);
+    }
   }
 }
 
-void C04_PI_Pixy::AddVector(PI_Vector vector){
-  vectorList->push_back(vector);
-  latestVector = &vector;
+PI_Vector C04_PI_Pixy::LatestVector()
+{
+  if(!vectorList.empty())
+  return vectorList.front();
+  else{
+    uint8_t test[5] = {0,0,0,0,0};
+    return PI_Vector(test);
+  }
+}
+
+PI_Vector C04_PI_Pixy::BestVector()
+{
+  PI_Vector bestVector = vectorList.at(0);
+  for (int i = 1; i < vectorList.size(); i++)
+  {
+    if (bestVector.lifeTime < vectorList.at(i).lifeTime)
+      bestVector = vectorList.at(i);
+  }
+  return bestVector;
+}
+
+bool C04_PI_Pixy::AimReady()
+{
+  return (LatestVector().lifeTime > LIFETIMETRESHHOLD);
 }

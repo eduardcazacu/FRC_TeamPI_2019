@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+  <meta charset="utf-8">
+  <title>The Red Dwarf Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  <!--<script language="javascript" type="text/javascript" src="PlayingField.js"></script>-->
+</head>
+
+-200 tot 200
+16 sliders
+for 3 pid
+
+kpAngle
+kiAngle
+kdAngle
+max
+min
+
+angle
+distance
+distance angle
+
+
+
+
+slider tolorance
+
+
+
+<body>
+
+  <H1>The ultimate Pi Dashboard</H1>
+
+  connected = <div id=connection></div>
+
+  <div id='PlayingField'></div>
+
+  
+  <div id="Angle PID">
+    <h1>Angle</h1>
+    <p>kpAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kpAngle">
+    <p>kiAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kiAngle">
+    <p>kdAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kdAngle">
+    <p>min:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="min">
+    <p>max:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="max">
+  </div>
+
+  <div id="Distance">
+    <h1>Distance </h1>
+    <p>kpAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kpDistance">
+    <p>kiAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kiDistance">
+    <p>kdAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kdDistance">
+    <p>min:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="minDistance">
+    <p>max:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="maxDistance">
+  </div>
+
+  <div id="Distance Angle">
+    <h1>Distance Angle</h1>
+    <p>kpAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kpDistAngle">
+    <p>kiAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kiDistAngle">
+    <p>kdAngle:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="kdDistAngle">
+    <p>min:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="minDistAngle">
+    <p>max:</p>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="maxDistAngle">
+  </div>
+
+  <div id="Tolerance">
+    <h1>Tolerance</h1>
+    <input type="range" min="-200" max="200" value="0" class="slider" id="Tolerance">
+  </div>
+
+
+  <script src="/networktables/networktables.js"></script>
+  <script src="ui.js"></script>
+
+</body>
+
+</html>

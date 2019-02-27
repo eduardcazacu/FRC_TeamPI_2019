@@ -58,7 +58,7 @@ void Adafruit_INA219::wireWriteRegister(uint8_t reg, uint16_t value)
     uint8_t received[2];
     this->_i2c->Transaction(data, 3, received, 2);
     //debug:
-    std::cout << std::hex << ((received[0] << 8) | received[1]) << '\n';
+    //std::cout << std::hex << ((received[0] << 8) | received[1]) << '\n';
 }
 
 /**************************************************************************/

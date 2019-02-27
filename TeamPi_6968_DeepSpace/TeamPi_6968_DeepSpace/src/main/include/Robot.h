@@ -15,19 +15,20 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 //our libraries:
-#include "S01_PI_Sensors.h"
-#include "Adafruit_INA219.h"
+#include "PI_Pins.h"
 #include "ArduinoI2C.h"
 #include "S02_PI_Input.h"
-#include "C01_PI_Victor.h"
-#include "C00_PI_Talon.h"
-#include "S04_PI_Drivetrain.h"
 #include "C03_PI_Camera.h"
+#include "S05_PI_Lift.h"
+#include "M00_PI_Manual.h"
+#include "S01_PI_Sensors.h"
+#include "S02_PI_Input.h"
+#include "M01_PI_Auto.h"
 #include "S00_PI_Network.h"
-#include "C04_PI_Pixy.h"
 
-class Robot : public frc::TimedRobot {
- public:
+class Robot : public frc::TimedRobot
+{
+public:
   void RobotInit() override;
   void RobotPeriodic() override;
   void AutonomousInit() override;
@@ -36,37 +37,72 @@ class Robot : public frc::TimedRobot {
   void TeleopPeriodic() override;
   void TestPeriodic() override;
 
- private:
+private:
   frc::SendableChooser<std::string> m_chooser;
   const std::string kAutoNameDefault = "Default";
   const std::string kAutoNameCustom = "My Auto";
   std::string m_autoSelected;
 
-
-  //frc::I2C *I2CBus;
-  S01_PI_Sensors *sensors;
-  
-  //motors:
-  C00_PI_Talon* talonL;
-  C00_PI_Talon* talonR;
-  C01_PI_Victor* victorL1;
-  C01_PI_Victor* victorL2;
-  C01_PI_Victor* victorR1;
-  C01_PI_Victor* victorR2;
+  //networking
+  S00_PI_Network *network;
 
   //drivetrain:
+  //motors:
+  C00_PI_Talon *talonL;
+  C00_PI_Talon *talonR;
+  C01_PI_Victor *victorL1;
+  C01_PI_Victor *victorL2;
+  C01_PI_Victor *victorR1;
+  C01_PI_Victor *victorR2;
+
   S04_PI_Drivetrain *drivetrain;
 
-  //camera
-  C03_PI_Camera* camera;
+  S01_PI_Sensors *sensors;
 
-  //S00_PI_Network* NetworkTable;
+  //manual:
+  M00_PI_Manual *manual;
+
+  //camera
+  C03_PI_Camera *camera;
 
   //input:
   S02_PI_Input *input;
-  //PI_Pixy *pixy;
+
+  //lift:
+  S05_PI_Lift *lift;
+
+  //climb system
+  PI_Pneumatics *lFrontPneu;
+  PI_Pneumatics *rFrontPnue;
+  PI_Pneumatics *lBackPneu;
+  PI_Pneumatics *rBackPnue;
+
+  PI_Climb *climbSystem;
+  C01_PI_Victor *climbMotor;
+
+  //grabber:
+  S06_PI_Grabber *grabber;
+
+  //positioning:
+  S03_PI_Positioning *positioning;
+
+  //auto functions:
+  M01_PI_Auto *autoFunctions;
+
+  S09_PI_Aim *aiming;
+  //status using leds:
+  /*
+  Protocol: 
+
   
+<<<<<<< HEAD
   //servo
   PI_Servo *Servo1; 
+=======
+  */
+  ArduinoI2C *ledArduino;
+  uint8_t *ledData = new uint8_t(0);
+>>>>>>> 91d8fd2a66004bb59f268df6619a2b4436bab4e7
 
+  void readUserInput();
 };

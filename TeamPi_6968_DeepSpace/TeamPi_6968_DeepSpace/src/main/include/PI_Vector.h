@@ -13,14 +13,16 @@ class PI_Vector{
     double Dir();
     double Height();
 
+    
+
+    public:
     uint8_t x0;
     uint8_t x1;
     uint8_t y0;
     uint8_t y1;
 
-    public:
-
     uint8_t index;
+    unsigned int lifeTime = 0;
 
     //creates the vectors from an array what it gets from the arduino
     PI_Vector(uint8_t info[5]);
@@ -33,8 +35,13 @@ class PI_Vector{
     double Angle(); //angle in radians between -PI/2 and PI/2
     double Length(); //pixel length
 
+    double NearestX();
+    double NearestY();
+
     //parallel gives -1 back
     double IntersectX(PI_Vector vector2);
     double IntersectY(PI_Vector vector2);
+
+    void Print();
 
 };

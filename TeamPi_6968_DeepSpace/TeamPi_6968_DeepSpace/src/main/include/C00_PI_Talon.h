@@ -28,7 +28,7 @@ class C00_PI_Talon
     /*the variables*/
     double totalDistance, speed, acceleration;
     double calibrationMultiplication, rotateRadius, talonRPM, MotorCurrent;
-    int setpointEncoder, encoderPref;
+    int setpointEncoder, encoderPrev;
     uint64_t PrefTime = 0;
     uint64_t DeltaT; // time in ms
     WPI_TalonSRX *PiTalon;
@@ -51,8 +51,8 @@ class C00_PI_Talon
     C00_PI_Talon(int CanBusDeviceID, double _CalibrationMultiplication, double radius, double _kP, double _kI, double kD, double _kF, double kPIDLoopIdx = 0, double kSlotIdx = 0);
 
     /*
-            Description:     This method sets the amount of encoder steps to take by the talon it self
-            parameters:     Setpoint amount of encoder steps to take 1 full rotation = 4096
+            Description:    The RPM of the motor
+            parameters:     none
             Return:         RPM
 
         */
@@ -64,7 +64,8 @@ class C00_PI_Talon
         output:         True if reached, false if not reached.
        */
     bool Arrived();
-    void closedLoopControl(int encoderSteps);
+
+    void closedLoopControl(double encoderRevs);
 
     /*
         Returns talon object for wpiLip manipulations
@@ -84,6 +85,7 @@ class C00_PI_Talon
         Output          [double] distance since last call
     */
     double deltaDistance();
+    void SetFPID(double _kP, double _kI, double _kD, double _kF, double kPIDLoopIdx = 0, double kSlotIdx = 0);
 
     // double getMotorCurrent();
 
