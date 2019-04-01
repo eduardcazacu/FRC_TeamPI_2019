@@ -6,12 +6,15 @@ var ui = {
 	//Xvalue: document.getElementById('X'),
 	//Yvalue: document.getElementById('Y'),
 	//Anglevalue: document.getElementById('Angle'),
-	
+	x0: 30,
+	y0: 30,
+	x1: 40,
+	y1: 40,
 
 	Tolerance: document.getElementById('Tolerance')
 };
 
-	Angle = document.getElementById("Angle PID").querySelectorAll(".slider"),
+	/*Angle = document.getElementById("Angle PID").querySelectorAll(".slider"),
 	Distance = document.getElementById("Distance").querySelectorAll(".slider"),
 	DistAngle = document.getElementById("Distance Angle").querySelectorAll(".slider")
 
@@ -33,6 +36,10 @@ for(var i = 0; i<5;i++){
 		NetworkTables.setValue('/data/PID/DistAngle/'+this.id, this.value);
 	}
 }
+
+Tolerance.oninput = function(){
+	NetworkTables.setValue('/data/PID/Tolerance'), this.val
+}*/
 
 
 var Xvalue = 0;
@@ -87,7 +94,8 @@ function onValueChanged(key, value, isNew) {
           }
           */
           // As you can see, it's better if you do it this short way. For more help, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
-          //break;
+		  //break;
+		  /*
 			case '/data/position/x':
 				Xvalue = value;
 				ui.Xvalue.innerHTML = "X= " + Xvalue;
@@ -100,6 +108,19 @@ function onValueChanged(key, value, isNew) {
 			case '/data/position/r':
 				Anglevalue = value;
 				ui.Anglevalue.innerHTML = "Angle= " + Anglevalue;
+				break;*/
+
+			case '/data/pixy/x0':
+				  ui.x0 = value;
+				  break;
+			case '/data/pixy/y0':
+				  ui.y0 = value;
+				  break;
+			case '/data/pixy/x1':
+				ui.x1 = value;
+				break;
+			case '/data/pixy/y1':
+				ui.y1 = value;
 				break;
 	}
 	// In the real dashboard, there will be more code here to manage the Tuning section of the UI.

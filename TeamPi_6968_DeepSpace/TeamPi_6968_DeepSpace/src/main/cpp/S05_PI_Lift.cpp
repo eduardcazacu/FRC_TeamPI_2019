@@ -14,9 +14,11 @@ S05_PI_Lift::S05_PI_Lift(uint8_t talonCAN, uint8_t limitSwitchID)
     winch->GetTalonObject()->SetSelectedSensorPosition(0, 0, 0);
     oldValue = new double();
     *oldValue = limitSwitch->Get();
+    liftOff = new bool();
+    *liftOff = true;
 
     //set current limit to prevent burning (again)
-    winch->GetTalonObject()->ConfigPeakCurrentLimit(25, 10);       
+    winch->GetTalonObject()->ConfigPeakCurrentLimit(30, 10);       
     winch->GetTalonObject()->ConfigPeakCurrentDuration(200, 10);   
     winch->GetTalonObject()->ConfigContinuousCurrentLimit(18, 10);
     winch->GetTalonObject()->EnableCurrentLimit(true);            
@@ -24,6 +26,11 @@ S05_PI_Lift::S05_PI_Lift(uint8_t talonCAN, uint8_t limitSwitchID)
 
 void S05_PI_Lift::goTo(double pos)
 {
+    /*if(*liftOff){
+        std::cout<<"calibrated is false \n";
+        this->reset();
+        return;
+    }*/
     winch->closedLoopControl(pos);
     //save the current position:
 
@@ -61,6 +68,7 @@ bool S05_PI_Lift::reset()
         winch->GetTalonObject()->SetSelectedSensorPosition(0, 0, 0);
         //stay there:
         *_pos = 0;
+        *liftOff = false;
         goTo(0);
         return true;
     }
@@ -78,6 +86,9 @@ bool S05_PI_Lift::reset()
     }
 
     *oldValue = currentValue;
+
+
+
     /*
     if (!limitSwitch->Get())
     {
@@ -101,7 +112,7 @@ bool S05_PI_Lift::reset()
 void S05_PI_Lift::adjustPos(double value)
 {
     if ((*_pos + value >= liftMin) && (*_pos + value) <= liftMax)
-        goTo(*_pos + value * 10);
+        goTo(*_pos + value * 20);
 }
 
 C00_PI_Talon *S05_PI_Lift::GetTalonObject()
@@ -111,6 +122,7 @@ C00_PI_Talon *S05_PI_Lift::GetTalonObject()
 
 bool S05_PI_Lift::TurnOff()
 {
+    *liftOff = true;
     //disable the PID control and let the lift drop to gravity.
     winch->GetTalonObject()->Set(ControlMode::PercentOutput, 0);
 

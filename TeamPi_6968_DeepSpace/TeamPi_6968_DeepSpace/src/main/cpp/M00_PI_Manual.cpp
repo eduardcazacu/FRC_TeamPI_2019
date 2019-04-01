@@ -32,13 +32,13 @@ void M00_PI_Manual::driving()
 
 void M00_PI_Manual::functions()
 {
-
+    
     /*if(!*calibrated){
         std::cout<<"calibrated is false \n";
         *calibrated = _lift->reset();
         return;
-    }
-*/
+    }*/
+
     //lift:
     //read buttons. set lift target to that:
     // /if(_input->navigator->)
@@ -79,6 +79,10 @@ void M00_PI_Manual::functions()
     else if (_input->driver->climbBackDownBtn->Get())
     {
         _climbSystem->retractBack();
+    }
+
+    if(_input->navigator->manualClimbDrive()){
+        _climbSystem->drive(_input->navigator->manualClimbDrive());
     }
 
     //grabber:

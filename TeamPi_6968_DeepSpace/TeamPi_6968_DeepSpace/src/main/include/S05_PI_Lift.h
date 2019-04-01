@@ -73,9 +73,10 @@ class S05_PI_Lift
     bool TurnOff();//in progress
 
     C00_PI_Talon *GetTalonObject();
+    frc::DigitalInput *limitSwitch;
 
   private:
-    bool verbose = true;
+    bool verbose = false;
 
     const double kp = 2; // p gain ~0.10*halfrotation/900
     const double kf = 0;     // based on system 
@@ -89,12 +90,13 @@ class S05_PI_Lift
     const double liftMax = 30000;
     const double liftMin = 0;
 
-    const double resetIncrement = 5;
+    const double resetIncrement = 20;
 
+    bool *liftOff;
     double *oldValue;
 
     //the speed controller + encoder for the winch.
     C00_PI_Talon *winch;
     double *_pos; //the current position of the robot.
-    frc::DigitalInput *limitSwitch;
+    
 };

@@ -13,16 +13,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "frc/DigitalInput.h"
 
-<<<<<<< HEAD
-//our libraries:
-#include "S01_PI_Sensors.h"
-#include "Adafruit_INA219.h"
-#include "ArduinoI2C.h"
-#include "S02_PI_Input.h"
-#include "PI_Servo.h"
-=======
 //frc::I2C *I2CBus
->>>>>>> 91d8fd2a66004bb59f268df6619a2b4436bab4e7
 
 int networkTest = 0;
 int networkTestID;
@@ -53,32 +44,22 @@ void Robot::RobotInit()
   positioning = new S03_PI_Positioning(network, talonL, talonR);
 
   
-<<<<<<< HEAD
-  camera = new C03_PI_Camera();
-
-  Servo1 = new PI_Servo(0);
-
-  //pixy = new PI_Pixy(frc::I2C::Port::kOnboard, 8);
-=======
   //sensors:
   sensors = new S01_PI_Sensors(); //check the cpp file for sensor definitions
 
   //setup the drivetrain:
   drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2, sensors, positioning);
->>>>>>> 91d8fd2a66004bb59f268df6619a2b4436bab4e7
 
   //NetworkTable = new S00_PI_Network();
   lift = new S05_PI_Lift(7, liftLimitSwitchId); //create a lift using the talon on CAN 7
 
   //climb system:
-  lFrontPneu = new PI_Pneumatics(PCMID, climb_piston_FL_channel_fwd, climb_piston_FL_channel_rev, climb_piston_FL_reed_retracted, climb_piston_FL_reed_extended);
-  rFrontPnue = new PI_Pneumatics(PCMID, climb_piston_FR_channel_fwd,  climb_piston_FR_channel_rev, climb_piston_FR_reed_retracted, climb_piston_FR_reed_extended);
-  lBackPneu = new PI_Pneumatics(PCMID, climb_piston_BL_channel_fwd, climb_piston_BL_channel_rev, climb_piston_BL_reed_retracted, climb_piston_BL_reed_extended);
-  rBackPnue = new PI_Pneumatics(PCMID, climb_piston_BR_channel_fwd, climb_piston_BR_channel_rev, climb_piston_BR_reed_retracted, climb_piston_BR_reed_extended);
-
+  FrontPneu = new PI_Pneumatics(PCMID, climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
+  BackPneu = new PI_Pneumatics(PCMID, climb_piston_B_channel_fwd, climb_piston_B_channel_rev, climb_piston_B_reed_retracted, climb_piston_B_reed_extended);
+ 
 
   climbMotor = new C01_PI_Victor(climb_victor_CANID);
-  climbSystem = new PI_Climb(lFrontPneu, rFrontPnue, lBackPneu, rBackPnue, climbMotor);
+  climbSystem = new PI_Climb(FrontPneu, BackPneu, climbMotor);
 
   //grabbing system:
   grabber = new S06_PI_Grabber(GRAB_PCMID, grabber_piston_channel_fwd, grabber_piston_channel_rev, grabber_reed_retracted, grabber_reed_extended, grabber_servo_pin);
@@ -152,44 +133,17 @@ void Robot::TeleopPeriodic()
   else
   {
     //reset auto functions here:
-    autoFunctions->reset();
+    //autoFunctions->reset();
   }
-<<<<<<< HEAD
-}
-
-void Robot::TeleopInit() 
-{
-
-}
-=======
->>>>>>> 91d8fd2a66004bb59f268df6619a2b4436bab4e7
 
   //positioning update:
   positioning->refresh();
 
-<<<<<<< HEAD
-  //drive:
-  //drivetrain->drive(input->driver->m_stick->GetY(),input->driver->m_stick->GetX());
-  //talonR->GetTalonObject()->Set(ControlMode::PercentOutput, input->driver->m_stick->GetY());
-  if (count == 50)
-  {
-    Servo1->TurnClockwise();
-    servo1->AngleControle(0);
-    std::this_thread::sleep_for(1s);
-    Servo1->TurnCounterClockwise();
-    std::this_thread::sleep_for(1s);
-    Servo1->AngleControle(180);
-    //execute code in here roughly once a second.
-
-    //sensors->refresh();
-    //pixy->Update();
-    //std::cout << pixy->latestVector->x0;
-=======
   //for testing:
   if (count == 50)
   {
-    std::cout<<"Pixy X: "<<sensors->PixyDown->LatestVector().NearestX()<<"\n";
-    std::cout<<"Pixy Y: "<<sensors->PixyDown->LatestVector().NearestY()<<"\n \n";
+    //std::cout<<"Pixy X: "<<sensors->PixyDown->LatestVector().NearestX()<<"\n";
+    //std::cout<<"Pixy Y: "<<sensors->PixyDown->LatestVector().NearestY()<<"\n \n";
 
     if (autoFunctions->on)
     {
@@ -200,10 +154,9 @@ void Robot::TeleopInit()
     networkTest++;
     //execute code in here roughly once a second.
 
->>>>>>> 91d8fd2a66004bb59f268df6619a2b4436bab4e7
     //test the Ultrasound sensors:
-    //std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
-    //std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
+    std::cout << "Distance L: " << sensors->USLeft->getDist() << '\n';
+    std::cout << "Distance R: " << sensors->USRight->getDist() << '\n';
 
     //std::cout << "current coordinates: x:" << positioning->Get()->position->x << " y:" << positioning->Get()->position->y << '\n';
     //std::cout << "current orientation: " << positioning->Get()->rotation->z << '\n';
@@ -236,10 +189,7 @@ void Robot::readUserInput()
 
 void Robot::TestPeriodic()
 {
-//Servo1.TurnClockwise();
-//std::this_thread::sleep_for(1s);
-
-//std::this_thread::sleep_for(1s);
+  std::cout<<lift->limitSwitch->Get()<<"\n";
 }
 
 #ifndef RUNNING_FRC_TESTS

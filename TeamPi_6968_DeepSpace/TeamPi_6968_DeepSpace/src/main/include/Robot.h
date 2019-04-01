@@ -72,10 +72,8 @@ private:
   S05_PI_Lift *lift;
 
   //climb system
-  PI_Pneumatics *lFrontPneu;
-  PI_Pneumatics *rFrontPnue;
-  PI_Pneumatics *lBackPneu;
-  PI_Pneumatics *rBackPnue;
+  PI_Pneumatics *FrontPneu;
+  PI_Pneumatics *BackPneu;
 
   PI_Climb *climbSystem;
   C01_PI_Victor *climbMotor;
@@ -95,14 +93,9 @@ private:
   Protocol: 
 
   
-<<<<<<< HEAD
-  //servo
-  PI_Servo *Servo1; 
-=======
   */
   ArduinoI2C *ledArduino;
   uint8_t *ledData = new uint8_t(0);
->>>>>>> 91d8fd2a66004bb59f268df6619a2b4436bab4e7
 
   void readUserInput();
 };

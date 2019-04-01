@@ -1,11 +1,9 @@
 #include "PI_Climb.h"
 
-PI_Climb::PI_Climb(PI_Pneumatics *LFront, PI_Pneumatics *RFront, PI_Pneumatics *LBack, PI_Pneumatics *RBack, C01_PI_Victor *motorDriver)
+PI_Climb::PI_Climb(PI_Pneumatics *Front,  PI_Pneumatics *Back, C01_PI_Victor *motorDriver)
 {
-    _LFront = LFront;
-    _RFront = RFront;
-    _LBack = LBack;
-    _RBack = RBack;
+    _Front = Front;
+    _Back = Back;
 
     _motorDriver = motorDriver;
 
@@ -15,22 +13,18 @@ PI_Climb::PI_Climb(PI_Pneumatics *LFront, PI_Pneumatics *RFront, PI_Pneumatics *
 
 void PI_Climb::extendAll()
 {
-    _LFront->OpenPiston();
-    _RFront->OpenPiston();
-    _LBack->OpenPiston();
-    _RBack->OpenPiston();
+    _Front->OpenPiston();
+    _Back->OpenPiston();
 }
 
 void PI_Climb::extendFront()
 {
-    _LFront->OpenPiston();
-    _RFront->OpenPiston();
+    _Front->OpenPiston();
 }
 
 void PI_Climb::extendBack()
 {
-    _LBack->OpenPiston();
-    _RBack->OpenPiston();
+    _Back->OpenPiston();
 }
 
 void PI_Climb::retractAll()
@@ -41,14 +35,12 @@ void PI_Climb::retractAll()
 
 void PI_Climb::retractFront()
 {
-    _LFront->ClosePiston();
-    _RFront->ClosePiston();
+    _Front->ClosePiston();
 }
 
 void PI_Climb::retractBack()
 {
-    _LBack->ClosePiston();
-    _RBack->ClosePiston();
+    _Back->ClosePiston();
 }
 
 int PI_Climb::getAll()
@@ -63,12 +55,12 @@ int PI_Climb::getAll()
 
 int PI_Climb::getBack()
 {
-    return _LBack->PistonStatus();
+    return _Back->PistonStatus();
 }
 
 int PI_Climb::getFront()
 {
-    return _LFront->PistonStatus();
+    return _Front->PistonStatus();
 }
 
 void PI_Climb::drive(double speed)
