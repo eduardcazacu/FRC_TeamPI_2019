@@ -94,7 +94,7 @@ void Robot::AutonomousInit()
 }
 void Robot::AutonomousPeriodic()
 {
-
+climbSystem->extendFront;
 }
 void Robot::TeleopInit()
 {
