@@ -94,7 +94,7 @@ void Robot::AutonomousInit()
 }
 void Robot::AutonomousPeriodic()
 {
-  FrontPneu.
+
 }
 void Robot::TeleopInit()
 {
