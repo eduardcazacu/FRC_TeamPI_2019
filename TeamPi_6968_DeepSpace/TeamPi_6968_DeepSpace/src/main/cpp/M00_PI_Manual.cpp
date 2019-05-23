@@ -1,5 +1,8 @@
 #include "M00_PI_Manual.h"
 #include <iostream>
+
+float speedLimit = 0.75;
+
 M00_PI_Manual::M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input, S05_PI_Lift *lift, PI_Climb *climbSystem, S06_PI_Grabber *grabber, bool verbose)
 {
 
@@ -21,7 +24,7 @@ void M00_PI_Manual::init(){
 void M00_PI_Manual::driving()
 {
     //drive:
-    _drivetrain->drive(-_input->driver->m_stick->GetY(), _input->driver->m_stick->GetZ()*turnSpeedMultiplier);
+    _drivetrain->drive(-_input->driver->m_stick->GetY() *speedLimit, _input->driver->m_stick->GetZ()*turnSpeedMultiplier);
     double throttle = _input->driver->m_stick->GetThrottle();
     throttle = map(throttle,1,-1,minimumAcceleration,maxAcceleration);
     

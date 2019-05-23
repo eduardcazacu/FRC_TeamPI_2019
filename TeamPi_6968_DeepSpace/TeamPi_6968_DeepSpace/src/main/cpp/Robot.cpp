@@ -55,8 +55,8 @@ void Robot::RobotInit()
   lift = new S05_PI_Lift(7, liftLimitSwitchId); //create a lift using the talon on CAN 7
 
   //climb system:
-  FrontPneu = new PI_Pneumatics(PCMID, climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
-  BackPneu = new PI_Pneumatics(PCMID, climb_piston_B_channel_fwd, climb_piston_B_channel_rev, climb_piston_B_reed_retracted, climb_piston_B_reed_extended);
+  FrontPneu = new PI_Pneumatics(climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
+  BackPneu = new PI_Pneumatics(climb_piston_B_channel_fwd, climb_piston_B_channel_rev, climb_piston_B_reed_retracted, climb_piston_B_reed_extended);
  
 
   climbMotor = new C01_PI_Victor(climb_victor_CANID);
@@ -94,6 +94,7 @@ void Robot::AutonomousInit()
 }
 void Robot::AutonomousPeriodic()
 {
+climbSystem->extendFront;
 }
 void Robot::TeleopInit()
 {
