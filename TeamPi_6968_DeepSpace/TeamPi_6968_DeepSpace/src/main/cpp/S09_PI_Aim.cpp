@@ -19,6 +19,22 @@ S09_PI_Aim::S09_PI_Aim(double _maxSpeedPercentage, S04_PI_Drivetrain *drivetrain
     PIDDistanceAngle->Disable();
 }
 
+bool S09_PI_AIM::SimpleAim(double error, double turnRate, double currentDistance, double maxDistance, double speed){
+
+    double distance = maxDistance-currentDistance;
+    double driveSpeed = distance * speed;
+
+    if (distance < 1){
+        return true;
+    }
+
+    double driveAngle = error*turnRate;
+
+    drivetrain->drive(driveSpeed, driveAngle);
+
+    return false;
+}
+
 bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
 {
     // _angle = angle-90; // convert the  the pixy angle in the angle usefull for the aiming class
@@ -99,6 +115,7 @@ bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
 
     return false;
 }
+
 void S09_PI_Aim::changePID()
 {
 }

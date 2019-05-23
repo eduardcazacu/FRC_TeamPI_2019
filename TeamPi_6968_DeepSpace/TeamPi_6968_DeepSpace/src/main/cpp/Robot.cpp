@@ -106,7 +106,6 @@ void Robot::TeleopInit()
 
 void Robot::TeleopPeriodic()
 {
-
   sensors->refresh();
   //std::cout << "\nPIXY: " << sensors->PixyDown->BestVector().NearestY() << "\n \n";
   //std::cout<<"winch pos: "<<lift->GetTalonObject()->GetTalonObject()->GetSelectedSensorPosition()<<'\n';
