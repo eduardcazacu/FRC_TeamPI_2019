@@ -84,7 +84,9 @@
     "iomanip": "cpp",
     "stack": "cpp",
     "xlocmon": "cpp",
-    "xloctime": "cpp"
+    "xloctime": "cpp",
+    "bitset": "cpp",
+    "numeric": "cpp"
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib"
 }

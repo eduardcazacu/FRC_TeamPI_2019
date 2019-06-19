@@ -30,7 +30,7 @@ public:
   /*
         Description:    Constructor.
     */
-  M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input, S05_PI_Lift *lift, PI_Climb *climbSystem, S06_PI_Grabber *grabber, bool verbose = 0);
+  M00_PI_Manual(S04_PI_Drivetrain *drivetrain, S02_PI_Input *input, S05_PI_Lift *lift, /*PI_Climb *climbSystem,*/ S06_PI_Grabber *grabber, bool verbose = 0);
 
   void init();
   void driving();

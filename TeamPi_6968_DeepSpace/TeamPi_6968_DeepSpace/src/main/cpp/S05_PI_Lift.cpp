@@ -19,7 +19,7 @@ S05_PI_Lift::S05_PI_Lift(uint8_t talonCAN, uint8_t limitSwitchID)
 
     //set current limit to prevent burning (again)
     winch->GetTalonObject()->ConfigPeakCurrentLimit(30, 10);       
-    winch->GetTalonObject()->ConfigPeakCurrentDuration(200, 10);   
+    winch->GetTalonObject()->ConfigPeakCurrentDuration(1000, 10);   
     winch->GetTalonObject()->ConfigContinuousCurrentLimit(18, 10);
     winch->GetTalonObject()->EnableCurrentLimit(true);            
 }
