@@ -314,7 +314,7 @@ bool M01_PI_Auto::autoAim()
        unit8_t info[2] = _pixy->GetBlocks();
        uint8_t x = info[0];
        uint8_t surface = info[1];
-       if (_aiming->SimpleAim(x,5,surface,100,10))
+       if (_aiming->SimpleAim(x,surface,_drivetrain))
         {
             //done
             autoAimDone = true;

@@ -9,6 +9,7 @@ C04_PI_Pixy::C04_PI_Pixy(frc::I2C::Port port, int address)
 
 
 uint8_t * C04_PI_Pixy::GetBlocks(){
+  //x value and surface
   static uint8_t check[2];
   i2cBus->read(check,2);
   return check;

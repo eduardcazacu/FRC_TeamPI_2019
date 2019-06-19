@@ -98,7 +98,7 @@ class S09_PI_Aim
        Input:       
         Return:     Is completed? true for there, false for not there yet.
     */
-    bool SimpleAim(double error, double turnRate, double currentDistance, double maxDistance, double speed);
+    bool SimpleAim(double angelError,double currentDistance, S04_PI_Drivetrain *drivetrain);
 
 
     /*

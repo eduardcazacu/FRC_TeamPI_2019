@@ -31,7 +31,7 @@
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
 #include "PiPathfinding.h"
-#include "C04_PI_Pixy.h"
+#include "PiAim.h"
 
 
 class Robot: public frc::IterativeRobot {
@@ -81,6 +81,8 @@ public:
     PiTransform *autoTarget3 = new PiTransform(PiVector3(0, 3000, 0),
                    PiVector3(0, 0, 0));
 
+	PiAim *aiming = new PiAim(piMovement, pixy);
+
 	int nOfTargets = 2;
 	int currentTarget = 0;
 
@@ -107,15 +109,15 @@ public:
 		else{
 			piMovement->move(m_stick.GetY() * speedReductionFactor, m_stick.GetX());
 		}*/
-
-		piMovement->move(m_stick.GetY() /* -1* (m_stick.GetThrottle()*2-1)/3*/, m_stick.GetX());
+		//std::cout<< m_stick.GetZ()<<'\n';
+		piMovement->move(m_stick.GetY()*abs(m_stick.GetY())*2 /* -1* (m_stick.GetThrottle()*2-1)/3*/, m_stick.GetZ());
 		//box intake:
 		intakeSystem();
 
 		// utlrasonic sensor stuf
 			//double c = Ultra1->UltrasoonMasurment(1, 1);
 			//std::cout << "This is the distance in front of ultra1: " << c << std::endl;
-		std::cout<<"Object: "<<Ultra1->UltrasoonObject(10)<<std::endl;
+		//std::cout<<"Object: "<<Ultra1->UltrasoonObject(10)<<std::endl;
 		positioningStuff();
 	}
 
@@ -155,9 +157,10 @@ public:
 	}
 
 	void AutonomousPeriodic() {
-
-		double maxDistance = 150;
-		double speed = 1;
+		/*
+		double stopDistance = 16;
+		double fullSpeedDistance = 60;
+		double speed = 0.1;
 		double turnRate = 0.7;
 
 		uint8_t *info = pixy->GetBlocks();
@@ -165,22 +168,27 @@ public:
 		double error = info[0];
 		//std::cout<<error<<std::endl;
 		double currentDistance = info[1];
-		//std::cout<<currentDistance<<std::endl;
+		std::cout<<currentDistance<<"      ";
 
-		double distance = maxDistance-currentDistance;
+		//double distance = stopDistance-currentDistance;
 		//std::cout<<distance<<std::endl;
-		double drivespeed = (distance/200-40) * speed;
-		//std::cout<<drivespeed<<std::endl;
+		//double drivespeed = (distance/200-40) * speed;
+		
+		double drivespeed = (currentDistance - fullSpeedDistance) / (stopDistance - fullSpeedDistance);
+		//(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+		std::cout<<drivespeed<<std::endl;
 
 
 		/*if (distance > 125){
 			drivespeed = 0;
-		}*/
+		}*//*
 
 		double driveAngle = (error*0.0077-1.1538)*turnRate;
-		std::cout<<driveAngle<<std::endl;
+		//std::cout<<drivespeed<<std::endl;
 		piMovement->move(-drivespeed,driveAngle);
-
+	*/
+		//aiming->EasyAim();
+		
 	}
 	
 	void RobotInit() {
@@ -220,10 +228,10 @@ public:
 
 		if (buttonValue == true) {
 			armState = !armState;
-
+	
 			//only do this once:
 			if (lastButtonValue == false) {
-				std::cout << "The state of the arms is" << armState;
+				//std::cout << "The state of the arms is" << armState;
 				if (armState) {
 					//if 1, then open:
 					power->openPistons();
@@ -237,8 +245,8 @@ public:
 		} else {
 			lastButtonValue = false;
 		}
-		std::cout << "OpenPiston: " << dashboard->OpenPiston.GetValue()
-				<< std::endl;
+		//std::cout << "OpenPiston: " << dashboard->OpenPiston.GetValue()
+				//<< std::endl;
 		/*
 		if (dashboard->OpenPiston.GetValue()) {
 			armState = !armState;
