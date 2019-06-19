@@ -19,10 +19,15 @@ int networkTest = 0;
 int networkTestID;
 
 int count = 0;
+
+frc::Compressor *compressor = new Compressor(0);
 //Mihail here
 
 void Robot::RobotInit()
 {
+
+  std::cout<<"Robot init starting \n";
+
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
@@ -52,20 +57,22 @@ void Robot::RobotInit()
   drivetrain = new S04_PI_Drivetrain(talonL, victorL1, victorL2, talonR, victorR1, victorR2, sensors, positioning);
 
   //NetworkTable = new S00_PI_Network();
+  
   lift = new S05_PI_Lift(7, liftLimitSwitchId); //create a lift using the talon on CAN 7
-
+  
   //climb system:
-  FrontPneu = new PI_Pneumatics(climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
-  BackPneu = new PI_Pneumatics(climb_piston_B_channel_fwd, climb_piston_B_channel_rev, climb_piston_B_reed_retracted, climb_piston_B_reed_extended);
+  //FrontPneu = new PI_Pneumatics(climb_piston_F_channel_fwd, climb_piston_F_channel_rev, climb_piston_F_reed_retracted, climb_piston_F_reed_extended);
+  //BackPneu = new PI_Pneumatics(climb_piston_B_channel_fwd, climb_piston_B_channel_rev, climb_piston_B_reed_retracted, climb_piston_B_reed_extended);
  
 
-  climbMotor = new C01_PI_Victor(climb_victor_CANID);
-  climbSystem = new PI_Climb(FrontPneu, BackPneu, climbMotor);
+  //climbMotor = new C01_PI_Victor(climb_victor_CANID);
+  //climbSystem = new PI_Climb(FrontPneu, BackPneu, climbMotor);
 
   //grabbing system:
   grabber = new S06_PI_Grabber(GRAB_PCMID, grabber_piston_channel_fwd, grabber_piston_channel_rev, grabber_reed_retracted, grabber_reed_extended, grabber_servo_pin);
+ 
   //manual:
-  manual = new M00_PI_Manual(drivetrain, input, lift, climbSystem, grabber);
+  manual = new M00_PI_Manual(drivetrain, input, lift,  grabber);
 
   aiming = new S09_PI_Aim(1, drivetrain);
 
@@ -76,6 +83,8 @@ void Robot::RobotInit()
 
   ledArduino = new ArduinoI2C(frc::I2C::Port::kOnboard, 10); //using address 10
   ledArduino->write(ledData, 1);                             //default design
+
+  std::cout<<"Robot init done \n";
 }
 
 /**
@@ -98,11 +107,14 @@ climbSystem->extendFront;
 }
 void Robot::TeleopInit()
 {
+  compressor->SetClosedLoopControl(true);
   //let the led arduino know teleop is starting:
   *ledData = 3;
   ledArduino->ArduinoI2C::write(ledData, 1); //default design
 
   manual->init();
+
+  std::cout<<"Teleop init \n";
 }
 
 void Robot::TeleopPeriodic()
@@ -138,11 +150,11 @@ void Robot::TeleopPeriodic()
   }
 
   //positioning update:
-  positioning->refresh();
-
+  //positioning->refresh();
   //for testing:
   if (count == 50)
   {
+    std::cout<<"printing \n";
     //std::cout<<"Pixy X: "<<sensors->PixyDown->LatestVector().NearestX()<<"\n";
     //std::cout<<"Pixy Y: "<<sensors->PixyDown->LatestVector().NearestY()<<"\n \n";
 
@@ -150,7 +162,7 @@ void Robot::TeleopPeriodic()
     {
       std::cout << "Auto action happening now \n";
     }
-
+/*
     network->changeValue(networkTestID, networkTest);
     networkTest++;
     //execute code in here roughly once a second.
@@ -161,8 +173,11 @@ void Robot::TeleopPeriodic()
 
     //std::cout << "current coordinates: x:" << positioning->Get()->position->x << " y:" << positioning->Get()->position->y << '\n';
     //std::cout << "current orientation: " << positioning->Get()->rotation->z << '\n';
+  */
+  
   }
   count = (count + 1) % 100;
+
 }
 
 void Robot::readUserInput()

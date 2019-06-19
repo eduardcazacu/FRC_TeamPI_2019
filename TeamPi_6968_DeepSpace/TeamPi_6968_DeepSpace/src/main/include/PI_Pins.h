@@ -6,8 +6,8 @@ const int GRAB_PCMID = 10;
 
 const int grabber_piston_channel_fwd = 1;
 const int grabber_piston_channel_rev = 0;
-const int grabber_reed_extended = 0;
-const int grabber_reed_retracted = 1;
+const int grabber_reed_extended = 9;
+const int grabber_reed_retracted = 8;
 const int grabber_servo_pin = 0;
 
 const int climb_piston_F_channel_fwd = 2;
@@ -26,7 +26,7 @@ const int climb_piston_B_reed_retracted = 4;
 const int climb_victor_CANID = 8;
 
 
-const int liftLimitSwitchId = 9;
+const int liftLimitSwitchId = 0;
 //--------------------------------DIO Pins----------------------------
 #define END_SWITCH_PNEUMATICS_EX 0
 #define END_SWITCH_PNEUMATICS_RE 1
