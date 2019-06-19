@@ -19,6 +19,7 @@ S09_PI_Aim::S09_PI_Aim(double _maxSpeedPercentage, S04_PI_Drivetrain *drivetrain
     PIDDistanceAngle->Disable();
 }
 
+/*
 bool S09_PI_AIM::SimpleAim(double angelError,double currentDistance, S04_PI_Drivetrain *drivetrain){
 
     double stopDistance = 16;
@@ -41,14 +42,14 @@ bool S09_PI_AIM::SimpleAim(double angelError,double currentDistance, S04_PI_Driv
     double PAngle = angelError*turnRate;
     //double IAngle = errorSum * angleI;
     //std::cout<<errorSum<<std::endl;
-    double turning = PAngle /*+ IAngle*/ ;
+    double turning = PAngle /*+ IAngle*/ /*;
     //driveSpeed = 0;
 
 
     double output[2] = {driveSpeed, turning};
     drivetrain->drive(output[0],output[1]);
     return false;
-}
+}*/
 
 bool S09_PI_Aim::Aim(double _angle, double targetX, double targetY)
 {

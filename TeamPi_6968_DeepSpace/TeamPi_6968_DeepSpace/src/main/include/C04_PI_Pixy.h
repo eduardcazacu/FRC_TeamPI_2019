@@ -38,6 +38,8 @@ class C04_PI_Pixy{
     PI_Vector BestVector();
     uint8_t * GetBlocks();
 
+    bool AimReady();
+
     //bool AimReady();
 
     

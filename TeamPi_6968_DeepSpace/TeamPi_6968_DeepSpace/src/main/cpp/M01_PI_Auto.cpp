@@ -311,7 +311,9 @@ bool M01_PI_Auto::autoAim()
         }
         return false;
         */
-       unit8_t info[2] = _pixy->GetBlocks();
+       /*
+       uint8_t df = 5;
+       unit8_t info[2] = this._pixy->GetBlocks();
        uint8_t x = info[0];
        uint8_t surface = info[1];
        if (_aiming->SimpleAim(x,surface,_drivetrain))
@@ -321,6 +323,7 @@ bool M01_PI_Auto::autoAim()
             return true;
         }
         return false;
+        */
     }
     return true;
 }

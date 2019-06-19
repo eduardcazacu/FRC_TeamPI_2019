@@ -98,9 +98,9 @@ class S09_PI_Aim
        Input:       
         Return:     Is completed? true for there, false for not there yet.
     */
-    bool SimpleAim(double angelError,double currentDistance, S04_PI_Drivetrain *drivetrain);
+    //bool SimpleAim(double angelError,double currentDistance, S04_PI_Drivetrain *drivetrain);
 
-
+ 
     /*
        Description: Aligns the robot to a vector given by a starting point and an angle.
        Input:       targetAngle [double] - the angle of the line relative to the robot.

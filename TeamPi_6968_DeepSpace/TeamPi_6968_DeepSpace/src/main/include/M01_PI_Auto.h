@@ -20,6 +20,7 @@ Team Pi 6968
 #include "S04_PI_Drivetrain.h"
 #include "C04_PI_Pixy.h"
 #include "S09_PI_Aim.h"
+#include <iostream>
 
 #define GRABBER_SERVO_PIN 0
 #define START_GRAB_RATIO 0.5

@@ -20,7 +20,7 @@ int networkTestID;
 
 int count = 0;
 
-frc::Compressor *compressor = new Compressor(0);
+frc::Compressor *compressor = new frc::Compressor(0);
 //Mihail here
 
 void Robot::RobotInit()
@@ -103,11 +103,11 @@ void Robot::AutonomousInit()
 }
 void Robot::AutonomousPeriodic()
 {
-climbSystem->extendFront;
+  climbSystem->extendFront();
 }
 void Robot::TeleopInit()
 {
-  compressor->SetClosedLoopControl(true);
+  compressor->SetClosedLoopControl(false);
   //let the led arduino know teleop is starting:
   *ledData = 3;
   ledArduino->ArduinoI2C::write(ledData, 1); //default design
