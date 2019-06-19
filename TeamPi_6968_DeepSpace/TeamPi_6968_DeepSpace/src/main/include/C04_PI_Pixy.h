@@ -36,6 +36,7 @@ class C04_PI_Pixy{
     void Update();
     PI_Vector LatestVector();
     PI_Vector BestVector();
+    uint8_t * GetBlocks()
 
     bool AimReady();
 

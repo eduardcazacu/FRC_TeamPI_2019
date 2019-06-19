@@ -31,6 +31,7 @@
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
 #include "PiPathfinding.h"
+#include "C04_PI_Pixy.h"
 
 
 class Robot: public frc::IterativeRobot {
@@ -38,6 +39,7 @@ public:
 
 	WPI_TalonSRX * _rEncoder = new WPI_TalonSRX(4);
 	WPI_TalonSRX * _lEncoder = new WPI_TalonSRX(2);
+	C04_PI_Pixy * pixy = new C04_PI_Pixy(frc::I2C::Port::kOnboard, 8);
 
 	//positioning:
 	const double wheelRadius = 76.2f;			//random value for now
@@ -82,7 +84,7 @@ public:
 	int nOfTargets = 2;
 	int currentTarget = 0;
 
-	double speedReductionFactor = 0.7;
+	double speedReductionFactor = 1;
 
 	//box pickup:
 	bool armState = false, lastButtonValue = false;
@@ -97,12 +99,16 @@ public:
 	void TeleopPeriodic() {
 
 		// drive with arcade style
+		
+		/*
 		if(m_stick.GetThrottle() > 0.5){
-			piMovement->move(m_stick.GetY() * speedReductionFactor, m_stick.GetZ() * 0.65);
+			piMovement->move(m_stick.GetY() * speedReductionFactor, m_stick.GetZ());
 		}
 		else{
-			piMovement->move(m_stick.GetY() * speedReductionFactor, m_stick.GetX()*0.65);
-		}
+			piMovement->move(m_stick.GetY() * speedReductionFactor, m_stick.GetX());
+		}*/
+
+		piMovement->move(m_stick.GetY() /* -1* (m_stick.GetThrottle()*2-1)/3*/, m_stick.GetX());
 		//box intake:
 		intakeSystem();
 
@@ -145,51 +151,38 @@ public:
 		}
 
 	void AutonomousInit() {
-			autoTarget = autoTarget0;
-		}
+	
+	}
 
 	void AutonomousPeriodic() {
-			positioningStuff();
-			//do auto stuff
-			//piMovement->autoMove(0, 0.2);
-			//std::cout << Ultra1->UltrasoonObject(30) << '\n';
-			/*if(Ultra1->UltrasoonObject(20)){	//in centimeters
-				piMovement->pause();
-			}
-			else{*/
-				piMovement->resume();
+
+		double maxDistance = 150;
+		double speed = 1;
+		double turnRate = 0.7;
+
+		uint8_t *info = pixy->GetBlocks();
+
+		double error = info[0];
+		//std::cout<<error<<std::endl;
+		double currentDistance = info[1];
+		//std::cout<<currentDistance<<std::endl;
+
+		double distance = maxDistance-currentDistance;
+		//std::cout<<distance<<std::endl;
+		double drivespeed = (distance/200-40) * speed;
+		//std::cout<<drivespeed<<std::endl;
 
 
-				if (pathfinding->GoTO(position, autoTarget)) {
-					std::cout << "Going new places \n";
-					//go to next target:
-					currentTarget++;
-				}
-			//}
+		/*if (distance > 125){
+			drivespeed = 0;
+		}*/
 
-			switch (currentTarget) {
-			case 0:
-				autoTarget = autoTarget0;
-				break;
-			case 1:
-				autoTarget = autoTarget1;
-				break;
-			case 2:
-				autoTarget = autoTarget2;
-				break;
-			case 3:
-				autoTarget = autoTarget3;
-				break;
-			default:
-				break;
+		double driveAngle = (error*0.0077-1.1538)*turnRate;
+		std::cout<<driveAngle<<std::endl;
+		piMovement->move(-drivespeed,driveAngle);
 
-			}
-
-
-			/*pathfinding->GoTO(position, new PiTransform(PiVector3(dashboard->XDestination, dashboard->YDestination, 0),
-		            PiVector3(0, 0, 0))))*/
-
-		}
+	}
+	
 	void RobotInit() {
 
 		//Dashboard
@@ -264,7 +257,6 @@ public:
 	void changeButtonValue(bool value) {
 		lastButtonValue = value;
 	}
-}
-;
+};
 
 START_ROBOT_CLASS(Robot)

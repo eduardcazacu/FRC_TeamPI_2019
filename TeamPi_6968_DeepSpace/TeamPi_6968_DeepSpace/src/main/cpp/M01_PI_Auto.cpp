@@ -302,7 +302,19 @@ bool M01_PI_Auto::autoAim()
 {
     if (!autoAimDone)
     {
+        /*
         if (_aiming->Aim(_pixy->LatestVector().Angle(), _pixy->LatestVector().NearestX(), _pixy->LatestVector().NearestY()))
+        {
+            //done
+            autoAimDone = true;
+            return true;
+        }
+        return false;
+        */
+       unit8_t info[2] = _pixy->GetBlocks();
+       uint8_t x = info[0];
+       uint8_t surface = info[1];
+       if (_aiming->SimpleAim(x,5,surface,100,10))
         {
             //done
             autoAimDone = true;
